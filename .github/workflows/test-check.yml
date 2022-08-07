@@ -1,0 +1,22 @@
+name: Test check
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  test-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: install dependencies
+        run: yarn install
+      - name: build
+        run: yarn build:all
+      - name: test run
+        run: yarn test:all
