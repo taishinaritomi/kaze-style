@@ -15,12 +15,12 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-          always-auth : true
+          always-auth: true
       - name: install
-        run : yarn install
+        run: yarn install
       - name: build
-        run : yarn build:all
+        run: yarn build:all
       - name: release
-        run : yarn release
-        env :
+        run: yarn release
+        env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
