@@ -15,6 +15,6 @@ jobs:
         with:
           node-version: '16.x'
       - name: install dependencies
-        run: yarn install
+        run: yarn
       - name: check run
         run: yarn check:all
