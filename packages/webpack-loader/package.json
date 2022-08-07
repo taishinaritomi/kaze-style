@@ -1,6 +1,6 @@
 {
-  "name": "@kaze/webpack-loader",
-  "version": "0.1.0",
+  "name": "@kaze-css/webpack-loader",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
@@ -18,10 +18,10 @@
   },
   "dependencies": {
     "@babel/core": "^7.18.10",
-    "@kaze/babel-preset": "0.1.0",
+    "@kaze-css/babel-preset": "0.2.0",
     "loader-utils": "^3.2.0"
   },
   "peerDependencies": {
-    "@kaze/core": "^0.1.0"
+    "@kaze-css/core": "^0.2.0"
   }
 }

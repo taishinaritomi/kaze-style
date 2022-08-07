@@ -1,6 +1,6 @@
 {
-  "name": "@kaze/babel-preset",
-  "version": "0.1.0",
+  "name": "@kaze-css/babel-preset",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
@@ -20,6 +20,6 @@
     "@babel/helper-plugin-utils": "^7.18.9"
   },
   "peerDependencies": {
-    "@kaze/core": "^0.1.0"
+    "@kaze-css/core": "^0.2.0"
   }
 }

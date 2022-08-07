@@ -1,4 +1,4 @@
-import { createStyle } from '@kaze/react';
+import { createStyle } from '@kaze-css/react';
 import * as ReactDOM from 'react-dom';
 
 const classes = createStyle({

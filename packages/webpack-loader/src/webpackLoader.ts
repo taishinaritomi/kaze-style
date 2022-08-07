@@ -1,6 +1,6 @@
 import path from 'path';
 import * as Babel from '@babel/core';
-import kazePreset from '@kaze/babel-preset';
+import kazePreset from '@kaze-css/babel-preset';
 import type webpack from 'webpack';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Any = any;

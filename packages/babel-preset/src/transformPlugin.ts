@@ -1,7 +1,7 @@
 import { types as t } from '@babel/core';
 import type { NodePath, PluginPass, PluginObj } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import { createStyle } from '@kaze/core';
+import { createStyle } from '@kaze-css/core';
 import { Cache } from './cache';
 import type { Any } from './types/any';
 import { astify } from './utils/astify';
@@ -37,7 +37,7 @@ export const transformPlugin = declare<
   PluginObj<State>
 >(() => {
   return {
-    name: '@kaze/babel-plugin-transform',
+    name: '@kaze-css/babel-plugin-transform',
     pre() {
       this.importDeclarationPaths = [];
       this.calleePaths = [];
@@ -46,7 +46,7 @@ export const transformPlugin = declare<
       this.cache = new Cache();
       this.option = {
         import: {
-          source: '@kaze/react',
+          source: '@kaze-css/react',
           name: 'createStyle',
           transformName: '__style',
         },
