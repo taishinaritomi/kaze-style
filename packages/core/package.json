@@ -1,6 +1,6 @@
 {
-  "name": "@kaze/core",
-  "version": "0.1.0",
+  "name": "@kaze-css/core",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",

@@ -1,6 +1,6 @@
 {
-  "name": "@kaze/react",
-  "version": "0.1.0",
+  "name": "@kaze-css/react",
+  "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
@@ -19,6 +19,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze/core": "^0.1.0"
+    "@kaze-css/core": "^0.1.0"
   }
 }

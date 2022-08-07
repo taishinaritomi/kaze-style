@@ -1,4 +1,4 @@
-import { createStyle, margeStyle, red } from '@kaze/react';
+import { createStyle, margeStyle, red } from '@kaze-css/react';
 import type { NextPage } from 'next';
 import { index } from '..';
 

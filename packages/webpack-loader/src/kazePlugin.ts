@@ -1,4 +1,4 @@
-import { sortCSS } from '@kaze/core';
+import { sortCSS } from '@kaze-css/core';
 import type { Compiler, RuleSetRule, sources } from 'webpack';
 import { Compilation } from 'webpack';
 

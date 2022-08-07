@@ -215,7 +215,7 @@ export const resolveBinding = (
       return;
     }
 
-    if (modulePath.includes('@kaze/react/dist/index.js')) {
+    if (modulePath.includes('@kaze-css/react/dist/index.js')) {
       modulePath = modulePath.replace('index.js', 'react.esm.js');
     }
 
