@@ -1,0 +1,37 @@
+{
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
+  "plugins": ["import", "unused-imports"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "error",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "import/order": [2, { "alphabetize": { "order": "asc" } }],
+    "import/no-default-export": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "./packages/babel-preset/src/index.ts",
+        "./packages/webpack-loader/src/index.ts",
+        "./playground/next/src/pages/**",
+        "./playground/next/next.config.*"
+      ],
+      "rules": {
+        "import/no-default-export": "off",
+        "import/prefer-default-export": "error"
+      }
+    },
+    {
+      "files": ["./packages/babel-preset/src/transformPlugin.ts"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off"
+      }
+    },
+    {
+      "files": ["./**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
+}

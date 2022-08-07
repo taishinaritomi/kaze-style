@@ -1,0 +1,25 @@
+{
+  "name": "@kaze/babel-preset",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Taishi Naritomi",
+  "main": "dist/index.js",
+  "module": "dist/babel-preset.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test"
+  },
+  "dependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/helper-plugin-utils": "^7.18.9"
+  },
+  "peerDependencies": {
+    "@kaze/core": "^0.1.0"
+  }
+}

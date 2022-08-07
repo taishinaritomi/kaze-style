@@ -1,0 +1,22 @@
+{
+  "name": "@kaze/core",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Taishi Naritomi",
+  "main": "dist/index.js",
+  "module": "dist/core.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test"
+  },
+  "dependencies": {
+    "csstype": "^3.1.0",
+    "stylis": "^4.1.1"
+  }
+}

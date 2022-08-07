@@ -1,0 +1,24 @@
+{
+  "name": "@kaze/react",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Taishi Naritomi",
+  "main": "dist/index.js",
+  "module": "dist/react.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "echo 'No test'"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "dependencies": {
+    "@kaze/core": "^0.1.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@kaze/playground-next",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo 'No test'"
+  },
+  "dependencies": {
+    "@kaze/core": "^0.1.0",
+    "@kaze/webpack-loader": "^0.1.0",
+    "browserslist": "^4.21.3",
+    "next": "12.2.3",
+    "react": "18.2.0",
+    "mini-css-extract-plugin": "^2.6.1",
+    "react-dom": "18.2.0"
+  }
+}

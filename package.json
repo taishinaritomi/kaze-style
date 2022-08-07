@@ -1,0 +1,53 @@
+{
+  "name": "kaze",
+  "version": "1.0.0",
+  "author": "Taishi Naritomi",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/core",
+    "packages/react",
+    "packages/babel-preset",
+    "packages/webpack-loader",
+    "playground/react",
+    "playground/next"
+  ],
+  "scripts": {
+    "build:all": "yarn workspaces run build",
+    "start:core": "yarn workspace @kaze/core run start",
+    "start:react": "yarn workspace @kaze/react run start",
+    "start:babel-preset": "yarn workspace @kaze/babel-preset run start",
+    "start:webpack-loader": "yarn workspace @kaze/webpack-loader run start",
+    "start:playground-react": "yarn workspace @kaze/playground-react run start",
+    "start:playground-next": "yarn workspace @kaze/playground-next run dev",
+    "test:all": "yarn workspaces run test",
+    "check:type": "yarn workspaces run tsc --noEmit",
+    "check:lint": "eslint . --ignore-path .gitignore",
+    "check:format": "prettier . --check --ignore-path .gitignore",
+    "check:all": "yarn check:type && yarn check:lint && yarn check:format",
+    "fix:format": "prettier . --write --ignore-path .gitignore",
+    "fix:lint": "eslint . --fix --ignore-path .gitignore",
+    "fix:all": "yarn fix:format && yarn fix:lint"
+  },
+  "devDependencies": {
+    "@tsconfig/strictest": "^1.0.1",
+    "@types/babel__helper-plugin-utils": "^7.10.0",
+    "@types/node": "^18.0.6",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/stylis": "^4.0.2",
+    "@types/loader-utils": "^2.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.30.7",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
+    "prettier": "^2.7.1",
+    "process": "^0.11.10",
+    "ts-node": "^10.9.1",
+    "tsdx": "^0.14.1",
+    "typescript": "^4.7.4",
+    "npm-run-all": "^4.1.5"
+  }
+}
