@@ -29,7 +29,7 @@ module.exports = {
             },
           },
           {
-            loader: '@kaze-css/webpack-loader',
+            loader: '@kaze-style/webpack-loader',
             options: {},
           },
         ],

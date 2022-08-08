@@ -1,4 +1,4 @@
-import { KazePlugin } from '@kaze-css/webpack-loader';
+import { KazePlugin } from '@kaze-style/webpack-loader';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 /** @type {import('next').NextConfig} */
@@ -16,7 +16,7 @@ const nextConfig = {
         exclude: [/node_modules/],
         use: [
           {
-            loader: '@kaze-css/webpack-loader',
+            loader: '@kaze-style/webpack-loader',
             options: {},
           },
         ],

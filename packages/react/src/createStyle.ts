@@ -1,5 +1,5 @@
-import { createStyle as createStyleCore } from '@kaze-css/core';
-import type { KazeStyle } from '@kaze-css/core';
+import { createStyle as createStyleCore } from '@kaze-style/core';
+import type { KazeStyle } from '@kaze-style/core';
 
 export const createStyle = <Key extends string>(
   stylesByKey: Record<Key, KazeStyle>,

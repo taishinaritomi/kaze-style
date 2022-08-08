@@ -1,5 +1,5 @@
 {
-  "name": "@kaze-css/react",
+  "name": "@kaze-style/react",
   "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
@@ -19,6 +19,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-css/core": "^0.1.0"
+    "@kaze-style/core": "^0.2.0"
   }
 }

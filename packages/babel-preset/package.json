@@ -1,5 +1,5 @@
 {
-  "name": "@kaze-css/babel-preset",
+  "name": "@kaze-style/babel-preset",
   "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
@@ -20,6 +20,6 @@
     "@babel/helper-plugin-utils": "^7.18.9"
   },
   "peerDependencies": {
-    "@kaze-css/core": "^0.2.0"
+    "@kaze-style/react": "^0.2.0"
   }
 }
