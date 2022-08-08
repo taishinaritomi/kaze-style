@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "build:all": "yarn workspaces run build",
+    "build:playground-next": "yarn workspace @kaze-style/playground-next run build",
     "start:core": "yarn workspace @kaze-style/core run start",
     "start:react": "yarn workspace @kaze-style/react run start",
     "start:babel-preset": "yarn workspace @kaze-style/babel-preset run start",
