@@ -163,7 +163,7 @@ const getBinding = (
       setValue: () => undefined,
       value: true,
       hasDeoptedValue: true,
-      hasValue: true
+      hasValue: true,
     } as Binding;
   }
 
