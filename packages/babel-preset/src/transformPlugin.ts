@@ -72,9 +72,11 @@ export const transformPlugin = declare<
               const evaluatePath = getPathOfNode(value, definitionPath);
               if (t.isObjectExpression(value)) {
                 const evaluated = evaluatePath.evaluate();
-                const { classes, cssRules } = createStyle(evaluated.value);
-                callExpressionPath.node.arguments = [astify(classes)];
-                state.cssRules!.push(...cssRules);
+                if (evaluated.value) {
+                  const { classes, cssRules } = createStyle(evaluated.value);
+                  callExpressionPath.node.arguments = [astify(classes)];
+                  state.cssRules!.push(...cssRules);
+                }
               }
             });
           }
