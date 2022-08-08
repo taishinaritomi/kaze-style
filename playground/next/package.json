@@ -1,5 +1,5 @@
 {
-  "name": "@kaze-css/playground-next",
+  "name": "@kaze-style/playground-next",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -9,8 +9,8 @@
     "test": "echo 'No test'"
   },
   "dependencies": {
-    "@kaze-css/core": "^0.2.0",
-    "@kaze-css/webpack-loader": "^0.2.0",
+    "@kaze-style/core": "^0.2.0",
+    "@kaze-style/webpack-loader": "^0.2.0",
     "browserslist": "^4.21.3",
     "next": "12.2.3",
     "react": "18.2.0",

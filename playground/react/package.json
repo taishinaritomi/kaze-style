@@ -1,5 +1,5 @@
 {
-  "name": "@kaze-css/playground-react",
+  "name": "@kaze-style/playground-react",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "@babel/preset-env": "^7.18.9",
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
-    "@kaze-css/webpack-loader": "^0.2.0",
+    "@kaze-style/webpack-loader": "^0.2.0",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
