@@ -155,6 +155,15 @@ const getBinding = (
       referencePaths: [],
       constant: true,
       constantViolations: [],
+      clearValue: () => undefined,
+      deopValue: () => undefined,
+      dereference: () => undefined,
+      reassign: () => undefined,
+      reference: () => undefined,
+      setValue: () => undefined,
+      value: true,
+      hasDeoptedValue: true,
+      hasValue: true,
     } as Binding;
   }
 

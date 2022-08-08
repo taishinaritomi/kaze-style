@@ -1,6 +1,6 @@
 type ClassNamesArgs = (string | false | undefined | null)[];
 
-export const margeStyle = (..._classNames: ClassNamesArgs): string => {
+export const mergeStyle = (..._classNames: ClassNamesArgs): string => {
   const notMatchStyles = new Set<string>();
   const matchStyles: Record<string, string> = {};
 
