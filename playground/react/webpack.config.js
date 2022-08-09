@@ -1,4 +1,5 @@
 const path = require('path');
+const { KazePlugin } = require('@kaze-style/webpack-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -15,6 +16,9 @@ module.exports = {
         exclude: [/node_modules/],
         use: [
           {
+            loader: '@kaze-style/webpack-loader',
+          },
+          {
             loader: 'babel-loader',
             options: {
               babelrc: false,
@@ -27,10 +31,6 @@ module.exports = {
                 ],
               ],
             },
-          },
-          {
-            loader: '@kaze-style/webpack-loader',
-            options: {},
           },
         ],
       },
@@ -45,7 +45,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   plugins: [
-    // new KazePlugin(),
+    new KazePlugin(),
     new HtmlWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],

@@ -22,7 +22,7 @@
     "loader-utils": "^3.2.0"
   },
   "peerDependencies": {
-    "@kaze-style/core": "^0.2.0",
+    "@kaze-style/react": "^0.2.0",
     "webpack": "^5"
   }
 }
