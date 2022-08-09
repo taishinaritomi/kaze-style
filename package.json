@@ -9,6 +9,7 @@
     "packages/react",
     "packages/babel-preset",
     "packages/webpack-loader",
+    "packages/next-plugin",
     "playground/react",
     "playground/next"
   ],
@@ -18,6 +19,7 @@
     "start:core": "yarn workspace @kaze-style/core run start",
     "start:react": "yarn workspace @kaze-style/react run start",
     "start:babel-preset": "yarn workspace @kaze-style/babel-preset run start",
+    "start:next-plugin": "yarn workspace @kaze-style/next-plugin run start",
     "start:webpack-loader": "yarn workspace @kaze-style/webpack-loader run start",
     "start:playground-react": "yarn workspace @kaze-style/playground-react run start",
     "start:playground-next": "yarn workspace @kaze-style/playground-next run dev",
