@@ -5,25 +5,13 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/core",
-    "packages/react",
-    "packages/babel-preset",
-    "packages/webpack-loader",
-    "packages/next-plugin",
-    "playground/react",
-    "playground/next"
+    "packages/*",
+    "playground/*"
   ],
   "scripts": {
-    "build:all": "yarn workspaces run build",
-    "build:playground-next": "yarn workspace @kaze-style/playground-next run build",
-    "start:core": "yarn workspace @kaze-style/core run start",
-    "start:react": "yarn workspace @kaze-style/react run start",
-    "start:babel-preset": "yarn workspace @kaze-style/babel-preset run start",
-    "start:next-plugin": "yarn workspace @kaze-style/next-plugin run start",
-    "start:webpack-loader": "yarn workspace @kaze-style/webpack-loader run start",
-    "start:playground-react": "yarn workspace @kaze-style/playground-react run start",
-    "start:playground-next": "yarn workspace @kaze-style/playground-next run dev",
-    "test:all": "yarn workspaces run test",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "test": "turbo run test",
     "check:type": "yarn workspaces run tsc --noEmit",
     "check:lint": "eslint . --ignore-path .gitignore",
     "check:format": "prettier . --check --ignore-path .gitignore",
@@ -53,6 +41,7 @@
     "process": "^0.11.10",
     "ts-node": "^10.9.1",
     "tsdx": "^0.14.1",
+    "turbo": "^1.4.2",
     "typescript": "^4.7.4"
   }
 }

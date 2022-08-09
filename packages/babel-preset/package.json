@@ -11,7 +11,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "start": "tsdx watch",
+    "dev": "tsdx watch --noClean",
     "build": "tsdx build",
     "test": "echo 'No test'"
   },
