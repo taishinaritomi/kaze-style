@@ -59,7 +59,7 @@ export function webpackLoader(
 
     if (babelAST === null) {
       this.callback(null, sourceCode, inputSourceMap);
-      return
+      return;
     }
 
     const babelFileResult = Babel.transformFromAstSync(babelAST, sourceCode, {
@@ -74,12 +74,12 @@ export function webpackLoader(
 
     if (babelFileResult === null) {
       this.callback(null, sourceCode, inputSourceMap);
-      return
+      return;
     }
 
     const cssRules = (
       babelFileResult.metadata as unknown as { cssRules: string[] }
-      ).cssRules;
+    ).cssRules;
     if (cssRules.length !== 0) {
       const request = `import ${JSON.stringify(
         this.utils.contextify(
@@ -92,9 +92,9 @@ export function webpackLoader(
       this.callback(
         null,
         `${babelFileResult.code}\n\n${request}`,
-        (babelFileResult.map as Any),
+        babelFileResult.map as Any,
       );
-      return
+      return;
     }
 
     this.callback(null, sourceCode, inputSourceMap);

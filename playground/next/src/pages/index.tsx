@@ -6,7 +6,7 @@ const classes = createStyle({
   button: {
     color: red,
     backgroundColor: index,
-    ...padding
+    ...padding,
   },
 });
 

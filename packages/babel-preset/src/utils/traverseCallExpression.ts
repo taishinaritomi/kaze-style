@@ -13,12 +13,10 @@ export const traverseCallExpression = (
   const callee = expression.callee;
   let value: t.Node | undefined | null = undefined;
 
-  let updatedMetadata: Metadata = { ...metadata }
+  let updatedMetadata: Metadata = { ...metadata };
 
   if (t.isExpression(callee)) {
     let functionNode;
-
-
 
     if (t.isFunction(callee)) {
       functionNode = callee;
@@ -31,9 +29,14 @@ export const traverseCallExpression = (
         if (resolvedBinding && resolvedBinding.constant) {
           functionNode = resolvedBinding.node;
         }
-      } else if (t.isMemberExpression(callee) && t.isIdentifier(callee.property)) {
-
-        callee.property = t.callExpression(callee.property, expression.arguments);
+      } else if (
+        t.isMemberExpression(callee) &&
+        t.isIdentifier(callee.property)
+      ) {
+        callee.property = t.callExpression(
+          callee.property,
+          expression.arguments,
+        );
 
         return evaluateExpression(callee, updatedMetadata);
       }
@@ -42,15 +45,21 @@ export const traverseCallExpression = (
     if (functionNode && t.isFunction(functionNode)) {
       const { params } = functionNode;
       const evaluatedArguments = expression.arguments.map(
-        (argument) => evaluateExpression(argument as t.Expression, updatedMetadata).value
+        (argument) =>
+          evaluateExpression(argument as t.Expression, updatedMetadata).value,
       );
 
-      const expressionPath = getPathOfNode(expression, updatedMetadata.parentPath);
-      const [wrappingNodePath] = expressionPath.replaceWith(wrapNodeInIIFE(expression));
+      const expressionPath = getPathOfNode(
+        expression,
+        updatedMetadata.parentPath,
+      );
+      const [wrappingNodePath] = expressionPath.replaceWith(
+        wrapNodeInIIFE(expression),
+      );
 
       const arrowFunctionExpressionPath = getPathOfNode(
         wrappingNodePath.node.callee,
-        wrappingNodePath as Any
+        wrappingNodePath as Any,
       );
       params
         .filter((param) => t.isIdentifier(param) || t.isObjectPattern(param))
@@ -62,14 +71,17 @@ export const traverseCallExpression = (
             kind: 'const',
           });
         });
-        updatedMetadata.ownPath = arrowFunctionExpressionPath;
+      updatedMetadata.ownPath = arrowFunctionExpressionPath;
     }
 
-    ({ value, metadata: updatedMetadata } = evaluateExpression(callee, updatedMetadata));
+    ({ value, metadata: updatedMetadata } = evaluateExpression(
+      callee,
+      updatedMetadata,
+    ));
   }
 
   return {
     value: value as t.Expression,
-    metadata:updatedMetadata,
+    metadata: updatedMetadata,
   };
 };
