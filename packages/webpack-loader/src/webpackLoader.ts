@@ -57,8 +57,10 @@ export function webpackLoader(
       sourceMaps: this.sourceMap || false,
     });
 
-    if (babelAST === null)
-      return this.callback(null, sourceCode, inputSourceMap);
+    if (babelAST === null) {
+      this.callback(null, sourceCode, inputSourceMap);
+      return;
+    }
 
     const babelFileResult = Babel.transformFromAstSync(babelAST, sourceCode, {
       babelrc: false,
@@ -70,34 +72,33 @@ export function webpackLoader(
       inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
     });
 
-    if (babelFileResult === null)
-      return this.callback(null, sourceCode, inputSourceMap);
+    if (babelFileResult === null) {
+      this.callback(null, sourceCode, inputSourceMap);
+      return;
+    }
 
     const cssRules = (
       babelFileResult.metadata as unknown as { cssRules: string[] }
     ).cssRules;
-
     if (cssRules.length !== 0) {
       const request = `import ${JSON.stringify(
         this.utils.contextify(
           this.context || this.rootContext,
           `kaze.css!=!${virtualLoaderPath}!${resourcePath}?style=${toURIComponent(
-            cssRules.join(' '),
+            cssRules.join('\n'),
           )}`,
         ),
       )};`;
-      return this.callback(
+      this.callback(
         null,
-        `${babelFileResult.code}\n\n${request}` || undefined,
-        (babelFileResult.map as Any) || undefined,
+        `${babelFileResult.code}\n\n${request}`,
+        babelFileResult.map as Any,
       );
+      return;
     }
-    return this.callback(
-      null,
-      babelFileResult.code || undefined,
-      (babelFileResult.map as Any) || undefined,
-    );
+
+    this.callback(null, sourceCode, inputSourceMap);
   } catch (error) {
-    return this.callback(null, sourceCode, inputSourceMap);
+    this.callback(error as Error);
   }
 }

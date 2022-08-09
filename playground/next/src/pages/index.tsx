@@ -1,11 +1,12 @@
 import { createStyle, mergeStyle, red } from '@kaze-style/react';
 import type { NextPage } from 'next';
-import { index } from '..';
+import { index, padding } from '..';
 
 const classes = createStyle({
   button: {
     color: red,
     backgroundColor: index,
+    ...padding,
   },
 });
 

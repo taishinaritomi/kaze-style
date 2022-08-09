@@ -35,6 +35,17 @@ export const extractObjectExpression = (
         }
         return;
       }
+    } else if (t.isSpreadElement(prop)) {
+      if (t.isIdentifier(prop.argument)) {
+        const { value } = evaluateExpression(prop.argument, metadata);
+        if (t.isObjectExpression(value)) {
+          const evaluatePath = getPathOfNode(value, metadata.definitionPath);
+          const evaluated = evaluatePath.evaluate();
+          if (evaluated?.value) {
+            Object.assign(result, evaluated?.value);
+          }
+        }
+      }
     }
   });
   return {
