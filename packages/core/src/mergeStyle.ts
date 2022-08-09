@@ -19,5 +19,5 @@ export const mergeStyle = (..._classNames: ClassNamesArgs): string => {
 
   const notMatchClasses = Array.from(notMatchStyles).join(' ');
 
-  return [matchClasses, notMatchClasses].join(' ');
+  return [matchClasses, notMatchClasses].join(' ').trim();
 };
