@@ -218,7 +218,7 @@ export const resolveBinding = (
 
     const moduleImportSource = getModuleImportSource(binding.path);
 
-    const extensions = ['.esm.js', '.js', '.jsx', '.ts', '.tsx'];
+    const extensions = ['.esm.js', '.js', '.jsx','mjs' , '.ts', '.tsx'];
     let modulePath = resolveRequest(moduleImportSource, extensions, metadata);
     if (!extensions.some((extension) => modulePath.endsWith(extension))) {
       return;

@@ -2,6 +2,7 @@ import { types as t } from '@babel/core';
 import type { Metadata } from '../transformPlugin';
 import { extractObjectExpression } from './extractObjectExpression';
 import { getPathOfNode } from './getPathOfNode';
+// import { traverseCallExpression } from './traverseCallExpression';
 import { traverseIdentifier } from './traverseIdentifier';
 
 export type Return = {
@@ -22,6 +23,10 @@ export const evaluateExpression = (
   } else if (t.isObjectExpression(targetExpression)) {
     return extractObjectExpression(targetExpression, metadata);
   }
+
+  // else if (t.isCallExpression(targetExpression)) {
+  //   return traverseCallExpression(targetExpression, metadata);
+  // }
 
   const path = getPathOfNode(expression, metadata.definitionPath);
   const evaluated = path.evaluate();

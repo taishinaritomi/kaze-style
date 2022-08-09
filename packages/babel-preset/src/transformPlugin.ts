@@ -22,12 +22,12 @@ type State = PluginPass & {
   definitionPaths?: NodePath<t.ObjectExpression>[];
   option?: Option;
   cssRules?: string[];
-  cache?: Cache<Any>;
+  cache?: Cache;
 };
 
 export type Metadata<T = Any> = {
   definitionPath: NodePath<T>;
-  parentPath?: NodePath<T>;
+  parentPath: NodePath<T>;
   state: Required<State>;
   ownPath?: NodePath<Any>;
 };
