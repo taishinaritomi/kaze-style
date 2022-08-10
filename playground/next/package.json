@@ -9,12 +9,10 @@
     "test": "echo 'No test'"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.2.0",
+    "@kaze-style/react": "^0.2.0",
     "@kaze-style/next-plugin": "^0.2.0",
-    "browserslist": "^4.21.3",
     "next": "12.2.3",
     "react": "18.2.0",
-    "mini-css-extract-plugin": "^2.6.1",
     "react-dom": "18.2.0"
   }
 }
