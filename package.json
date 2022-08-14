@@ -11,8 +11,9 @@
   "scripts": {
     "clean": "rimraf **/dist **/.next **/.turbo **/node_modules",
     "build": "turbo run build",
+    "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
-    "test": "turbo run test",
+    "test": "turbo run test --filter=./packages/*",
     "check:type": "yarn workspaces run tsc --noEmit",
     "check:lint": "eslint . --ignore-path .gitignore",
     "check:format": "prettier . --check --ignore-path .gitignore",

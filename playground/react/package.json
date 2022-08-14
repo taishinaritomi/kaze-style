@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "webpack --watch",
-    "build": "webpack",
-    "test": "echo 'No test'"
+    "build": "webpack"
+
   },
   "dependencies": {
     "@babel/core": "^7.18.9",

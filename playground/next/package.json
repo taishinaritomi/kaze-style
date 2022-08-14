@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "test": "echo 'No test'"
+    "start": "next start"
   },
   "dependencies": {
     "@kaze-style/react": "^0.2.0",
