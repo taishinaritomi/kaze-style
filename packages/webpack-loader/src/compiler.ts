@@ -98,7 +98,8 @@ function compileVanillaSource(
         },
       });
     } else {
-      const { LibraryTemplatePlugin, SingleEntryPlugin } = (() => require('webpack'))();
+      const { LibraryTemplatePlugin, SingleEntryPlugin } = (() =>
+        require('webpack'))();
 
       new LibraryTemplatePlugin(null, 'commonjs2').apply(childCompiler);
       new SingleEntryPlugin(loader.context, loader.resourcePath).apply(
