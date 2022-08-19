@@ -1,6 +1,6 @@
 <div>
   <br>
-  <h1 align="center"><b>Kaze Style</b></h1>
+  <h1 align="center"><b>🌬Kaze Style</b></h1>
   <p align="center">Kaze [風] zero-runtime CSS in JS for React.<p>
   <p align="center"><b>🚧 Kaze Style is under development 🚧</b></p>
   <br>
