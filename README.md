@@ -1,4 +1,3 @@
-
 <div>
   <br>
   <h1 align="center"><b>Kaze Style</b></h1>
@@ -8,6 +7,7 @@
 </div>
 
 ## Example
+
 ```ts
 import { createStyle } from '@kaze-style/react';
 const classes = createStyle({
@@ -17,17 +17,18 @@ const classes = createStyle({
 });
 
 const Component = () => {
-  return (
-    <button className={classes.button}>button</button>
-  );
+  return <button className={classes.button}>button</button>;
 };
 ```
+
 <br>
 
 ## Author
+
 [Taishi Naritomi](https://github.com/taishinaritomi)
 
 <br>
 
 ## License
+
 [MIT](https://github.com/taishinaritomi/kaze-style/blob/main/LICENSE)
