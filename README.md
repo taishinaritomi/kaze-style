@@ -25,7 +25,6 @@ const Component = () => {
 
 [Taishi Naritomi](https://github.com/taishinaritomi)
 
-
 ## License
 
 [MIT](https://github.com/taishinaritomi/kaze-style/blob/main/LICENSE)
