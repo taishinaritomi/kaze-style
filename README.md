@@ -21,13 +21,10 @@ const Component = () => {
 };
 ```
 
-<br>
-
 ## Author
 
 [Taishi Naritomi](https://github.com/taishinaritomi)
 
-<br>
 
 ## License
 
