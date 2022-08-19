@@ -18,6 +18,6 @@ jobs:
       - name: install dependencies
         run: yarn install
       - name: build packages
-        run: yarn build:packages
+        run: yarn build
       - name: check run
-        run: yarn check:all
+        run: yarn code-check

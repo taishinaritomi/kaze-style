@@ -1,11 +1,11 @@
-name: Test check
+name: Test
 on:
   pull_request:
     branches:
       - main
   workflow_dispatch:
 jobs:
-  test-check:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
