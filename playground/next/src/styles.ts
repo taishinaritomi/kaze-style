@@ -1,5 +1,4 @@
-export { index } from './index2';
-// export const index = 'red'
+export { red, black } from './colors';
 export const padding = {
   paddingLeft: '100px',
   paddingRight: '100px',

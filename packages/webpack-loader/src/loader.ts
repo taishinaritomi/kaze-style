@@ -1,15 +1,26 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import kazePreset from '@kaze-style/babel-preset';
-import type webpack from 'webpack';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Any = any;
+import type {
+  LoaderDefinitionFunction,
+  LoaderContext as _LoaderContext,
+  Compiler,
+  Compilation,
+} from 'webpack';
+import type { ChildCompiler } from './compiler';
+import type { StyleData } from './pitch';
+import { parseSourceMap } from './utils/parseSourceMap';
+import { toURIComponent } from './utils/toURIComponent';
 
-type WebpackLoaderOptions = unknown;
+type Option = {
+  childCompiler: ChildCompiler;
+};
 
-type WebpackLoaderParams = Parameters<
-  webpack.LoaderDefinitionFunction<WebpackLoaderOptions>
->;
+export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<Option>>;
+export type LoaderContext = _LoaderContext<Option> & {
+  _compiler: Compiler;
+  _compilation: Compilation;
+};
 
 const virtualLoaderPath = path.resolve(
   __dirname,
@@ -24,32 +35,14 @@ const resourcePath = path.resolve(
   'kaze.css',
 );
 
-const parseSourceMap = (
-  inputSourceMap: WebpackLoaderParams[1],
-): Babel.TransformOptions['inputSourceMap'] => {
-  try {
-    if (typeof inputSourceMap === 'string') {
-      return JSON.parse(
-        inputSourceMap,
-      ) as Babel.TransformOptions['inputSourceMap'];
-    }
-
-    return inputSourceMap as Babel.TransformOptions['inputSourceMap'];
-  } catch (err) {
-    return undefined;
-  }
-};
-
-function toURIComponent(rule: string): string {
-  return encodeURIComponent(rule).replace(/!/g, '%21');
-}
-
-export function webpackLoader(
-  this: webpack.LoaderContext<never>,
+export function loader(
+  this: LoaderContext,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
 ) {
-  try {
+  const styleData = this.data.styleData as StyleData;
+
+  if (styleData) {
     const babelAST = Babel.parseSync(sourceCode, {
       caller: { name: 'kaze' },
       filename: path.relative(process.cwd(), this.resourcePath),
@@ -65,7 +58,7 @@ export function webpackLoader(
     const babelFileResult = Babel.transformFromAstSync(babelAST, sourceCode, {
       babelrc: false,
       configFile: false,
-      presets: [[kazePreset]],
+      presets: [[kazePreset, styleData]],
       filename: path.relative(process.cwd(), this.resourcePath),
       sourceMaps: this.sourceMap || false,
       sourceFileName: path.relative(process.cwd(), this.resourcePath),
@@ -77,10 +70,9 @@ export function webpackLoader(
       return;
     }
 
-    const cssRules = (
-      babelFileResult.metadata as unknown as { cssRules: string[] }
-    ).cssRules;
-    if (cssRules.length !== 0) {
+    const cssRules = styleData.cssRulesList.flat();
+
+    if (cssRules.length) {
       const request = `import ${JSON.stringify(
         this.utils.contextify(
           this.context || this.rootContext,
@@ -92,13 +84,11 @@ export function webpackLoader(
       this.callback(
         null,
         `${babelFileResult.code}\n\n${request}`,
-        babelFileResult.map as Any,
+        babelFileResult.map as unknown as string,
       );
       return;
     }
-
-    this.callback(null, sourceCode, inputSourceMap);
-  } catch (error) {
-    this.callback(error as Error);
   }
+
+  this.callback(null, sourceCode, inputSourceMap);
 }

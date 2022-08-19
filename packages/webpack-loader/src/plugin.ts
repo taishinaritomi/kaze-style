@@ -1,30 +1,43 @@
 import { sortCSS } from '@kaze-style/core';
-import type { Compiler, RuleSetRule, sources } from 'webpack';
+import type { Compiler, RuleSetRule } from 'webpack';
 import { Compilation } from 'webpack';
+import { ChildCompiler } from './compiler';
+import { getSource } from './utils/getSource';
 
 type PluginOptions = {
   test: RuleSetRule['test'];
 };
 
-const getSource = (assetSource: sources.Source): string => {
-  const source = assetSource.source();
+const pluginName = 'KazePlugin';
+const loader = '@kaze-style/webpack-loader';
 
-  if (typeof source === 'string') source;
-
-  return source.toString();
-};
-
-export class KazePlugin {
+export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
-  constructor({ test = /\.(js|jsx|ts|tsx)$/ }: Partial<PluginOptions> = {}) {
+  childCompiler: ChildCompiler;
+  constructor({
+    test = /\.(js|mjs|jsx|ts|tsx)$/,
+  }: Partial<PluginOptions> = {}) {
     this.test = test;
+    this.childCompiler = new ChildCompiler(undefined);
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.compilation.tap('KazePlugin', (compilation) => {
+    compiler.options.module?.rules.splice(0, 0, {
+      test: this.test,
+      use: [
+        {
+          loader,
+          options: {
+            childCompiler: this.childCompiler,
+          },
+        },
+      ],
+    });
+
+    compiler.hooks.compilation.tap(pluginName, (compilation) => {
       compilation.hooks.processAssets.tap(
         {
-          name: 'KazePlugin',
+          name: pluginName,
           stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
         },
         (assets) => {

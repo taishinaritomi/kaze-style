@@ -1,2 +1,3 @@
-export { webpackLoader as default } from './webpackLoader';
-export * from './kazePlugin';
+export { loader as default } from './loader';
+export { pitch } from './pitch';
+export { Plugin as KazePlugin } from './plugin';

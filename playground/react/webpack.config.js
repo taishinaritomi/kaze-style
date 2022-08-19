@@ -16,9 +16,6 @@ module.exports = {
         exclude: [/node_modules/],
         use: [
           {
-            loader: '@kaze-style/webpack-loader',
-          },
-          {
             loader: 'babel-loader',
             options: {
               babelrc: false,

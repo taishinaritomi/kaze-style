@@ -21,17 +21,6 @@ const kazeStyleConfig = (nextConfig: NextConfig) => {
     webpack(config: Configuration & ConfigurationContext, options) {
       const { dir, dev, isServer } = options;
 
-      config.module?.rules?.unshift({
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: [/node_modules/],
-        use: [
-          {
-            loader: '@kaze-style/webpack-loader',
-            options: {},
-          },
-        ],
-      });
-
       const cssRules = (
         config.module?.rules?.find(
           (rule) =>
