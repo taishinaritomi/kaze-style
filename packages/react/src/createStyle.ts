@@ -15,7 +15,6 @@ export const createStyle = <Key extends string>(
 
   //TODO:processに直接入れるの良くない
   if (process && process['__styleData' as keyof NodeJS.Process] !== undefined) {
-    // let __styleData = process['__styleData' as keyof NodeJS.Process] as unknown as StyleData;
     if (
       !process['__styleData' as keyof NodeJS.Process] as unknown as StyleData
     ) {
