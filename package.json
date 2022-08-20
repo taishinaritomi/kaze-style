@@ -14,8 +14,8 @@
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
     "test": "turbo run test --filter=./packages/*",
-    "code-check": "yarn workspaces run tsc --noEmit && eslint . --ignore-path .gitignore && prettier . --check --ignore-path .gitignore",
-    "code-fix": "eslint . --fix --ignore-path .gitignore && prettier . --write --ignore-path .gitignore",
+    "code:fix": "eslint . --fix --ignore-path .gitignore && prettier . --write --ignore-path .gitignore",
+    "code:check": "yarn workspaces run tsc --noEmit && eslint . --ignore-path .gitignore && prettier . --check --ignore-path .gitignore",
     "release": "changeset publish"
   },
   "devDependencies": {

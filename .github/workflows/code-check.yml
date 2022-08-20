@@ -20,4 +20,4 @@ jobs:
       - name: build packages
         run: yarn build
       - name: check run
-        run: yarn code-check
+        run: yarn code:check
