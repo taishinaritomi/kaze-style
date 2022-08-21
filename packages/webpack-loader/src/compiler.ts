@@ -118,7 +118,9 @@ function compileVanillaSource(
       childCompiler.hooks.compilation.tap(compilerName, (compilation) => {
         compilation.hooks.processAssets.tap(compilerName, () => {
           source = (compilation.assets[loader.resourcePath] &&
-            compilation.assets[loader.resourcePath]?.source() as string) as '';
+            (compilation.assets[
+              loader.resourcePath
+            ]?.source() as string)) as '';
 
           compilation.chunks.forEach((chunk) => {
             chunk.files.forEach((file) => {
@@ -129,8 +131,10 @@ function compileVanillaSource(
       });
     } else {
       childCompiler.hooks.afterCompile.tap(compilerName, (compilation) => {
-        source = (compilation.assets[loader.resourcePath] &&
-          compilation.assets[loader.resourcePath]?.source() as string) || '';
+        source =
+          (compilation.assets[loader.resourcePath] &&
+            (compilation.assets[loader.resourcePath]?.source() as string)) ||
+          '';
 
         compilation.chunks.forEach((chunk) => {
           chunk.files.forEach((file) => {
