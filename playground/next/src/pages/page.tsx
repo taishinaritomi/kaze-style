@@ -13,7 +13,7 @@ const classes = createStyle({
 const Home: NextPage = () => {
   return (
     <div>
-      <p className={mergeStyle(classes.text)}>index</p>
+      <p className={mergeStyle(classes.text)}>page</p>
     </div>
   );
 };
