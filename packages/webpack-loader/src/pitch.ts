@@ -39,8 +39,8 @@ export function pitch(this: LoaderContext) {
           callback(null);
         }
       })
-      .catch((e) => {
-        callback(e);
+      .catch(() => {
+        callback(null);
       });
   }
 }
