@@ -6,9 +6,7 @@ const { URLSearchParams } = require('url');
  */
 function virtualLoader() {
   const query = new URLSearchParams(this.resourceQuery);
-  const styleRule = query.get('style');
-
-  return styleRule ?? '';
+  return query.get('style') || '';
 }
 
 module.exports = virtualLoader;
