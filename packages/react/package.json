@@ -8,7 +8,9 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "LICENSE"
+    "LICENSE",
+    "reset.css",
+    "reset.css.d.ts"
   ],
   "scripts": {
     "dev": "tsdx watch --noClean",
