@@ -5,4 +5,4 @@ export const theme = {
     m: '@media (max-width: 768px)',
     l: '@media (max-width: 1024px)',
   },
-};
+} as const;
