@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@kaze-style/react": "^0.2.0",
     "@kaze-style/next-plugin": "^0.2.0",
+    "@next/bundle-analyzer": "^12.2.5",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
