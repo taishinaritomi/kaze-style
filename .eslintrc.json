@@ -22,12 +22,6 @@
       }
     },
     {
-      "files": ["./packages/babel-preset/src/transformPlugin.ts"],
-      "rules": {
-        "@typescript-eslint/no-non-null-assertion": "off"
-      }
-    },
-    {
       "files": ["./packages/webpack-loader/src/compiler.ts"],
       "rules": {
         "@typescript-eslint/no-explicit-any": "off"

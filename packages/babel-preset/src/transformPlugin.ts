@@ -89,8 +89,8 @@ export const transformPlugin = declare<
           if (Array.isArray(argumentPaths) && argumentPaths.length === 1) {
             const definitionsPath = argumentPaths[0];
             if (definitionsPath?.isObjectExpression()) {
-              state.definitionPaths!.push(definitionsPath);
-              state.calleePaths!.push(calleePath as NodePath<t.Identifier>);
+              state.definitionPaths?.push(definitionsPath);
+              state.calleePaths?.push(calleePath as NodePath<t.Identifier>);
             }
           }
         }
