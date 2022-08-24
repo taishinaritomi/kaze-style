@@ -35,3 +35,8 @@ type SupportedCSSProperties = Omit<
   CSSAnimationNameProperty;
 
 export type KazeStyle = SupportedCSSProperties | CSSNestProperties;
+
+export type ResolvedStyle = {
+  cssRules: string[];
+  classes: Record<string, string>;
+};

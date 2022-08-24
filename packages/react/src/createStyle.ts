@@ -1,12 +1,5 @@
 import { createStyle as createStyleCore } from '@kaze-style/core';
-import type { KazeStyle } from '@kaze-style/core';
-
-type StyleData =
-  | {
-      cssRulesList: string[][];
-      classesList: Record<string, string>[];
-    }
-  | undefined;
+import type { KazeStyle, ResolvedStyle } from '@kaze-style/core';
 
 export const createStyle = <Key extends string>(
   stylesByKey: Record<Key, KazeStyle>,
@@ -14,19 +7,11 @@ export const createStyle = <Key extends string>(
   const { classes, cssRules } = createStyleCore(stylesByKey);
 
   //TODO:processに直接入れるの良くない
-  if (process && process['__styleData' as keyof NodeJS.Process] !== undefined) {
-    if (
-      !process['__styleData' as keyof NodeJS.Process] as unknown as StyleData
-    ) {
-      (process['__styleData' as keyof NodeJS.Process] as unknown as StyleData) =
-        { cssRulesList: [], classesList: [] };
-    }
-    (
-      process['__styleData' as keyof NodeJS.Process] as unknown as StyleData
-    )?.classesList.push(classes);
-    (
-      process['__styleData' as keyof NodeJS.Process] as unknown as StyleData
-    )?.cssRulesList.push(cssRules);
+  if (process && process['__resolvedStyles' as keyof NodeJS.Process]) {
+    const resolvedStyles = process[
+      '__resolvedStyles' as keyof NodeJS.Process
+    ] as unknown as ResolvedStyle[];
+    resolvedStyles.push({ classes, cssRules });
   }
 
   if (typeof document !== 'undefined') {

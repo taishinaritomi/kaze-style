@@ -1,7 +1,9 @@
-import type { StyleData } from './transformPlugin';
+import type { Options as _Options } from './transformPlugin';
 import { transformPlugin } from './transformPlugin';
 
-const kazePreset = (_: unknown, options: StyleData) => {
+export type Options = _Options;
+
+const kazePreset = (_: unknown, options: Options) => {
   return {
     plugins: [[transformPlugin, options]],
   };

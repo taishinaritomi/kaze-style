@@ -1,12 +1,6 @@
+import type { ResolvedStyle } from '@kaze-style/core';
 import evalCode from 'eval';
 import type { LoaderContext } from './loader';
-
-export type StyleData =
-  | {
-      cssRulesList: string[][];
-      classesList: Record<string, string>[];
-    }
-  | undefined;
 
 export function pitch(this: LoaderContext) {
   this.cacheable(true);
@@ -24,15 +18,16 @@ export function pitch(this: LoaderContext) {
             this.resourcePath,
             {
               console,
-              process: Object.assign(process, { __styleData: null }),
+              process: Object.assign(process, { __resolvedStyles: [] }),
             },
             true,
           );
-          const styleData = process[
-            '__styleData' as keyof NodeJS.Process
-          ] as StyleData;
+          const resolvedStyles = process[
+            '__resolvedStyles' as keyof NodeJS.Process
+          ] as unknown as ResolvedStyle[];
 
-          if (styleData) this.data['styleData'] = styleData;
+          if (resolvedStyles.length !== 0)
+            this.data.resolvedStyles = resolvedStyles;
 
           callback(null);
         } catch (error) {

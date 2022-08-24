@@ -1,6 +1,8 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import kazePreset from '@kaze-style/babel-preset';
+import type { Options } from '@kaze-style/babel-preset';
+import type { ResolvedStyle } from '@kaze-style/core';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
@@ -8,9 +10,14 @@ import type {
   Compilation,
 } from 'webpack';
 import type { ChildCompiler } from './compiler';
-import type { StyleData } from './pitch';
 import { parseSourceMap } from './utils/parseSourceMap';
 import { toURIComponent } from './utils/toURIComponent';
+
+const importOption: Options['import'] = {
+  source: '@kaze-style/react',
+  name: 'createStyle',
+  transformName: '__style',
+};
 
 type Option = {
   childCompiler: ChildCompiler;
@@ -40,9 +47,9 @@ export function loader(
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
 ) {
-  const styleData = this.data.styleData as StyleData;
+  const resolvedStyles = this.data.resolvedStyles as ResolvedStyle[];
 
-  if (styleData) {
+  if (resolvedStyles) {
     const babelAST = Babel.parseSync(sourceCode, {
       caller: { name: 'kaze' },
       filename: path.relative(process.cwd(), this.resourcePath),
@@ -58,7 +65,7 @@ export function loader(
     const babelFileResult = Babel.transformFromAstSync(babelAST, sourceCode, {
       babelrc: false,
       configFile: false,
-      presets: [[kazePreset, styleData]],
+      presets: [[kazePreset, { resolvedStyles, import: importOption }]],
       filename: path.relative(process.cwd(), this.resourcePath),
       sourceMaps: this.sourceMap || false,
       sourceFileName: path.relative(process.cwd(), this.resourcePath),
@@ -70,7 +77,9 @@ export function loader(
       return;
     }
 
-    const cssRules = styleData.cssRulesList.flat();
+    const cssRules = resolvedStyles.flatMap(
+      (resolvedStyle) => resolvedStyle.cssRules,
+    );
 
     if (cssRules.length) {
       const request = `import ${JSON.stringify(
