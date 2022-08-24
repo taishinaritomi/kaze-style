@@ -6,6 +6,8 @@ import { getGlobalCssLoader } from 'next/dist/build/webpack/config/blocks/css/lo
 import type { ConfigurationContext } from 'next/dist/build/webpack/config/utils';
 import type { Configuration, RuleSetRule } from 'webpack';
 
+type KazeConfig = Record<string, string>;
+
 const getSupportedBrowsers = (dir: string, isDevelopment: boolean) => {
   try {
     return loadConfig({
@@ -16,9 +18,13 @@ const getSupportedBrowsers = (dir: string, isDevelopment: boolean) => {
   return undefined;
 };
 
-const kazeStyleConfig = (nextConfig: NextConfig) => {
+const kazeStyleConfig = (
+  nextConfig: NextConfig,
+  kazeConfig: KazeConfig = {},
+) => {
   return {
     webpack(config: Configuration & ConfigurationContext, options) {
+      kazeConfig;
       const { dir, dev, isServer } = options;
 
       const cssRules = (
@@ -61,6 +67,16 @@ const kazeStyleConfig = (nextConfig: NextConfig) => {
       return config;
     },
   } as NextConfig;
+};
+
+export const createKazeStylePlugin = (kazeConfig: KazeConfig = {}) => {
+  return (nextConfig: NextConfig) => {
+    return Object.assign(
+      {},
+      nextConfig,
+      kazeStyleConfig(nextConfig, kazeConfig),
+    );
+  };
 };
 
 export const withKazeStyle = (nextConfig: NextConfig) => {
