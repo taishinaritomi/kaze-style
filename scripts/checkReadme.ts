@@ -8,11 +8,15 @@ import glob from 'fast-glob';
     absolute: true,
   });
 
-  const primaryREADME = (await fs.readFile(path.join(__dirname, '../README.md'))).toString();
+  const primaryREADME = (
+    await fs.readFile(path.join(__dirname, '../README.md'))
+  ).toString();
   for (const packageDir of packages) {
-    const packageREADME = (await fs.readFile(path.join(packageDir, 'README.md'))).toString();
-    if(packageREADME !== primaryREADME) {
-      throw Error('README has not been copied.')
+    const packageREADME = (
+      await fs.readFile(path.join(packageDir, 'README.md'))
+    ).toString();
+    if (packageREADME !== primaryREADME) {
+      throw Error('README has not been copied.');
     }
   }
 })();
