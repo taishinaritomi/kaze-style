@@ -7,7 +7,10 @@ import { hashClassName } from './utils/hashClassName';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
 import { isObject } from './utils/isObject';
+import { isShortHandProperty } from './utils/isShortHandProperty';
 import { normalizeNestedProperty } from './utils/normalizeNestedProperty';
+import { omit } from './utils/omit';
+import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
 
 type Args = {
   style: KazeStyle;
@@ -29,18 +32,35 @@ export const resolveStyle = ({
   for (const _property in style) {
     const property = _property as keyof KazeStyle;
     const styleValue: ValueOf<KazeStyle> = style[property];
-    if (!styleValue) return { resultStyle };
-
-    if (typeof styleValue === 'string' || typeof styleValue === 'number') {
-      const className = hashClassName({ property, pseudo, media, styleValue });
-      const rules = compileCSS({
-        className,
-        property,
-        styleValue: styleValue.toString(),
-        media,
-        pseudo,
-      });
-      Object.assign(resultStyle, { [className]: rules });
+    if (
+      typeof styleValue === 'string' ||
+      typeof styleValue === 'number' ||
+      Array.isArray(styleValue)
+    ) {
+      if (isShortHandProperty(property)) {
+        const resolvedStyle = resolveShortHandStyle(property, styleValue);
+        resolveStyle({
+          style: Object.assign(omit(style, [property]), resolvedStyle),
+          pseudo,
+          media,
+          resultStyle,
+        });
+      } else {
+        const className = hashClassName({
+          property,
+          pseudo,
+          media,
+          styleValue,
+        });
+        const rules = compileCSS({
+          className,
+          property,
+          styleValue,
+          media,
+          pseudo,
+        });
+        Object.assign(resultStyle, { [className]: rules });
+      }
     } else if (property === 'animationName') {
       const animationNameValue = styleValue as CSSKeyframes;
       const { keyframesRules, keyframeName } =

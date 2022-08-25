@@ -1,10 +1,12 @@
 import { hash } from '../hash';
+import type { CSSValue } from '../types/Style';
+import type { AndArray } from '../types/Utils';
 
 type Args = {
   property?: string;
   pseudo?: string;
   media?: string;
-  styleValue?: string | number;
+  styleValue?: AndArray<CSSValue>;
 };
 
 export const hashClassName = ({
@@ -13,5 +15,11 @@ export const hashClassName = ({
   styleValue = '',
   media = '',
 }: Args): string => {
-  return `k-${hash(property + pseudo + media)}-${hash(`${styleValue}`)}`;
+  if (Array.isArray(styleValue)) {
+    return `k-${hash(property + pseudo + media)}-${hash(
+      `${styleValue.join(' ')}`,
+    )}`;
+  } else {
+    return `k-${hash(property + pseudo + media)}-${hash(`${styleValue}`)}`;
+  }
 };

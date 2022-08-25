@@ -5,6 +5,8 @@ import type {
   StandardShorthandProperties,
 } from 'csstype';
 
+export type CSSValue = string | number;
+
 type CSSPseudos = {
   [_ in Pseudos]?: SupportedCSSProperties;
 };
@@ -26,9 +28,20 @@ type CSSAnimationNameProperty = {
   animationName?: CSSKeyframes | string;
 };
 
-type SupportedCSSProperties = Omit<
-  PropertiesFallback<string | 0>,
-  'animationName' | keyof StandardShorthandProperties
+export const supportedShorthandProperties = [
+  'margin',
+  'padding',
+  'gap',
+  'inset',
+  'overflow',
+] as const;
+export type SupportedShorthandProperties =
+  typeof supportedShorthandProperties[number];
+
+export type SupportedCSSProperties = Omit<
+  PropertiesFallback<CSSValue>,
+  | 'animationName'
+  | keyof Omit<StandardShorthandProperties, SupportedShorthandProperties>
 > &
   CSSPseudos &
   CSSAtRules &
