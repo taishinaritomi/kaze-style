@@ -16,11 +16,11 @@ type Args = {
   style: KazeStyle;
   pseudo?: string;
   media?: string;
-  resultStyle?: Record<string, string[]>;
+  resultStyle?: Record<string, string>;
 };
 
 type Result = {
-  resultStyle: Record<string, string[]>;
+  resultStyle: Record<string, string>;
 };
 
 export const resolveStyle = ({
@@ -52,25 +52,25 @@ export const resolveStyle = ({
           media,
           styleValue,
         });
-        const rules = compileCSS({
+        const rule = compileCSS({
           className,
           property,
           styleValue,
           media,
           pseudo,
         });
-        Object.assign(resultStyle, { [className]: rules });
+        Object.assign(resultStyle, { [className]: rule });
       }
     } else if (property === 'animationName') {
       const animationNameValue = styleValue as CSSKeyframes;
-      const { keyframesRules, keyframeName } =
+      const { keyframesRule, keyframeName } =
         compileKeyFrameCSS(animationNameValue);
       resolveStyle({
         style: { animationName: keyframeName },
         pseudo,
         media,
         resultStyle: Object.assign(resultStyle, {
-          [keyframeName]: keyframesRules,
+          [keyframeName]: keyframesRule,
         }),
       });
     } else if (isObject(styleValue)) {

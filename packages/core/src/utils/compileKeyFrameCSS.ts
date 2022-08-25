@@ -1,7 +1,6 @@
 import { hash } from '../hash';
 import type { CSSKeyframes } from '../types/Style';
 import { compileObjectCSS } from './compileObjectCSS';
-import { serializeCSS } from './serializeCSS';
 
 export const compileKeyFrameCSS = (keyframeObject: CSSKeyframes) => {
   const percentageRules: string[] = [];
@@ -10,9 +9,9 @@ export const compileKeyFrameCSS = (keyframeObject: CSSKeyframes) => {
     const value = keyframeObject[percentage as keyof CSSKeyframes];
     percentageRules.push(`${percentage}{${compileObjectCSS(value || {})}}`);
   }
-  const css = percentageRules.join();
+  const css = percentageRules.join('');
   const keyframeName = `k-${hash(css)}`;
-  const keyframesRules = serializeCSS(`@keyframes ${keyframeName} {${css}}`);
+  const keyframesRule = `@keyframes ${keyframeName} {${css}}`;
 
-  return { keyframesRules, keyframeName };
+  return { keyframesRule, keyframeName };
 };

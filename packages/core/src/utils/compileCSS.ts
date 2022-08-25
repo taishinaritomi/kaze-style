@@ -1,7 +1,6 @@
 import type { CSSValue } from '../types/Style';
 import type { AndArray } from '../types/Utils';
 import { hyphenateProperty } from './hyphenateProperty';
-import { serializeCSS } from './serializeCSS';
 
 type CompileCSS = {
   className: string;
@@ -17,7 +16,7 @@ export const compileCSS = ({
   styleValue,
   pseudo = '',
   media,
-}: CompileCSS): string[] => {
+}: CompileCSS): string => {
   const selector = `.${className}`;
   let rule = '';
   if (Array.isArray(styleValue)) {
@@ -31,5 +30,5 @@ export const compileCSS = ({
   }
   if (media) rule = `@media ${media} {${rule}}`;
 
-  return serializeCSS(rule);
+  return rule;
 };

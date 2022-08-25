@@ -9,5 +9,5 @@ export const compileObjectCSS = (style: KazeStyle): string => {
       rules.push(hyphenateProperty(property) + ':' + value + ';');
     }
   }
-  return rules.join();
+  return rules.join('');
 };
