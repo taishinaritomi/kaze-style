@@ -21,7 +21,6 @@
   <br>
 </div>
 
-
 ## Example
 
 ```ts
