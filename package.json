@@ -16,6 +16,8 @@
     "test": "turbo run test --filter=./packages/*",
     "code:fix": "eslint . --fix --ignore-path .gitignore && prettier . --write --ignore-path .gitignore",
     "code:check": "yarn workspaces run tsc --noEmit && eslint . --ignore-path .gitignore && prettier . --check --ignore-path .gitignore",
+    "readme:copy": "tsx scripts/copyReadme.ts",
+    "readme:check": "tsx scripts/checkReadme.ts",
     "release": "changeset publish"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
     "tsdx": "^0.14.1",
+    "tsx": "^3.8.2",
     "turbo": "^1.4.3",
     "typescript": "^4.7.4"
   }

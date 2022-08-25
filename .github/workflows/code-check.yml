@@ -19,5 +19,7 @@ jobs:
         run: yarn install
       - name: build packages
         run: yarn build
-      - name: check run
+      - name: check run code
         run: yarn code:check
+      - name: check run readme
+        run: yarn readme:check
