@@ -8,15 +8,11 @@ import type {
 export type CSSValue = string | number;
 
 type CSSPseudos = {
-  [_ in Pseudos]?: SupportedCSSProperties;
+  [_ in Pseudos]?: SupportedAllStyle;
 };
 
 type CSSAtRules = {
-  [_ in AtRules]?: SupportedCSSProperties;
-};
-
-type CSSNestProperties = {
-  [_: string]: SupportedCSSProperties;
+  [_ in AtRules]?: SupportedAllStyle;
 };
 
 export type CSSKeyframes = Record<
@@ -42,12 +38,18 @@ export type SupportedCSSProperties = Omit<
   PropertiesFallback<CSSValue>,
   | 'animationName'
   | keyof Omit<StandardShorthandProperties, SupportedShorthandProperties>
-> &
+>;
+
+export type SupportedAllStyle = SupportedCSSProperties &
   CSSPseudos &
   CSSAtRules &
   CSSAnimationNameProperty;
 
-export type KazeStyle = SupportedCSSProperties | CSSNestProperties;
+type CSSNestProperties = {
+  [_: string]: SupportedAllStyle;
+};
+
+export type KazeStyle = SupportedAllStyle | CSSNestProperties;
 
 export type ResolvedStyle = {
   cssRules: string[];

@@ -14,14 +14,12 @@ const classes = createStyle({
     animationName: {
       from: {
         transform: 'rotate(0deg)',
-        ':hover': { backgroundColor: 'green' },
       },
       '50%': {
         transform: 'rotate(340deg)',
       },
       to: {
         transform: 'rotate(360deg)',
-        ':hover': { backgroundColor: 'green' },
       },
     },
   },
