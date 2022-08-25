@@ -1,4 +1,4 @@
-import { KazePlugin } from '@kaze-style/webpack-loader';
+import { KazePlugin } from '@kaze-style/webpack-plugin';
 import { loadConfig } from 'browserslist';
 import type { NextConfig } from 'next';
 import { lazyPostCSS } from 'next/dist/build/webpack/config/blocks/css';

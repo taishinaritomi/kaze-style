@@ -1,10 +1,10 @@
 {
-  "name": "@kaze-style/webpack-loader",
+  "name": "@kaze-style/webpack-plugin",
   "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
-  "module": "dist/webpack-loader.esm.js",
+  "module": "dist/webpack-plugin.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",

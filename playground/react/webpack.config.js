@@ -1,5 +1,5 @@
 const path = require('path');
-const { KazePlugin } = require('@kaze-style/webpack-loader');
+const { KazePlugin } = require('../../packages/webpack-plugin/dist');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 

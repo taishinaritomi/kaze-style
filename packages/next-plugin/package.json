@@ -16,7 +16,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/webpack-loader": "^0.2.0",
+    "@kaze-style/webpack-plugin": "^0.2.0",
     "browserslist": "^4.21.3"
   },
   "peerDependencies": {

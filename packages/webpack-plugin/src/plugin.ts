@@ -9,7 +9,7 @@ type PluginOptions = {
 };
 
 const pluginName = 'KazePlugin';
-const loader = '@kaze-style/webpack-loader';
+const loader = '@kaze-style/webpack-plugin';
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
