@@ -1,7 +1,7 @@
 import path from 'path';
 import * as Babel from '@babel/core';
-import kazePreset from '@kaze-style/babel-preset';
-import type { Options } from '@kaze-style/babel-preset';
+import kazePreset from '@kaze-style/babel-plugin';
+import type { Options } from '@kaze-style/babel-plugin';
 import type { ResolvedStyle } from '@kaze-style/core';
 import type {
   LoaderDefinitionFunction,

@@ -3,7 +3,7 @@ import { transformPlugin } from './transformPlugin';
 
 export type Options = _Options;
 
-const kazePreset = (_: unknown, options: Options) => {
+export const kazePreset = (_: unknown, options: Options) => {
   return {
     plugins: [[transformPlugin, options]],
   };

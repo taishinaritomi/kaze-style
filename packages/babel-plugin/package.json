@@ -1,10 +1,10 @@
 {
-  "name": "@kaze-style/babel-preset",
+  "name": "@kaze-style/babel-plugin",
   "version": "0.2.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
-  "module": "dist/babel-preset.esm.js",
+  "module": "dist/babel-plugin.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
