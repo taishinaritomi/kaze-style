@@ -4,6 +4,7 @@ import type {
   PropertiesFallback,
   StandardShorthandProperties,
 } from 'csstype';
+import type { NestedObject } from './Utils';
 
 export type CSSValue = string | number;
 
@@ -31,6 +32,7 @@ export const supportedShorthandProperties = [
   'inset',
   'overflow',
 ] as const;
+
 export type SupportedShorthandProperties =
   typeof supportedShorthandProperties[number];
 
@@ -40,16 +42,14 @@ export type SupportedCSSProperties = Omit<
   | keyof Omit<StandardShorthandProperties, SupportedShorthandProperties>
 >;
 
-export type SupportedAllStyle = SupportedCSSProperties &
+type SupportedAllStyle = SupportedCSSProperties &
   CSSPseudos &
   CSSAtRules &
   CSSAnimationNameProperty;
 
-type CSSNestProperties = {
-  [_: string]: SupportedAllStyle;
-};
-
-export type KazeStyle = SupportedAllStyle | CSSNestProperties;
+export type KazeStyle = NestedObject<
+  NestedObject<NestedObject<NestedObject<NestedObject<SupportedAllStyle>>>>
+>;
 
 export type ResolvedStyle = {
   cssRules: string[];
