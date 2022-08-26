@@ -14,20 +14,28 @@ export const compileCSS = ({
   className,
   property,
   styleValue,
-  pseudo = '',
+  pseudo,
   media,
 }: CompileCSS): string => {
-  const selector = `.${className}`;
+  let selector = '';
   let rule = '';
-  if (Array.isArray(styleValue)) {
-    rule = `${selector}${pseudo}{${hyphenateProperty(
-      property,
-    )}:${styleValue.join(' ')};}`;
+
+  if (!pseudo) {
+    selector = `.${className}`;
+  } else if (/^(:|\[|>|\ )/.test(pseudo)) {
+    selector = `.${className}${pseudo.replace(/&/g, `.${className}`)}`;
   } else {
-    rule = `${selector}${pseudo}{${hyphenateProperty(
-      property,
-    )}:${styleValue};}`;
+    selector = `${pseudo.replace(/&/g, `.${className}`)}`;
   }
+
+  if (Array.isArray(styleValue)) {
+    rule = `${selector}{${hyphenateProperty(property)}:${styleValue.join(
+      ' ',
+    )};}`;
+  } else {
+    rule = `${selector}{${hyphenateProperty(property)}:${styleValue};}`;
+  }
+
   if (media) rule = `@media ${media} {${rule}}`;
 
   return rule;

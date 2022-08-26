@@ -74,14 +74,7 @@ export const resolveStyle = ({
         }),
       });
     } else if (isObject(styleValue)) {
-      if (isNestedSelector(property)) {
-        resolveStyle({
-          style: styleValue,
-          pseudo: pseudo + normalizeNestedProperty(property),
-          media,
-          resultStyle,
-        });
-      } else if (isMediaQuerySelector(property)) {
+      if (isMediaQuerySelector(property)) {
         const combinedMediaQuery = combinedQuery(
           media,
           property.slice(6).trim(),
@@ -90,6 +83,13 @@ export const resolveStyle = ({
           style: styleValue,
           pseudo,
           media: combinedMediaQuery,
+          resultStyle,
+        });
+      } else if (isNestedSelector(property)) {
+        resolveStyle({
+          style: styleValue,
+          pseudo: pseudo + normalizeNestedProperty(property),
+          media,
           resultStyle,
         });
       }
