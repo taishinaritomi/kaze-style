@@ -1,19 +1,19 @@
-import { createStyle, mergeStyle, red } from '@kaze-style/react';
+import { createStyle, mergeStyle } from '@kaze-style/react';
 import type { NextPage } from 'next';
-import { index, padding } from '..';
+import { theme } from '@/theme';
 
 const classes = createStyle({
-  button: {
-    color: red,
-    backgroundColor: index,
-    ...padding,
+  text: {
+    backgroundColor: 'green',
+    [theme.screen.xs]: {
+      backgroundColor: 'red',
+    },
   },
 });
-
 const Home: NextPage = () => {
   return (
     <div>
-      <p className={mergeStyle(classes.button)}>{index}</p>
+      <p className={mergeStyle(classes.text)}>index</p>
     </div>
   );
 };

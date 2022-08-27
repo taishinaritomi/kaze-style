@@ -1,4 +1,4 @@
-import type { KazeStyle } from '../types/Style';
+import type { KazeStyle } from '../types/style';
 import { hyphenateProperty } from './hyphenateProperty';
 
 export const compileObjectCSS = (style: KazeStyle): string => {
@@ -9,5 +9,5 @@ export const compileObjectCSS = (style: KazeStyle): string => {
       rules.push(hyphenateProperty(property) + ':' + value + ';');
     }
   }
-  return rules.join();
+  return rules.join('');
 };

@@ -1,0 +1,25 @@
+{
+  "name": "@kaze-style/babel-plugin",
+  "version": "0.3.0",
+  "license": "MIT",
+  "author": "Taishi Naritomi",
+  "main": "dist/index.js",
+  "module": "dist/babel-plugin.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "tsdx watch --noClean",
+    "build": "tsdx build",
+    "test": "echo 'no test specified'"
+  },
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.18.9",
+    "@kaze-style/core": "^0.3.0"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7"
+  }
+}

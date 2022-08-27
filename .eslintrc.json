@@ -11,8 +11,8 @@
   "overrides": [
     {
       "files": [
-        "./packages/babel-preset/src/index.ts",
-        "./packages/webpack-loader/src/index.ts",
+        "./packages/babel-plugin/src/index.ts",
+        "./packages/webpack-plugin/src/index.ts",
         "./playground/next/src/pages/**",
         "./playground/next/next.config.*"
       ],
@@ -22,9 +22,9 @@
       }
     },
     {
-      "files": ["./packages/babel-preset/src/transformPlugin.ts"],
+      "files": ["./packages/webpack-plugin/src/compiler.ts"],
       "rules": {
-        "@typescript-eslint/no-non-null-assertion": "off"
+        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {

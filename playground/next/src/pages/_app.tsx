@@ -1,7 +1,11 @@
 import type { AppProps } from 'next/app';
+import '@kaze-style/react/reset.css';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
-}
-
-export default MyApp;
+const App = ({ Component, pageProps }: AppProps) => {
+  return (
+    <div>
+      <Component {...pageProps} />
+    </div>
+  );
+};
+export default App;

@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/react",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
@@ -8,17 +8,19 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "LICENSE"
+    "LICENSE",
+    "reset.css",
+    "reset.css.d.ts"
   ],
   "scripts": {
     "dev": "tsdx watch --noClean",
     "build": "tsdx build",
-    "test": "echo 'No test'"
+    "test": "echo 'no test specified'"
   },
   "peerDependencies": {
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.2.0"
+    "@kaze-style/core": "^0.3.0"
   }
 }

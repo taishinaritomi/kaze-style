@@ -1,5 +1,5 @@
 import { resolveStyle } from './resolveStyle';
-import type { KazeStyle } from './types/Style';
+import type { KazeStyle } from './types/style';
 
 type Result<Key extends string> = {
   cssRules: string[];
@@ -16,9 +16,7 @@ export const createStyle = <Key extends string>(
     const keyStyle: KazeStyle = styles[key];
     const { resultStyle } = resolveStyle({ style: keyStyle });
 
-    Object.values(resultStyle).forEach((rules) =>
-      rules.forEach((css) => allCSS.add(css)),
-    );
+    Object.values(resultStyle).forEach((rule) => allCSS.add(rule));
     classes[key] = Object.keys(resultStyle).join(' ');
   }
 

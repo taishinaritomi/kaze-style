@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/next-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
@@ -13,10 +13,10 @@
   "scripts": {
     "dev": "tsdx watch --noClean",
     "build": "tsdx build",
-    "test": "echo 'No test'"
+    "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/webpack-loader": "^0.2.0",
+    "@kaze-style/webpack-plugin": "^0.3.0",
     "browserslist": "^4.21.3"
   },
   "peerDependencies": {

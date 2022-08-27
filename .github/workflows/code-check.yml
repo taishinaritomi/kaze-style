@@ -17,7 +17,9 @@ jobs:
           cache: npm
       - name: install dependencies
         run: yarn install
-      - name: build
+      - name: build packages
         run: yarn build
-      - name: check run
-        run: yarn check:all
+      - name: check run code
+        run: yarn code:check
+      - name: check run readme
+        run: yarn readme:check

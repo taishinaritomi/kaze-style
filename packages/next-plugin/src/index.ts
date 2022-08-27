@@ -1,10 +1,12 @@
-import { KazePlugin } from '@kaze-style/webpack-loader';
+import { KazePlugin } from '@kaze-style/webpack-plugin';
 import { loadConfig } from 'browserslist';
 import type { NextConfig } from 'next';
 import { lazyPostCSS } from 'next/dist/build/webpack/config/blocks/css';
 import { getGlobalCssLoader } from 'next/dist/build/webpack/config/blocks/css/loaders';
 import type { ConfigurationContext } from 'next/dist/build/webpack/config/utils';
 import type { Configuration, RuleSetRule } from 'webpack';
+
+type KazeConfig = Record<string, string>;
 
 const getSupportedBrowsers = (dir: string, isDevelopment: boolean) => {
   try {
@@ -16,21 +18,14 @@ const getSupportedBrowsers = (dir: string, isDevelopment: boolean) => {
   return undefined;
 };
 
-const kazeStyleConfig = (nextConfig: NextConfig) => {
+const kazeStyleConfig = (
+  nextConfig: NextConfig,
+  kazeConfig: KazeConfig = {},
+) => {
   return {
     webpack(config: Configuration & ConfigurationContext, options) {
+      kazeConfig;
       const { dir, dev, isServer } = options;
-
-      config.module?.rules?.unshift({
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: [/node_modules/],
-        use: [
-          {
-            loader: '@kaze-style/webpack-loader',
-            options: {},
-          },
-        ],
-      });
 
       const cssRules = (
         config.module?.rules?.find(
@@ -72,6 +67,16 @@ const kazeStyleConfig = (nextConfig: NextConfig) => {
       return config;
     },
   } as NextConfig;
+};
+
+export const createKazeStylePlugin = (kazeConfig: KazeConfig = {}) => {
+  return (nextConfig: NextConfig) => {
+    return Object.assign(
+      {},
+      nextConfig,
+      kazeStyleConfig(nextConfig, kazeConfig),
+    );
+  };
 };
 
 export const withKazeStyle = (nextConfig: NextConfig) => {

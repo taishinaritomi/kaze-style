@@ -6,15 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "echo 'No test'"
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.2.0",
-    "@kaze-style/next-plugin": "^0.2.0",
-    "browserslist": "^4.21.3",
-    "next": "12.2.3",
+    "@kaze-style/react": "^0.3.0",
+    "@kaze-style/next-plugin": "^0.3.0",
+    "@next/bundle-analyzer": "^12.2.5",
+    "next": "12.2.5",
     "react": "18.2.0",
-    "mini-css-extract-plugin": "^2.6.1",
     "react-dom": "18.2.0"
   }
 }

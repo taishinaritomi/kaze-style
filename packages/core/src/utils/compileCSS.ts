@@ -1,10 +1,11 @@
+import type { CSSValue } from '../types/style';
+import type { AndArray } from '../types/utils';
 import { hyphenateProperty } from './hyphenateProperty';
-import { serializeCSS } from './serializeCSS';
 
 type CompileCSS = {
   className: string;
   property: string;
-  styleValue: string;
+  styleValue: AndArray<CSSValue>;
   pseudo?: string;
   media?: string;
 };
@@ -13,13 +14,29 @@ export const compileCSS = ({
   className,
   property,
   styleValue,
-  pseudo = '',
+  pseudo,
   media,
-}: CompileCSS): string[] => {
-  const selector = `.${className}`;
+}: CompileCSS): string => {
+  let selector = '';
   let rule = '';
-  rule = `${selector}${pseudo}{${hyphenateProperty(property)}:${styleValue};}`;
+
+  if (!pseudo) {
+    selector = `.${className}`;
+  } else if (/^(:|\[|>|\ )/.test(pseudo)) {
+    selector = `.${className}${pseudo.replace(/&/g, `.${className}`)}`;
+  } else {
+    selector = `${pseudo.replace(/&/g, `.${className}`)}`;
+  }
+
+  if (Array.isArray(styleValue)) {
+    rule = `${selector}{${hyphenateProperty(property)}:${styleValue.join(
+      ' ',
+    )};}`;
+  } else {
+    rule = `${selector}{${hyphenateProperty(property)}:${styleValue};}`;
+  }
+
   if (media) rule = `@media ${media} {${rule}}`;
 
-  return serializeCSS(rule);
+  return rule;
 };
