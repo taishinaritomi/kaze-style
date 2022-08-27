@@ -1,5 +1,5 @@
-import type { CSSKeyframes, KazeStyle } from './types/Style';
-import type { ValueOf } from './types/Utils';
+import type { CSSKeyframes, KazeStyle } from './types/style';
+import type { ValueOf } from './types/utils';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';

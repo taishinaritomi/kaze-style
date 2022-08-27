@@ -1,4 +1,4 @@
-import type { KazeStyle } from '../types/Style';
+import type { KazeStyle } from '../types/style';
 import { hyphenateProperty } from './hyphenateProperty';
 
 export const compileObjectCSS = (style: KazeStyle): string => {

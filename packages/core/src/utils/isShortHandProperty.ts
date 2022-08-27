@@ -1,5 +1,5 @@
-import type { KazeStyle, SupportedShorthandProperties } from '../types/Style';
-import { supportedShorthandProperties } from '../types/Style';
+import type { KazeStyle, SupportedShorthandProperties } from '../types/style';
+import { supportedShorthandProperties } from '../types/style';
 
 export const isShortHandProperty = (
   property: keyof KazeStyle,

@@ -1,5 +1,5 @@
-import type { CSSValue, SupportedCSSProperties } from '../types/Style';
-import type { AndArray } from '../types/Utils';
+import type { CSSValue, SupportedCSSProperties } from '../types/style';
+import type { AndArray } from '../types/utils';
 
 const positionMap = ['Top', 'Right', 'Bottom', 'Left'];
 

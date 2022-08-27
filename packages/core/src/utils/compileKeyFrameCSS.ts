@@ -1,5 +1,5 @@
 import { hash } from '../hash';
-import type { CSSKeyframes } from '../types/Style';
+import type { CSSKeyframes } from '../types/style';
 import { compileObjectCSS } from './compileObjectCSS';
 
 export const compileKeyFrameCSS = (keyframeObject: CSSKeyframes) => {

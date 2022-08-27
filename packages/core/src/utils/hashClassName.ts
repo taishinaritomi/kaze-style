@@ -1,6 +1,6 @@
 import { hash } from '../hash';
-import type { CSSValue } from '../types/Style';
-import type { AndArray } from '../types/Utils';
+import type { CSSValue } from '../types/style';
+import type { AndArray } from '../types/utils';
 
 type Args = {
   property?: string;

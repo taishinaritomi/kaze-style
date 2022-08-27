@@ -1,5 +1,5 @@
 import { resolveStyle } from './resolveStyle';
-import type { KazeStyle } from './types/Style';
+import type { KazeStyle } from './types/style';
 
 type Result<Key extends string> = {
   cssRules: string[];

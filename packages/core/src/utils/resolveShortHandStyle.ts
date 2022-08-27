@@ -2,8 +2,8 @@ import type {
   CSSValue,
   SupportedShorthandProperties,
   SupportedCSSProperties,
-} from '../types/Style';
-import type { AndArray } from '../types/Utils';
+} from '../types/style';
+import type { AndArray } from '../types/utils';
 import { generateStyles } from './generateStyles';
 
 type OverflowStyle = Pick<SupportedCSSProperties, 'overflowX' | 'overflowY'>;

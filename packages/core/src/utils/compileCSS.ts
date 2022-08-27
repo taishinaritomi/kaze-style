@@ -1,5 +1,5 @@
-import type { CSSValue } from '../types/Style';
-import type { AndArray } from '../types/Utils';
+import type { CSSValue } from '../types/style';
+import type { AndArray } from '../types/utils';
 import { hyphenateProperty } from './hyphenateProperty';
 
 type CompileCSS = {
