@@ -3,6 +3,11 @@
   "version": "0.3.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
+  "description": "Kaze [風] zero-runtime CSS in JS",  "repository": {
+    "type": "git",
+    "url": "https://github.com/taishinaritomi/kaze-style.git",
+    "directory": "packages/react"
+  },
   "main": "dist/index.js",
   "module": "dist/react.esm.js",
   "typings": "dist/index.d.ts",
