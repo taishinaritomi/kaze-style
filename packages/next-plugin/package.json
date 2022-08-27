@@ -1,8 +1,14 @@
 {
   "name": "@kaze-style/next-plugin",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "license": "MIT",
   "author": "Taishi Naritomi",
+  "description": "Kaze [風] zero-runtime CSS in JS",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taishinaritomi/kaze-style.git",
+    "directory": "packages/next-plugin"
+  },
   "main": "dist/index.js",
   "module": "dist/next-plugin.esm.js",
   "typings": "dist/index.d.ts",
@@ -16,7 +22,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/webpack-plugin": "^0.3.0",
+    "@kaze-style/webpack-plugin": "^0.3.1",
     "browserslist": "^4.21.3"
   },
   "peerDependencies": {
