@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/babel-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "main": "dist/index.js",
