@@ -21,6 +21,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.2.0"
+    "@kaze-style/core": "^0.3.0"
   }
 }
