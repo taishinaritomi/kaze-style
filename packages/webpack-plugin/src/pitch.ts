@@ -13,28 +13,38 @@ export function pitch(this: LoaderContext) {
       .getCompiledSource(this)
       .then(({ source }) => {
         try {
-          evalCode(
-            source,
-            this.resourcePath,
-            {
-              console,
-              process: Object.assign(process, { __resolvedStyles: [] }),
-            },
-            true,
-          );
-          const resolvedStyles = process[
-            '__resolvedStyles' as keyof NodeJS.Process
-          ] as unknown as ResolvedStyle[];
+          if (
+            source.includes('@kaze-style/react') &&
+            source.includes('createStyle')
+          ) {
+            evalCode(
+              source,
+              this.resourcePath,
+              {
+                console,
+                process: Object.assign(process, { __resolvedStyles: [] }),
+              },
+              true,
+            );
 
-          if (resolvedStyles.length !== 0)
-            this.data.resolvedStyles = resolvedStyles;
+            const resolvedStyles = process[
+              '__resolvedStyles' as keyof NodeJS.Process
+            ] as unknown as ResolvedStyle[];
+
+            if (resolvedStyles.length !== 0) {
+              this.data.resolvedStyles = resolvedStyles;
+            }
+          }
 
           callback(null);
         } catch (error) {
+          console.error(error);
           callback(null);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
+
         callback(null);
       });
   }
