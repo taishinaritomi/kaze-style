@@ -47,6 +47,19 @@ export const resolveShortHandStyle = (
       overflowX: firstValue,
       overflowY: secondValue,
     } as OverflowStyle;
+  } else if (property === 'borderRadius') {
+    const [
+      firstValue,
+      secondValue = firstValue,
+      thirdValue = firstValue,
+      fourthValue = secondValue,
+    ] = values;
+    return {
+      borderBottomRightRadius: thirdValue,
+      borderBottomLeftRadius: fourthValue,
+      borderTopRightRadius: secondValue,
+      borderTopLeftRadius: firstValue,
+    };
   } else {
     return {};
   }
