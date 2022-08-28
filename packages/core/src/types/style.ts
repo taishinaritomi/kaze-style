@@ -31,7 +31,7 @@ export const supportedShorthandProperties = [
   'gap',
   'inset',
   'overflow',
-  'borderRadius'
+  'borderRadius',
 ] as const;
 
 export type SupportedShorthandProperties =

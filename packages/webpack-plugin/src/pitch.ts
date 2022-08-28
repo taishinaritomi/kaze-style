@@ -13,7 +13,10 @@ export function pitch(this: LoaderContext) {
       .getCompiledSource(this)
       .then(({ source }) => {
         try {
-          if(source.includes("@kaze-style/react") && source.includes("createStyle")) {
+          if (
+            source.includes('@kaze-style/react') &&
+            source.includes('createStyle')
+          ) {
             evalCode(
               source,
               this.resourcePath,
@@ -35,12 +38,12 @@ export function pitch(this: LoaderContext) {
 
           callback(null);
         } catch (error) {
-          console.error(error)
+          console.error(error);
           callback(null);
         }
       })
       .catch((err) => {
-        console.error(err)
+        console.error(err);
 
         callback(null);
       });
