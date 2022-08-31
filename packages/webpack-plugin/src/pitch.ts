@@ -44,7 +44,6 @@ export function pitch(this: LoaderContext) {
       })
       .catch((err) => {
         console.error(err);
-
         callback(null);
       });
   }
