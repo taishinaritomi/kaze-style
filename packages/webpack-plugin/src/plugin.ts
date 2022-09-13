@@ -31,6 +31,12 @@ export class Plugin {
             childCompiler: this.childCompiler,
           },
         },
+        {
+          loader,
+          options: {
+            pre: true,
+          },
+        },
       ],
     });
 
@@ -42,7 +48,7 @@ export class Plugin {
         },
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {
-            if (pathname.includes('.css')) {
+            if (pathname.includes('kaze.css')) {
               const sortedCSSRules = sortCSS(getSource(source));
               compilation.updateAsset(
                 pathname,

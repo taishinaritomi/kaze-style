@@ -117,10 +117,10 @@ function compileVanillaSource(
     if (compat.isWebpack5) {
       childCompiler.hooks.compilation.tap(compilerName, (compilation) => {
         compilation.hooks.processAssets.tap(compilerName, () => {
-          source = (compilation.assets[loader.resourcePath] &&
-            (compilation.assets[
-              loader.resourcePath
-            ]?.source() as string)) as '';
+          source =
+            (compilation.assets[loader.resourcePath] &&
+              (compilation.assets[loader.resourcePath]?.source() as string)) ||
+            '';
 
           compilation.chunks.forEach((chunk) => {
             chunk.files.forEach((file) => {

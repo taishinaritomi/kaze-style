@@ -9,6 +9,7 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/react"
   },
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/react.esm.js",
   "typings": "dist/index.d.ts",

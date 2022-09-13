@@ -9,6 +9,7 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/core"
   },
+  "sideEffects": false,
   "main": "dist/index.js",
   "module": "dist/core.esm.js",
   "typings": "dist/index.d.ts",
