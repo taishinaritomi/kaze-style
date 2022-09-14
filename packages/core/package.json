@@ -10,16 +10,16 @@
     "directory": "packages/core"
   },
   "sideEffects": false,
-  "main": "dist/index.js",
-  "module": "dist/core.esm.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsdx watch --noClean",
-    "build": "tsdx build",
+    "dev": "tsx ./../../scripts/build.ts watch",
+    "build": "tsx ./../../scripts/build.ts",
     "test": "tsdx test"
   },
   "dependencies": {
