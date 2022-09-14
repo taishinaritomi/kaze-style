@@ -55,4 +55,5 @@ export type KazeStyle = NestedObject<
 export type ResolvedStyle = {
   cssRules: string[];
   classes: Record<string, string>;
+  index: number;
 };

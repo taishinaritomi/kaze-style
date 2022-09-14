@@ -1,4 +1,4 @@
-import { createStyle, mergeStyle } from '@kaze-style/react';
+import { createStyle } from '@kaze-style/react';
 import type { NextPage } from 'next';
 import { theme } from '@/theme';
 
@@ -10,10 +10,11 @@ const classes = createStyle({
     },
   },
 });
+
 const Home: NextPage = () => {
   return (
     <div>
-      <p className={mergeStyle(classes.text)}>page</p>
+      <p className={classes.text}>page</p>
     </div>
   );
 };

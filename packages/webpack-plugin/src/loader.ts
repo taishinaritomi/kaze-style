@@ -1,7 +1,6 @@
 import path from 'path';
 import * as Babel from '@babel/core';
-import kazePreset from '@kaze-style/babel-plugin';
-import type { Options } from '@kaze-style/babel-plugin';
+import { preTransformPlugin, transformPlugin } from '@kaze-style/babel-plugin';
 import type { ResolvedStyle } from '@kaze-style/core';
 import type {
   LoaderDefinitionFunction,
@@ -13,14 +12,9 @@ import type { ChildCompiler } from './compiler';
 import { parseSourceMap } from './utils/parseSourceMap';
 import { toURIComponent } from './utils/toURIComponent';
 
-const importOption: Options['import'] = {
-  source: '@kaze-style/react',
-  name: 'createStyle',
-  transformName: '__style',
-};
-
 type Option = {
-  childCompiler: ChildCompiler;
+  childCompiler?: ChildCompiler;
+  pre?: boolean;
 };
 
 export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<Option>>;
@@ -35,6 +29,7 @@ const virtualLoaderPath = path.resolve(
   'virtual-loader',
   'index.js',
 );
+
 const resourcePath = path.resolve(
   __dirname,
   '..',
@@ -42,33 +37,27 @@ const resourcePath = path.resolve(
   'kaze.css',
 );
 
+export const transformedComment = '/* Kaze style Transformed File */';
+
 export function loader(
   this: LoaderContext,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
 ) {
-  const resolvedStyles = this.data.resolvedStyles as ResolvedStyle[];
+  this.cacheable(true);
+  const { pre } = this.getOptions();
 
-  if (resolvedStyles) {
-    const babelAST = Babel.parseSync(sourceCode, {
+  if (pre) {
+    const filePath = path.relative(process.cwd(), this.resourcePath);
+
+    const babelFileResult = Babel.transformSync(sourceCode, {
       caller: { name: 'kaze' },
-      filename: path.relative(process.cwd(), this.resourcePath),
-      inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
-      sourceMaps: this.sourceMap || false,
-    });
-
-    if (babelAST === null) {
-      this.callback(null, sourceCode, inputSourceMap);
-      return;
-    }
-
-    const babelFileResult = Babel.transformFromAstSync(babelAST, sourceCode, {
       babelrc: false,
       configFile: false,
-      presets: [[kazePreset, { resolvedStyles, import: importOption }]],
-      filename: path.relative(process.cwd(), this.resourcePath),
+      filename: filePath,
+      plugins: [[preTransformPlugin]],
       sourceMaps: this.sourceMap || false,
-      sourceFileName: path.relative(process.cwd(), this.resourcePath),
+      sourceFileName: filePath,
       inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
     });
 
@@ -77,27 +66,66 @@ export function loader(
       return;
     }
 
-    const cssRules = resolvedStyles.flatMap(
-      (resolvedStyle) => resolvedStyle.cssRules,
-    );
-
-    if (cssRules.length) {
-      const request = `import ${JSON.stringify(
-        this.utils.contextify(
-          this.context || this.rootContext,
-          `kaze.css!=!${virtualLoaderPath}!${resourcePath}?style=${toURIComponent(
-            cssRules.join('\n'),
-          )}`,
-        ),
-      )};`;
+    if (
+      (
+        babelFileResult.metadata as
+          | (Babel.BabelFileMetadata & { transformed?: boolean })
+          | undefined
+      )?.transformed === true
+    ) {
       this.callback(
         null,
-        `${babelFileResult.code}\n\n${request}`,
+        `${transformedComment}\n${babelFileResult.code}`,
         babelFileResult.map as unknown as string,
       );
       return;
     }
-  }
 
-  this.callback(null, sourceCode, inputSourceMap);
+    this.callback(null, sourceCode, inputSourceMap);
+  } else {
+    const resolvedStyles = this.data.resolvedStyles as
+      | ResolvedStyle[]
+      | undefined;
+    if (resolvedStyles && resolvedStyles.length !== 0) {
+      const filePath = path.relative(process.cwd(), this.resourcePath);
+
+      const babelFileResult = Babel.transformSync(sourceCode, {
+        caller: { name: 'kaze' },
+        babelrc: false,
+        configFile: false,
+        filename: filePath,
+        plugins: [[transformPlugin, { resolvedStyles }]],
+        sourceMaps: this.sourceMap || false,
+        sourceFileName: filePath,
+        inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
+      });
+
+      if (babelFileResult === null) {
+        this.callback(null, sourceCode, inputSourceMap);
+        return;
+      }
+
+      const cssRules = resolvedStyles.flatMap(
+        (resolvedStyle) => resolvedStyle.cssRules,
+      );
+
+      if (cssRules.length) {
+        const request = `import ${JSON.stringify(
+          this.utils.contextify(
+            this.context || this.rootContext,
+            `kaze.css!=!${virtualLoaderPath}!${resourcePath}?style=${toURIComponent(
+              cssRules.join('\n'),
+            )}`,
+          ),
+        )};`;
+        this.callback(
+          null,
+          `${babelFileResult.code}\n\n${request}`,
+          babelFileResult.map as unknown as string,
+        );
+        return;
+      }
+    }
+    this.callback(null, sourceCode, inputSourceMap);
+  }
 }
