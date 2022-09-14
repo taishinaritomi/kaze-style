@@ -26,7 +26,7 @@ const kazeStyleConfig = (
     webpack(config: Configuration & ConfigurationContext, options) {
       kazeConfig;
       const { dir, dev, isServer } = options;
-      if(!dev) {
+      if (!dev) {
         const cssRules = (
           config.module?.rules?.find(
             (rule) =>
