@@ -41,12 +41,6 @@ export const resolveShortHandStyle = (
       bottom: thirdValue,
       left: fourthValue,
     };
-  } else if (property === 'overflow') {
-    const [firstValue, secondValue = firstValue] = values;
-    return {
-      overflowX: firstValue,
-      overflowY: secondValue,
-    } as OverflowStyle;
   } else if (property === 'borderRadius') {
     const [
       firstValue,
@@ -55,10 +49,23 @@ export const resolveShortHandStyle = (
       fourthValue = secondValue,
     ] = values;
     return {
+      borderTopLeftRadius: firstValue,
+      borderTopRightRadius: secondValue,
       borderBottomRightRadius: thirdValue,
       borderBottomLeftRadius: fourthValue,
-      borderTopRightRadius: secondValue,
-      borderTopLeftRadius: firstValue,
+    };
+  } else if (property === 'overflow') {
+    const [firstValue, secondValue = firstValue] = values;
+    return {
+      overflowX: firstValue,
+      overflowY: secondValue,
+    } as OverflowStyle;
+  } else if (property === 'outline') {
+    const [firstValue, secondValue, thirdValue] = values;
+    return {
+      outlineWidth: firstValue,
+      ...(secondValue && { outlineColor: secondValue }),
+      ...(thirdValue && { outlineStyle: thirdValue }),
     };
   } else {
     return {};
