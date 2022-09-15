@@ -3,7 +3,7 @@ import { build } from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import glob from 'fast-glob';
 
-const isWatch = process.argv[2] === 'watch';
+const isWatch = process.argv.includes('--watch');
 
 Promise.all([
   build({
@@ -16,7 +16,7 @@ Promise.all([
   }),
   build({
     watch: isWatch,
-    entryPoints: ['./src'],
+    entryPoints: ['./src/index.ts'],
     logLevel: 'info',
     bundle: true,
     platform: 'node',

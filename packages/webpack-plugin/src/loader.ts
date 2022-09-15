@@ -45,7 +45,13 @@ export function loader(
   inputSourceMap: WebpackLoaderParams[1],
 ) {
   this.cacheable(true);
-  const { pre } = this.getOptions();
+  const { pre, childCompiler } = this.getOptions();
+  const isChildCompiler = childCompiler?.isChildCompiler(this._compiler.name);
+
+  if (isChildCompiler) {
+    this.callback(null, sourceCode, inputSourceMap);
+    return;
+  }
 
   if (pre) {
     const filePath = path.relative(process.cwd(), this.resourcePath);
@@ -54,6 +60,7 @@ export function loader(
       caller: { name: 'kaze' },
       babelrc: false,
       configFile: false,
+      compact: false,
       filename: filePath,
       plugins: [[preTransformPlugin]],
       sourceMaps: this.sourceMap || false,
@@ -93,6 +100,7 @@ export function loader(
         caller: { name: 'kaze' },
         babelrc: false,
         configFile: false,
+        compact: false,
         filename: filePath,
         plugins: [[transformPlugin, { resolvedStyles }]],
         sourceMaps: this.sourceMap || false,
