@@ -17,10 +17,24 @@
   <br>
 </div>
 
+## Feature
+
+🛠 &nbsp; KazeStyle can choose when to extract css. (build time & run time)
+
+💪 &nbsp; Type-safe styles via [csstype](https://github.com/frenic/csstype)
+
+🦷 &nbsp; Reuse styles using Atomic CSS
+
+👘 &nbsp; Can ignore specificity and merge styles
+
+🎨 &nbsp; Consistent styling using "@kaze-style/themes" (under development)
+
 ## Example
 
 ```ts
+//Component.tsx
 import { createStyle } from '@kaze-style/react';
+
 const classes = createStyle({
   button: {
     color: 'red',
@@ -31,6 +45,31 @@ const Component = () => {
   return <button className={classes.button}>button</button>;
 };
 ```
+
+### Setup Next.js（build time extract）
+
+```ts
+//next.config.mjs
+import { withKazeStyle } from '@kaze-style/next-plugin';
+
+/** @type {import('next').NextConfig} */
+const nextConfig = { };
+
+export default withKazeStyle(nextConfig);
+```
+
+## Inspiration
+
+KazeStyle was designed with reference to several CSS in JS libraries.
+
+[microsoft/griffel](https://github.com/microsoft/griffel)
+
+[seek-oss/vanilla-extract](https://github.com/seek-oss/vanilla-extract)
+
+[argyleink/open-props](https://github.com/argyleink/open-props)
+
+[callstack/linaria](https://github.com/callstack/linaria)
+
 
 ## Author
 
