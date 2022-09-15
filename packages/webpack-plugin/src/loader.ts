@@ -48,7 +48,7 @@ export function loader(
   const { pre, childCompiler } = this.getOptions();
   const isChildCompiler = childCompiler?.isChildCompiler(this._compiler.name);
 
-  if(isChildCompiler) {
+  if (isChildCompiler) {
     this.callback(null, sourceCode, inputSourceMap);
     return;
   }
