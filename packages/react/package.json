@@ -28,6 +28,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.3.5"
+    "@kaze-style/core": "^0.3.7"
   }
 }

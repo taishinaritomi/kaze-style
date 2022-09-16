@@ -24,11 +24,11 @@
   },
   "dependencies": {
     "@babel/core": "^7.18.10",
-    "@kaze-style/babel-plugin": "0.3.5",
+    "@kaze-style/babel-plugin": "0.3.7",
     "eval": "^0.1.8"
   },
   "peerDependencies": {
-    "@kaze-style/react": "^0.3.5",
+    "@kaze-style/react": "^0.3.7",
     "webpack": "^5"
   }
 }

@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.18.9",
-    "@kaze-style/core": "^0.3.5"
+    "@kaze-style/core": "^0.3.7"
   },
   "peerDependencies": {
     "@babel/core": ">=7"
