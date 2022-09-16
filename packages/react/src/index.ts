@@ -1,2 +1,9 @@
 export * from './createStyle';
-export { mergeStyle, __style, __preStyle } from '@kaze-style/core';
+export * from './createGlobalStyle';
+export {
+  mergeStyle,
+  __style,
+  __globalStyle,
+  __preStyle,
+  __preGlobalStyle,
+} from '@kaze-style/core';

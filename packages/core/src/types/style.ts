@@ -53,8 +53,15 @@ export type KazeStyle = NestedObject<
   NestedObject<NestedObject<NestedObject<NestedObject<SupportedAllStyle>>>>
 >;
 
+export type KazeGlobalStyle = PropertiesFallback<CSSValue>;
+
 export type ResolvedStyle = {
   cssRules: string[];
   classes: Record<string, string>;
+  index: number;
+};
+
+export type ResolvedGlobalStyle = {
+  cssRules: string[];
   index: number;
 };

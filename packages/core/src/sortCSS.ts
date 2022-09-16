@@ -1,15 +1,20 @@
 import type { Element } from 'stylis';
-import { MEDIA } from 'stylis';
 import {
   RULESET,
   KEYFRAMES,
+  MEDIA,
   COMMENT,
   serialize,
   stringify,
   compile,
 } from 'stylis';
+import {
+  GLOBAL_STYLE_END_COMMENT,
+  GLOBAL_STYLE_START_COMMENT,
+} from './utils/constants';
 
 const styleBucketOrdering = [
+  'global',
   'normal',
   'link',
   'visited',
@@ -53,12 +58,22 @@ function getElementReference(element: Element, suffix = ''): string {
 }
 
 export const sortCSS = (css: string): string => {
+  let globalFlag = false;
   const childElements = compile(css)
-    .filter((element) => element.type !== COMMENT)
+    // .filter((element) => element.type !== COMMENT)
     .map((element) => {
+      if (element.type === COMMENT) {
+        if (element.value === GLOBAL_STYLE_START_COMMENT) {
+          globalFlag = true;
+        } else if (element.value === GLOBAL_STYLE_END_COMMENT) {
+          globalFlag = false;
+        }
+      }
       return {
         ...element,
-        bucketName: getStyleBucketNameFromElement(element),
+        bucketName: globalFlag
+          ? 'global'
+          : getStyleBucketNameFromElement(element),
         reference: getElementReference(element),
       };
     });
