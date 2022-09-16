@@ -53,7 +53,7 @@ const Component = () => {
 import { withKazeStyle } from '@kaze-style/next-plugin';
 
 /** @type {import('next').NextConfig} */
-const nextConfig = { };
+const nextConfig = {};
 
 export default withKazeStyle(nextConfig);
 ```
@@ -69,7 +69,6 @@ KazeStyle was designed with reference to several CSS in JS libraries.
 [argyleink/open-props](https://github.com/argyleink/open-props)
 
 [callstack/linaria](https://github.com/callstack/linaria)
-
 
 ## Author
 
