@@ -118,14 +118,20 @@ export function loader(
         return;
       }
 
-      const cssRules:string[] = [];
+      const cssRules: string[] = [];
 
       if (resolvedStyles && resolvedStyles.length !== 0) {
-        cssRules.push(...resolvedStyles.flatMap((resolvedStyle) => resolvedStyle.cssRules));
+        cssRules.push(
+          ...resolvedStyles.flatMap((resolvedStyle) => resolvedStyle.cssRules),
+        );
       }
 
       if (resolvedGlobalStyles && resolvedGlobalStyles.length !== 0) {
-        cssRules.push(...resolvedGlobalStyles.flatMap((resolvedGlobalStyle) => resolvedGlobalStyle.cssRules))
+        cssRules.push(
+          ...resolvedGlobalStyles.flatMap(
+            (resolvedGlobalStyle) => resolvedGlobalStyle.cssRules,
+          ),
+        );
       }
 
       if (cssRules.length !== 0) {
