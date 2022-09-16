@@ -48,7 +48,7 @@ export class Plugin {
         },
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {
-            if (pathname.includes('kaze.css')) {
+            if (pathname.includes('.css')) {
               const sortedCSSRules = sortCSS(getSource(source));
               compilation.updateAsset(
                 pathname,

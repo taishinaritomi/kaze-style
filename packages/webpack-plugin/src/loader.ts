@@ -1,7 +1,7 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import { preTransformPlugin, transformPlugin } from '@kaze-style/babel-plugin';
-import type { ResolvedStyle } from '@kaze-style/core';
+import type { ResolvedStyle, ResolvedGlobalStyle } from '@kaze-style/core';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
@@ -93,7 +93,12 @@ export function loader(
     const resolvedStyles = this.data.resolvedStyles as
       | ResolvedStyle[]
       | undefined;
-    if (resolvedStyles && resolvedStyles.length !== 0) {
+
+    const resolvedGlobalStyles = this.data.resolvedGlobalStyles as
+      | ResolvedGlobalStyle[]
+      | undefined;
+
+    if (resolvedGlobalStyles || resolvedStyles) {
       const filePath = path.relative(process.cwd(), this.resourcePath);
 
       const babelFileResult = Babel.transformSync(sourceCode, {
@@ -113,11 +118,23 @@ export function loader(
         return;
       }
 
-      const cssRules = resolvedStyles.flatMap(
-        (resolvedStyle) => resolvedStyle.cssRules,
-      );
+      const cssRules: string[] = [];
 
-      if (cssRules.length) {
+      if (resolvedStyles && resolvedStyles.length !== 0) {
+        cssRules.push(
+          ...resolvedStyles.flatMap((resolvedStyle) => resolvedStyle.cssRules),
+        );
+      }
+
+      if (resolvedGlobalStyles && resolvedGlobalStyles.length !== 0) {
+        cssRules.push(
+          ...resolvedGlobalStyles.flatMap(
+            (resolvedGlobalStyle) => resolvedGlobalStyle.cssRules,
+          ),
+        );
+      }
+
+      if (cssRules.length !== 0) {
         const request = `import ${JSON.stringify(
           this.utils.contextify(
             this.context || this.rootContext,

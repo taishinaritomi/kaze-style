@@ -1,7 +1,14 @@
 import type { ResolvedStyle } from '@kaze-style/core';
+import type { ResolvedGlobalStyle } from '@kaze-style/core/dist/types/style';
 import evalCode from 'eval';
 import type { LoaderContext } from './loader';
 import { transformedComment } from './loader';
+
+type BuildStyle = {
+  fileName: string;
+  resolvedStyles: ResolvedStyle[];
+  resolvedGlobalStyles: ResolvedGlobalStyle[];
+};
 
 export function pitch(this: LoaderContext) {
   this.cacheable(true);
@@ -15,10 +22,11 @@ export function pitch(this: LoaderContext) {
         .getCompiledSource(this)
         .then(({ source }) => {
           if (source.includes(transformedComment)) {
-            const __buildStyles: {
-              fileName: string;
-              resolvedStyles: ResolvedStyle[];
-            } = { fileName: this.resourcePath, resolvedStyles: [] };
+            const __buildStyles: BuildStyle = {
+              fileName: this.resourcePath,
+              resolvedStyles: [],
+              resolvedGlobalStyles: [],
+            };
             const window = {};
             evalCode(
               source,
@@ -33,6 +41,11 @@ export function pitch(this: LoaderContext) {
 
             if (__buildStyles.resolvedStyles.length !== 0) {
               this.data.resolvedStyles = __buildStyles.resolvedStyles;
+            }
+
+            if (__buildStyles.resolvedGlobalStyles.length !== 0) {
+              this.data.resolvedGlobalStyles =
+                __buildStyles.resolvedGlobalStyles;
             }
           }
           callback(null);
