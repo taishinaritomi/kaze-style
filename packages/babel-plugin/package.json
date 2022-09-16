@@ -22,7 +22,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.18.9",
+    "@babel/helper-plugin-utils": "^7.19.0",
     "@kaze-style/core": "^0.3.7"
   },
   "peerDependencies": {

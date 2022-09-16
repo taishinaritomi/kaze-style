@@ -21,18 +21,18 @@
     "release": "changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.24.3",
+    "@changesets/cli": "^2.24.4",
     "@tsconfig/strictest": "^1.0.1",
     "@types/babel__helper-plugin-utils": "^7.10.0",
-    "@types/node": "^18.7.11",
-    "@types/react": "^18.0.17",
+    "@types/node": "^18.7.18",
+    "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
     "@types/stylis": "^4.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.34.0",
-    "@typescript-eslint/parser": "^5.34.0",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
     "esbuild": "^0.15.7",
     "esbuild-node-externals": "^1.5.0",
-    "eslint": "^8.22.0",
+    "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-unused-imports": "^2.0.0",
@@ -40,8 +40,8 @@
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
     "tsdx": "^0.14.1",
-    "tsx": "^3.8.2",
-    "turbo": "^1.4.3",
-    "typescript": "^4.7.4"
+    "tsx": "^3.9.0",
+    "turbo": "^1.4.6",
+    "typescript": "^4.8.3"
   }
 }
