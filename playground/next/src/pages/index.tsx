@@ -1,9 +1,15 @@
-import { createStyle } from '@kaze-style/react';
+import { createGlobalStyle, createStyle } from '@kaze-style/react';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/Button';
 const LazyButton = dynamic(() => import('@/components/LazyButton'), {
   suspense: true,
+});
+
+createGlobalStyle({
+  html: {
+    backgroundColor: 'blue',
+  },
 });
 
 const classes = createStyle({
