@@ -11,6 +11,8 @@ import {
 import {
   GLOBAL_STYLE_END_COMMENT,
   GLOBAL_STYLE_START_COMMENT,
+  STYLE_END_COMMENT,
+  STYLE_START_COMMENT,
 } from './utils/constants';
 
 const styleBucketOrdering = [
@@ -58,34 +60,49 @@ function getElementReference(element: Element, suffix = ''): string {
 }
 
 export const sortCSS = (css: string): string => {
+  let targetFlag = false;
   let globalFlag = false;
-  const childElements = compile(css)
-    // .filter((element) => element.type !== COMMENT)
-    .map((element) => {
-      if (element.type === COMMENT) {
-        if (element.value === GLOBAL_STYLE_START_COMMENT) {
-          globalFlag = true;
-        } else if (element.value === GLOBAL_STYLE_END_COMMENT) {
-          globalFlag = false;
-        }
-      }
-      return {
-        ...element,
-        bucketName: globalFlag
-          ? 'global'
-          : getStyleBucketNameFromElement(element),
-        reference: getElementReference(element),
-      };
-    });
 
-  const uniqueElements = childElements.reduce<
-    Record<string, typeof childElements[number]>
+  const otherElements: Element[] = [];
+  const targetElements: (Element & {
+    bucketName: typeof styleBucketOrdering[number];
+    reference: string;
+  })[] = [];
+  const globalElements: Element[] = [];
+
+  compile(css).forEach((element) => {
+    if (element.type === COMMENT) {
+      if (element.value === GLOBAL_STYLE_START_COMMENT) {
+        globalFlag = true;
+      } else if (element.value === GLOBAL_STYLE_END_COMMENT) {
+        globalFlag = false;
+      }
+      if (element.value === STYLE_START_COMMENT) {
+        targetFlag = true;
+      } else if (element.value === STYLE_END_COMMENT) {
+        targetFlag = false;
+      }
+    } else if (targetFlag) {
+      targetElements.push({
+        ...element,
+        bucketName: getStyleBucketNameFromElement(element),
+        reference: getElementReference(element),
+      });
+    } else if (globalFlag) {
+      globalElements.push(element);
+    } else {
+      otherElements.push(element);
+    }
+  });
+
+  const uniqueTargetElements = targetElements.reduce<
+    Record<string, typeof targetElements[number]>
   >((acc, element) => {
     acc[element.reference] = element;
     return acc;
   }, {});
 
-  const sortedElements = Object.values(uniqueElements).sort(
+  const sortedTargetElements = Object.values(uniqueTargetElements).sort(
     (elementA, elementB) => {
       if (elementA.bucketName === elementB.bucketName) {
         return 0;
@@ -96,5 +113,8 @@ export const sortCSS = (css: string): string => {
       );
     },
   );
-  return serialize(sortedElements, stringify);
+  return serialize(
+    [...globalElements, ...otherElements, ...sortedTargetElements],
+    stringify,
+  );
 };
