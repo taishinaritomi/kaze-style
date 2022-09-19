@@ -18,6 +18,9 @@ jobs:
           always-auth: true
       - name: setup pnpm
         uses: pnpm/action-setup@v2.2.2
+        with:
+          version: 7
+          run_install: false
       - name: install
         run: pnpm install
       - name: build packages
