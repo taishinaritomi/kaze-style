@@ -16,8 +16,8 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
-      - name: setup pnpm
-        uses: pnpm/action-setup@v2.2.2
+      - uses: pnpm/action-setup@v2.2.2
+        name: setup pnpm
         with:
           version: 7
           run_install: false
