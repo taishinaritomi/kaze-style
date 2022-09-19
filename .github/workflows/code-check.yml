@@ -15,11 +15,13 @@ jobs:
         with:
           node-version: '16.x'
           cache: npm
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2.2.2
       - name: install dependencies
-        run: yarn install
+        run: pnpm install
       - name: build packages
-        run: yarn build
+        run: pnpm build
       - name: check run code
-        run: yarn code:check
+        run: pnpm code:check
       - name: check run readme
-        run: yarn readme:check
+        run: pnpm readme:check

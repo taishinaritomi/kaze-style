@@ -1,0 +1,9 @@
+node_modules
+.DS_Store
+dist
+.parcel-cache
+.next
+*.tsbuildinfo
+*.log
+.turbo
+pnpm-lock.yaml

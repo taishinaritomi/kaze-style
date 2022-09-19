@@ -17,11 +17,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
           cache: npm
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2.2.2
       - name: install
-        run: yarn install
+        run: pnpm install
       - name: build packages
-        run: yarn build:packages
+        run: pnpm build:packages
       - name: release
-        run: yarn release
+        run: pnpm release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
