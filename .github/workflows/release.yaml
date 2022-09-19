@@ -16,7 +16,6 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
-          cache: npm
       - name: setup pnpm
         uses: pnpm/action-setup@v2.2.2
       - name: install
