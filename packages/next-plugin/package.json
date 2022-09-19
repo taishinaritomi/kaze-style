@@ -22,7 +22,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/webpack-plugin": "^0.3.7",
+    "@kaze-style/webpack-plugin": "^0.3.8",
     "browserslist": "^4.21.4"
   },
   "peerDependencies": {
