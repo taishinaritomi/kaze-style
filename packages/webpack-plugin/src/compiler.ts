@@ -61,7 +61,10 @@ function compileVanillaSource(
       loader._compiler.webpack && loader._compiler.webpack.version,
     );
     const compat = createCompat(isWebpack5);
-    const outputOptions = { filename: loader.resourcePath, type: 'asset/resource' };
+    const outputOptions = {
+      filename: loader.resourcePath,
+      type: 'asset/resource',
+    };
 
     const compilerName = getCompilerName(loader.resourcePath);
     const childCompiler = getRootCompilation(loader).createChildCompiler(
@@ -107,9 +110,7 @@ function compileVanillaSource(
     }
 
     new LimitChunkCountPlugin({ maxChunks: 1 }).apply(childCompiler);
-    new ExternalsPlugin('commonjs', ['@kaze-style/react']).apply(
-      childCompiler,
-    );
+    new ExternalsPlugin('commonjs', ['@kaze-style/react']).apply(childCompiler);
 
     let source: string;
 
