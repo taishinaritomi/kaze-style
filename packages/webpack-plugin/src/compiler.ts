@@ -63,7 +63,6 @@ function compileVanillaSource(
     const compat = createCompat(isWebpack5);
     const outputOptions = {
       filename: loader.resourcePath,
-      type: 'asset/resource',
     };
 
     const compilerName = getCompilerName(loader.resourcePath);
