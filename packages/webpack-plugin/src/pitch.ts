@@ -1,5 +1,4 @@
-import type { ResolvedStyle } from '@kaze-style/core';
-import type { ResolvedGlobalStyle } from '@kaze-style/core/dist/types/style';
+import type { ResolvedStyle, ResolvedGlobalStyle } from '@kaze-style/core';
 import evalCode from 'eval';
 import type { LoaderContext } from './loader';
 import { transformedComment } from './loader';
