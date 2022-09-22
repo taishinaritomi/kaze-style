@@ -1,6 +1,5 @@
 import { sortCSS } from '@kaze-style/core';
 import type { Compiler, RuleSetRule } from 'webpack';
-import { Compilation } from 'webpack';
 import { ChildCompiler } from './compiler';
 import { getSource } from './utils/getSource';
 
@@ -44,7 +43,7 @@ export class Plugin {
       compilation.hooks.processAssets.tap(
         {
           name: pluginName,
-          stage: Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
+          stage: compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONS,
         },
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {

@@ -27,7 +27,7 @@ export class ChildCompiler {
 
   async getCompiledSource(loader: LoaderContext) {
     const { source, fileDependencies, contextDependencies } =
-      await compileVanillaSource(loader, this.externals);
+      await compileVanillaSource(loader);
 
     fileDependencies.forEach((dep) => {
       loader.addDependency(dep);
@@ -55,14 +55,15 @@ function getRootCompilation(loader: LoaderContext) {
 
 function compileVanillaSource(
   loader: LoaderContext,
-  externals: Externals | undefined,
 ): Promise<CompilationResult> {
   return new Promise((resolve, reject) => {
     const isWebpack5 = Boolean(
       loader._compiler.webpack && loader._compiler.webpack.version,
     );
     const compat = createCompat(isWebpack5);
-    const outputOptions = { filename: loader.resourcePath };
+    const outputOptions = {
+      filename: loader.resourcePath,
+    };
 
     const compilerName = getCompilerName(loader.resourcePath);
     const childCompiler = getRootCompilation(loader).createChildCompiler(
@@ -108,9 +109,7 @@ function compileVanillaSource(
     }
 
     new LimitChunkCountPlugin({ maxChunks: 1 }).apply(childCompiler);
-    new ExternalsPlugin('commonjs', ['@kaze-style/react', externals]).apply(
-      childCompiler,
-    );
+    new ExternalsPlugin('commonjs', ['@kaze-style/react']).apply(childCompiler);
 
     let source: string;
 

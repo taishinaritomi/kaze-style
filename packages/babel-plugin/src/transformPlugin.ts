@@ -63,7 +63,9 @@ export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
                     (resolvedStyle) =>
                       resolvedStyle.index === indexArgPath.value,
                   )?.classes;
-                  callExpressionPath.node.arguments = [t.valueToNode(classes)];
+                  callExpressionPath.node.arguments = [
+                    t.valueToNode(classes || {}),
+                  ];
                 }
                 if (transform.from === '__preGlobalStyle') {
                   callExpressionPath.node.arguments = [t.valueToNode({})];
