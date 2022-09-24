@@ -15,11 +15,9 @@ export const hashClassName = ({
   styleValue = '',
   media = '',
 }: Args): string => {
-  if (Array.isArray(styleValue)) {
-    return `k-${hash(property + pseudo + media)}-${hash(
-      `${styleValue.join(' ')}`,
-    )}`;
-  } else {
-    return `k-${hash(property + pseudo + media)}-${hash(`${styleValue}`)}`;
-  }
+  return `_${hash(
+    `${property}${pseudo}${media}${
+      Array.isArray(styleValue) ? styleValue.join(' ') : styleValue
+    }`,
+  )}`;
 };

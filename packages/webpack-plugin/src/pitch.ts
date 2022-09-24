@@ -1,12 +1,12 @@
-import type { ResolvedStyle, ResolvedGlobalStyle } from '@kaze-style/core';
+import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
 import evalCode from 'eval';
 import type { LoaderContext } from './loader';
 import { transformedComment } from './loader';
 
-type BuildStyle = {
+type ForBuild = {
   fileName: string;
-  resolvedStyles: ResolvedStyle[];
-  resolvedGlobalStyles: ResolvedGlobalStyle[];
+  styles: ForBuildStyle<string>[];
+  globalStyles: ForBuildGlobalStyle[];
 };
 
 export function pitch(this: LoaderContext) {
@@ -21,10 +21,10 @@ export function pitch(this: LoaderContext) {
         .getCompiledSource(this)
         .then(({ source }) => {
           if (source.includes(transformedComment)) {
-            const __buildStyles: BuildStyle = {
+            const __forBuildByKazeStyle: ForBuild = {
               fileName: this.resourcePath,
-              resolvedStyles: [],
-              resolvedGlobalStyles: [],
+              styles: [],
+              globalStyles: [],
             };
             const window = {};
             evalCode(
@@ -32,19 +32,18 @@ export function pitch(this: LoaderContext) {
               this.resourcePath,
               {
                 console,
-                __buildStyles,
+                __forBuildByKazeStyle,
                 window,
               },
               true,
             );
 
-            if (__buildStyles.resolvedStyles.length !== 0) {
-              this.data.resolvedStyles = __buildStyles.resolvedStyles;
+            if (__forBuildByKazeStyle.styles.length !== 0) {
+              this.data.styles = __forBuildByKazeStyle.styles;
             }
 
-            if (__buildStyles.resolvedGlobalStyles.length !== 0) {
-              this.data.resolvedGlobalStyles =
-                __buildStyles.resolvedGlobalStyles;
+            if (__forBuildByKazeStyle.globalStyles.length !== 0) {
+              this.data.globalStyles = __forBuildByKazeStyle.globalStyles;
             }
           }
           callback(null);

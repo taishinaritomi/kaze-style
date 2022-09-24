@@ -1,23 +1,20 @@
-type ClassNamesArgs = (string | false | undefined | null)[];
+import { ClassName } from './utils/ClassName';
+
+type ClassNamesArgs = (string | false | undefined | null | ClassName)[];
 
 export const mergeStyle = (..._classNames: ClassNamesArgs): string => {
-  const notMatchStyles = new Set<string>();
-  const matchStyles: Record<string, string> = {};
+  const notMatchClassNames: string[] = [];
+  const matchStyles: ClassName['object'] = {};
 
-  const classNames = _classNames.filter(Boolean).join(' ').split(' ');
-
-  classNames.forEach((className) => {
-    const [hash, property, value] = className.split('-');
-    if (!hash || !property || !value) {
-      className !== '' && notMatchStyles.add(className);
-    } else {
-      Object.assign(matchStyles, { [property]: className });
+  _classNames.forEach((className) => {
+    if (typeof className === 'string') {
+      notMatchClassNames.push(className);
+    } else if (className instanceof ClassName) {
+      Object.assign(matchStyles, className.object);
     }
   });
 
-  const matchClasses = Object.values(matchStyles).join(' ');
+  const matchClassName = Object.values(matchStyles);
 
-  const notMatchClasses = Array.from(notMatchStyles).join(' ');
-
-  return [matchClasses, notMatchClasses].join(' ').trim();
+  return [...matchClassName, ...notMatchClassNames].join(' ').trim();
 };

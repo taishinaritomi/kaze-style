@@ -10,7 +10,7 @@ export const compileKeyFrameCSS = (keyframeObject: CSSKeyframes) => {
     percentageRules.push(`${percentage}{${compileObjectCSS(value || {})}}`);
   }
   const css = percentageRules.join('');
-  const keyframeName = `k-${hash(css)}`;
+  const keyframeName = `_${hash(css)}`;
   const keyframesRule = `@keyframes ${keyframeName} {${css}}`;
 
   return { keyframesRule, keyframeName };

@@ -4,6 +4,7 @@ import type {
   PropertiesFallback,
   StandardShorthandProperties,
 } from 'csstype';
+import type { ClassName } from '../utils/ClassName';
 import type { NestedObject } from './utils';
 
 export type CSSValue = string | number;
@@ -55,13 +56,6 @@ export type KazeStyle = NestedObject<
 
 export type KazeGlobalStyle = PropertiesFallback<CSSValue>;
 
-export type ResolvedStyle = {
-  cssRules: string[];
-  classes: Record<string, string>;
-  index: number;
-};
-
-export type ResolvedGlobalStyle = {
-  cssRules: string[];
-  index: number;
-};
+export type CssRules = string[];
+export type Classes<K extends string> = Record<K, string>;
+export type ClassesObject<K extends string> = Record<K, ClassName['object']>;

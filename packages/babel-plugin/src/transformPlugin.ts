@@ -1,7 +1,7 @@
 import { types as t, template } from '@babel/core';
 import type { NodePath, PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { ResolvedStyle } from '@kaze-style/core';
+import type { ForBuildStyle } from '@kaze-style/core';
 
 type Transform = {
   from: string;
@@ -37,11 +37,11 @@ const buildStyleImport = template(`
 `);
 
 export type Options = {
-  resolvedStyles: ResolvedStyle[];
+  styles: ForBuildStyle<string>[];
 };
 
 export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
-  (_, { resolvedStyles }) => {
+  (_, { styles }) => {
     return {
       name: '@kaze-style/babel-plugin-transform',
       pre() {
@@ -59,12 +59,11 @@ export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
                 const indexArgPath = callExpressionPath.node
                   .arguments[3] as t.NumericLiteral;
                 if (transform.from === '__preStyle') {
-                  const classes = resolvedStyles.find(
-                    (resolvedStyle) =>
-                      resolvedStyle.index === indexArgPath.value,
-                  )?.classes;
+                  const classesObject = styles.find(
+                    (style) => style.index === indexArgPath.value,
+                  )?.classesObject;
                   callExpressionPath.node.arguments = [
-                    t.valueToNode(classes || {}),
+                    t.valueToNode(classesObject || {}),
                   ];
                 }
                 if (transform.from === '__preGlobalStyle') {
