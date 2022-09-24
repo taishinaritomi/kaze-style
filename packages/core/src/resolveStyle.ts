@@ -1,9 +1,11 @@
-import type { CSSKeyframes, KazeStyle } from './types/style';
+import type { CSSKeyframes, CssRules, KazeStyle } from './types/style';
 import type { ValueOf } from './types/utils';
+import type { ClassName } from './utils/ClassName';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';
 import { hashClassName } from './utils/hashClassName';
+import { hashSelector } from './utils/hashSelector';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
 import { isObject } from './utils/isObject';
@@ -12,23 +14,24 @@ import { normalizeNestedProperty } from './utils/normalizeNestedProperty';
 import { omit } from './utils/omit';
 import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
 
+export type ResolvedStyle = {
+  classNameObject: ClassName['object'];
+  cssRules: CssRules;
+};
+
 type Args = {
   style: KazeStyle;
   pseudo?: string;
   media?: string;
-  resultStyle?: Record<string, string>;
-};
-
-type Result = {
-  resultStyle: Record<string, string>;
+  resolvedStyle?: ResolvedStyle;
 };
 
 export const resolveStyle = ({
   style,
   pseudo = '',
   media = '',
-  resultStyle = {},
-}: Args): Result => {
+  resolvedStyle = { classNameObject: {}, cssRules: [] },
+}: Args): ResolvedStyle => {
   for (const _property in style) {
     const property = _property as keyof KazeStyle;
     const styleValue: ValueOf<KazeStyle> = style[property];
@@ -38,40 +41,51 @@ export const resolveStyle = ({
       Array.isArray(styleValue)
     ) {
       if (isShortHandProperty(property)) {
-        const resolvedStyle = resolveShortHandStyle(property, styleValue);
+        const resolvedShortHandStyle = resolveShortHandStyle(
+          property,
+          styleValue,
+        );
         resolveStyle({
-          style: Object.assign(omit(style, [property]), resolvedStyle),
+          style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
           pseudo,
           media,
-          resultStyle,
+          resolvedStyle,
         });
       } else {
         const className = hashClassName({
-          property,
-          pseudo,
           media,
+          pseudo,
+          property,
           styleValue,
         });
-        const rule = compileCSS({
+        const selector = hashSelector({
+          media,
+          pseudo,
+          property,
+        });
+        const cssRule = compileCSS({
+          media,
+          pseudo,
+          property,
+          styleValue,
           className,
-          property,
-          styleValue,
-          media,
-          pseudo,
         });
-        Object.assign(resultStyle, { [className]: rule });
+        resolvedStyle.cssRules.push(cssRule);
+        Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
     } else if (property === 'animationName') {
       const animationNameValue = styleValue as CSSKeyframes;
       const { keyframesRule, keyframeName } =
         compileKeyFrameCSS(animationNameValue);
+      resolvedStyle.cssRules.push(keyframesRule);
+      Object.assign(resolvedStyle.classNameObject, {
+        [keyframeName]: keyframeName,
+      });
       resolveStyle({
         style: { animationName: keyframeName },
         pseudo,
         media,
-        resultStyle: Object.assign(resultStyle, {
-          [keyframeName]: keyframesRule,
-        }),
+        resolvedStyle,
       });
     } else if (isObject(styleValue)) {
       if (isMediaQuerySelector(property)) {
@@ -83,17 +97,17 @@ export const resolveStyle = ({
           style: styleValue,
           pseudo,
           media: combinedMediaQuery,
-          resultStyle,
+          resolvedStyle,
         });
       } else if (isNestedSelector(property)) {
         resolveStyle({
           style: styleValue,
           pseudo: pseudo + normalizeNestedProperty(property),
           media,
-          resultStyle,
+          resolvedStyle,
         });
       }
     }
   }
-  return { resultStyle };
+  return resolvedStyle;
 };

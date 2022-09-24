@@ -17,7 +17,7 @@ type State = {
 
 const options = {
   importSource: '@kaze-style/react',
-  buildStyles: '__buildStyles',
+  forBuild: '__forBuildByKazeStyle',
   transforms: [
     {
       from: 'createStyle',
@@ -56,7 +56,7 @@ export const preTransformPlugin = declare<never, PluginObj<State & PluginPass>>(
                   if (callExpressionPath.node.arguments[0]) {
                     callExpressionPath.node.arguments = [
                       callExpressionPath.node.arguments[0],
-                      t.identifier(options.buildStyles),
+                      t.identifier(options.forBuild),
                       t.stringLiteral(this.filename || ''),
                       t.numericLiteral(index),
                     ];

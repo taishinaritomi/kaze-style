@@ -1,24 +1,35 @@
 import { resolveStyle } from './resolveStyle';
-import type { KazeStyle } from './types/style';
+import type {
+  Classes,
+  ClassesObject,
+  CssRules,
+  KazeStyle,
+} from './types/style';
+import { ClassName } from './utils/ClassName';
 
-type Result<Key extends string> = {
-  cssRules: string[];
-  classes: Record<Key, string>;
+type Result<K extends string> = {
+  cssRules: CssRules;
+  classes: Classes<K>;
+  classesObject: ClassesObject<K>;
 };
 
-export const createStyle = <Key extends string>(
-  styles: Record<Key, KazeStyle>,
-): Result<Key> => {
-  const classes = {} as Record<Key, string>;
-  const allCSS = new Set<string>();
+export const createStyle = <K extends string>(
+  styles: Record<K, KazeStyle>,
+): Result<K> => {
+  const classes = {} as Classes<K>;
+  const classesObject = {} as ClassesObject<K>;
+  const allCssRules: CssRules = [];
 
   for (const key in styles) {
-    const keyStyle: KazeStyle = styles[key];
-    const { resultStyle } = resolveStyle({ style: keyStyle });
-
-    Object.values(resultStyle).forEach((rule) => allCSS.add(rule));
-    classes[key] = Object.keys(resultStyle).join(' ');
+    const { cssRules, classNameObject } = resolveStyle({ style: styles[key] });
+    allCssRules.push(...cssRules);
+    const className = Object.values(classNameObject).join(' ');
+    classes[key] = new ClassName(
+      className,
+      classNameObject,
+    ) as unknown as string;
+    classesObject[key] = classNameObject;
   }
 
-  return { classes, cssRules: Array.from(allCSS) };
+  return { classes, classesObject, cssRules: Array.from(new Set(allCssRules)) };
 };

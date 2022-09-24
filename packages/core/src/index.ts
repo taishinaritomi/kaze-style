@@ -5,10 +5,7 @@ export * from './__style';
 export * from './__globalStyle';
 export * from './__preStyle';
 export * from './__preGlobalStyle';
-export type {
-  KazeStyle,
-  KazeGlobalStyle,
-  ResolvedStyle,
-  ResolvedGlobalStyle,
-} from './types/style';
 export * from './sortCSS';
+export type { KazeStyle, KazeGlobalStyle } from './types/style';
+export type { ForBuildStyle } from './__preStyle';
+export type { ForBuildGlobalStyle } from './__preGlobalStyle';

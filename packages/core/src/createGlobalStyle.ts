@@ -1,8 +1,8 @@
-import type { KazeGlobalStyle } from './types/style';
+import type { CssRules, KazeGlobalStyle } from './types/style';
 import { compileObjectCSS } from './utils/compileObjectCSS';
 
 type Result = {
-  cssRules: string[];
+  cssRules: CssRules;
 };
 
 export const createGlobalStyle = <Selector extends string>(

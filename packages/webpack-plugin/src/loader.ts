@@ -1,7 +1,7 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import { preTransformPlugin, transformPlugin } from '@kaze-style/babel-plugin';
-import type { ResolvedStyle, ResolvedGlobalStyle } from '@kaze-style/core';
+import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
@@ -88,12 +88,10 @@ export function loader(
 
     this.callback(null, sourceCode, inputSourceMap);
   } else {
-    const resolvedStyles = this.data.resolvedStyles as
-      | ResolvedStyle[]
-      | undefined;
+    const styles = this.data.styles as ForBuildStyle<string>[] | undefined;
 
-    const resolvedGlobalStyles = this.data.resolvedGlobalStyles as
-      | ResolvedGlobalStyle[]
+    const globalStyles = this.data.globalStyles as
+      | ForBuildGlobalStyle[]
       | undefined;
 
     if (sourceCode.includes(transformedComment)) {
@@ -105,7 +103,7 @@ export function loader(
         configFile: false,
         compact: false,
         filename: filePath,
-        plugins: [[transformPlugin, { resolvedStyles: resolvedStyles || [] }]],
+        plugins: [[transformPlugin, { styles: styles || [] }]],
         sourceMaps: this.sourceMap || false,
         sourceFileName: filePath,
         inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
@@ -118,17 +116,13 @@ export function loader(
 
       const cssRules: string[] = [];
 
-      if (resolvedStyles && resolvedStyles.length !== 0) {
-        cssRules.push(
-          ...resolvedStyles.flatMap((resolvedStyle) => resolvedStyle.cssRules),
-        );
+      if (styles && styles.length !== 0) {
+        cssRules.push(...styles.flatMap((style) => style.cssRules));
       }
 
-      if (resolvedGlobalStyles && resolvedGlobalStyles.length !== 0) {
+      if (globalStyles && globalStyles.length !== 0) {
         cssRules.push(
-          ...resolvedGlobalStyles.flatMap(
-            (resolvedGlobalStyle) => resolvedGlobalStyle.cssRules,
-          ),
+          ...globalStyles.flatMap((globalStyle) => globalStyle.cssRules),
         );
       }
 
