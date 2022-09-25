@@ -6,10 +6,7 @@ export const __style = <K extends string>(styles: ClassesObject<K>) => {
   for (const key in styles) {
     if (styles.hasOwnProperty(key)) {
       const objectClassName = styles[key] as ClassName['object'];
-      classes[key] = new ClassName(
-        Object.values(objectClassName).join(' '),
-        objectClassName,
-      ) as unknown as string;
+      classes[key] = new ClassName(objectClassName) as unknown as string;
     }
   }
   return classes;
