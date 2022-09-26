@@ -33,7 +33,7 @@ const options = {
 const buildStyleImport = template(`
   import { ${options.transforms
     .map((transform) => transform.to)
-    .join(',')} } from '${options.importSource}';
+    .join(',')} , ClassName } from '${options.importSource}';
 `);
 
 export type Options = {
@@ -62,8 +62,21 @@ export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
                   const classesObject = styles.find(
                     (style) => style.index === indexArgPath.value,
                   )?.classesObject;
+                  const objectProperties: t.ObjectProperty[] = [];
+                  for (const key in classesObject) {
+                    if (classesObject.hasOwnProperty(key)) {
+                      objectProperties.push(
+                        t.objectProperty(
+                          t.stringLiteral(key),
+                          t.newExpression(t.identifier('ClassName'), [
+                            t.valueToNode(classesObject[key] || {}),
+                          ]),
+                        ),
+                      );
+                    }
+                  }
                   callExpressionPath.node.arguments = [
-                    t.valueToNode(classesObject || {}),
+                    t.objectExpression(objectProperties),
                   ];
                 }
                 if (transform.from === '__preGlobalStyle') {

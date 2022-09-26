@@ -6,4 +6,5 @@ export {
   __globalStyle,
   __preStyle,
   __preGlobalStyle,
+  ClassName,
 } from '@kaze-style/core';
