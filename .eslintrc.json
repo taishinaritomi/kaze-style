@@ -13,6 +13,7 @@
       "files": [
         "./packages/babel-plugin/src/index.ts",
         "./packages/webpack-plugin/src/index.ts",
+        "./packages/webpack-plugin/src/virtualLoader.ts",
         "./playground/next/src/pages/**",
         "./playground/next/next.config.*"
       ],
