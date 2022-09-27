@@ -6,8 +6,8 @@ import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import glob from 'fast-glob';
 
 const args = arg({
-	'--entry': [String],
-  '--watch': Boolean
+  '--entry': [String],
+  '--watch': Boolean,
 });
 
 const isWatch = args['--watch'] || false;
@@ -15,9 +15,8 @@ const entries = args['--entry'] || [];
 entries.push('./src/index.ts');
 console.log(entries);
 
-
-const cjsBuilds = ():Promise<BuildResult>[] => {
-  return entries.map(entry => {
+const cjsBuilds = (): Promise<BuildResult>[] => {
+  return entries.map((entry) => {
     const fileName = entry.split('/').slice(-1)[0]?.split('.')[0];
     return build({
       watch: isWatch,
@@ -30,9 +29,9 @@ const cjsBuilds = ():Promise<BuildResult>[] => {
       sourcemap: true,
       outfile: `./dist/${fileName}.cjs`,
       plugins: [nodeExternalsPlugin()],
-    })
-  })
-}
+    });
+  });
+};
 
 Promise.all([
   build({
@@ -43,7 +42,7 @@ Promise.all([
     minify: true,
     outdir: 'dist',
   }),
-  ...cjsBuilds()
+  ...cjsBuilds(),
 ]);
 
 exec(
