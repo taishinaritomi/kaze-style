@@ -21,19 +21,8 @@ export type LoaderContext = _LoaderContext<Option> & {
   _compilation: NonNullable<_LoaderContext<Option>['_compilation']>;
 };
 
-const virtualLoaderPath = path.resolve(
-  __dirname,
-  '..',
-  'virtual-loader',
-  'index.js',
-);
-
-const resourcePath = path.resolve(
-  __dirname,
-  '..',
-  'virtual-loader',
-  'kaze.css',
-);
+const virtualLoaderPath = '@kaze-style/webpack-plugin/virtualLoader';
+const cssPath = '@kaze-style/webpack-plugin/assets/kaze.css';
 
 export const transformedComment = '/* Kaze style Transformed File */';
 
@@ -129,7 +118,7 @@ export function loader(
       const request = `import ${JSON.stringify(
         this.utils.contextify(
           this.context || this.rootContext,
-          `kaze.css!=!${virtualLoaderPath}!${resourcePath}?style=${toURIComponent(
+          `kaze.css!=!${virtualLoaderPath}!${cssPath}?style=${toURIComponent(
             cssRules.join('\n'),
           )}`,
         ),

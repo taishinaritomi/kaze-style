@@ -12,14 +12,25 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./virtualLoader": {
+      "import": "./dist/virtualLoader.js",
+      "require": "./dist/virtualLoader.cjs"
+    },
+    "./assets/*": "./assets/*"
+  },
   "files": [
     "dist",
-    "virtual-loader",
+    "assets",
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts",
+    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/virtualLoader.ts",
+    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts",
     "test": "echo 'no test specified'"
   },
   "dependencies": {
