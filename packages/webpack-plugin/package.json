@@ -43,7 +43,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.19.1",
-    "@kaze-style/build-man": "0.4.0",
     "@kaze-style/babel-plugin": "0.4.0",
     "@kaze-style/core": "^0.4.0",
     "eval": "^0.1.8"
