@@ -21,6 +21,14 @@
       "import": "./dist/virtualLoader.js",
       "require": "./dist/virtualLoader.cjs"
     },
+    "./preLoader": {
+      "import": "./dist/preLoader.js",
+      "require": "./dist/preLoader.cjs"
+    },
+    "./loader": {
+      "import": "./dist/loader.js",
+      "require": "./dist/loader.cjs"
+    },
     "./assets/*": "./assets/*"
   },
   "files": [
@@ -29,12 +37,13 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/virtualLoader.ts",
-    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts",
+    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts",
+    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts",
     "test": "echo 'no test specified'"
   },
   "dependencies": {
     "@babel/core": "^7.19.1",
+    "@kaze-style/build-man": "0.4.0",
     "@kaze-style/babel-plugin": "0.4.0",
     "@kaze-style/core": "^0.4.0",
     "eval": "^0.1.8"

@@ -8,7 +8,8 @@ type PluginOptions = {
 };
 
 const pluginName = 'KazePlugin';
-const loader = '@kaze-style/webpack-plugin';
+const loader = '@kaze-style/webpack-plugin/loader';
+const preLoader = '@kaze-style/webpack-plugin/preLoader';
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
@@ -23,6 +24,7 @@ export class Plugin {
   apply(compiler: Compiler) {
     compiler.options.module?.rules.splice(0, 0, {
       test: this.test,
+      exclude: /node_modules/,
       use: [
         {
           loader,
@@ -31,9 +33,9 @@ export class Plugin {
           },
         },
         {
-          loader,
+          loader: preLoader,
           options: {
-            pre: true,
+            childCompiler: this.childCompiler,
           },
         },
       ],
