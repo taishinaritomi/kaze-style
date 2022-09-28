@@ -7,24 +7,19 @@ import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
 } from 'webpack';
-import type { ChildCompiler } from './compiler';
+import { getCompiledSource, isChildCompiler } from './compiler';
+import { transformedComment } from './utils/constants';
 import { parseSourceMap } from './utils/parseSourceMap';
 import { toURIComponent } from './utils/toURIComponent';
 
-type Option = {
-  childCompiler?: ChildCompiler;
-};
-
-export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<Option>>;
-export type LoaderContext = _LoaderContext<Option> & {
-  _compiler: NonNullable<_LoaderContext<Option>['_compiler']>;
-  _compilation: NonNullable<_LoaderContext<Option>['_compilation']>;
+export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
+export type LoaderContext = _LoaderContext<never> & {
+  _compiler: NonNullable<_LoaderContext<never>['_compiler']>;
+  _compilation: NonNullable<_LoaderContext<never>['_compilation']>;
 };
 
 const virtualLoaderPath = '@kaze-style/webpack-plugin/virtualLoader';
 const cssPath = '@kaze-style/webpack-plugin/assets/kaze.css';
-
-export const transformedComment = '/* Kaze style Transformed File */';
 
 function loader(
   this: LoaderContext,
@@ -32,10 +27,7 @@ function loader(
   inputSourceMap: WebpackLoaderParams[1],
 ) {
   this.cacheable(true);
-  const { childCompiler } = this.getOptions();
-  const isChildCompiler = childCompiler?.isChildCompiler(this._compiler.name);
-
-  if (isChildCompiler) {
+  if (isChildCompiler(this._compiler.name)) {
     this.callback(null, sourceCode, inputSourceMap);
     return;
   }
@@ -107,47 +99,41 @@ type ForBuild = {
 
 export function pitch(this: LoaderContext) {
   this.cacheable(true);
+  if (!isChildCompiler(this._compiler.name)) {
+    const callback = this.async();
+    getCompiledSource(this)
+      .then((source) => {
+        if (source.includes(transformedComment)) {
+          const __forBuildByKazeStyle: ForBuild = {
+            fileName: this.resourcePath,
+            styles: [],
+            globalStyles: [],
+          };
+          const window = {};
+          evalCode(
+            source,
+            this.resourcePath,
+            {
+              console,
+              __forBuildByKazeStyle,
+              window,
+            },
+            true,
+          );
 
-  const { childCompiler } = this.getOptions();
-  if (childCompiler) {
-    const isChildCompiler = childCompiler.isChildCompiler(this._compiler.name);
-    if (!isChildCompiler) {
-      const callback = this.async();
-      childCompiler
-        .getCompiledSource(this)
-        .then(({ source }) => {
-          if (source.includes(transformedComment)) {
-            const __forBuildByKazeStyle: ForBuild = {
-              fileName: this.resourcePath,
-              styles: [],
-              globalStyles: [],
-            };
-            const window = {};
-            evalCode(
-              source,
-              this.resourcePath,
-              {
-                console,
-                __forBuildByKazeStyle,
-                window,
-              },
-              true,
-            );
-
-            if (__forBuildByKazeStyle.styles.length !== 0) {
-              this.data.styles = __forBuildByKazeStyle.styles;
-            }
-
-            if (__forBuildByKazeStyle.globalStyles.length !== 0) {
-              this.data.globalStyles = __forBuildByKazeStyle.globalStyles;
-            }
+          if (__forBuildByKazeStyle.styles.length !== 0) {
+            this.data.styles = __forBuildByKazeStyle.styles;
           }
-          callback(null);
-        })
-        .catch((error) => {
-          console.error({ resourcePath: this.resourcePath, error });
-          callback(null);
-        });
-    }
+
+          if (__forBuildByKazeStyle.globalStyles.length !== 0) {
+            this.data.globalStyles = __forBuildByKazeStyle.globalStyles;
+          }
+        }
+        callback(null);
+      })
+      .catch((error) => {
+        console.error({ resourcePath: this.resourcePath, error });
+        callback(null);
+      });
   }
 }

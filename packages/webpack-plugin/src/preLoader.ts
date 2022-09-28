@@ -1,24 +1,14 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import { preTransformPlugin } from '@kaze-style/babel-plugin';
-import type {
-  LoaderDefinitionFunction,
-  LoaderContext as _LoaderContext,
-} from 'webpack';
-import type { ChildCompiler } from './compiler';
+import type { LoaderDefinitionFunction, LoaderContext } from 'webpack';
+import { transformedComment } from './utils/constants';
 import { parseSourceMap } from './utils/parseSourceMap';
 
-type Option = {
-  childCompiler?: ChildCompiler;
-};
-
-export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<Option>>;
-export type LoaderContext = _LoaderContext<Option>;
-
-export const transformedComment = '/* Kaze style Transformed File */';
+type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 
 function loader(
-  this: LoaderContext,
+  this: LoaderContext<never>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
 ) {
