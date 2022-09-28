@@ -7,6 +7,10 @@ import { parseSourceMap } from './utils/parseSourceMap';
 
 type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 
+type BabelFileMetadata =
+  | (Babel.BabelFileMetadata & { transformed?: boolean })
+  | undefined;
+
 function loader(
   this: LoaderContext<never>,
   sourceCode: WebpackLoaderParams[0],
@@ -32,13 +36,7 @@ function loader(
     return;
   }
 
-  if (
-    (
-      babelFileResult.metadata as
-        | (Babel.BabelFileMetadata & { transformed?: boolean })
-        | undefined
-    )?.transformed === true
-  ) {
+  if ((babelFileResult.metadata as BabelFileMetadata)?.transformed === true) {
     this.callback(
       null,
       `${transformedComment}\n${babelFileResult.code}`,
