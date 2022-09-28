@@ -4,5 +4,5 @@
     "target": "esnext",
     "moduleResolution": "node"
   },
-  "exclude": ["**/node_modules", "**/dist", "**/*.spec.*"]
+  "exclude": ["**/node_modules", "**/dist", "**/*.spec.*", "**/*.js", "**/*.mjs"]
 }
