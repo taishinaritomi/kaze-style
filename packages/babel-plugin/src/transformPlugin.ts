@@ -11,7 +11,7 @@ type Transform = {
 type State = {
   targetPaths?: Array<{
     callee: NodePath<t.Identifier>;
-    definition: NodePath<t.ObjectExpression>;
+    definition: NodePath<t.Node>;
     transform: Transform;
   }>;
 };
@@ -52,9 +52,8 @@ export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
           exit(path, state) {
             if (state.targetPaths && state.targetPaths.length !== 0) {
               state.targetPaths.forEach(({ callee, definition, transform }) => {
-                const definitionPath = definition as NodePath<t.Expression>;
-                const callExpressionPath = definitionPath.findParent(
-                  (parentPath) => parentPath.isCallExpression(),
+                const callExpressionPath = definition.findParent((parentPath) =>
+                  parentPath.isCallExpression(),
                 ) as NodePath<t.CallExpression>;
                 const indexArgPath = callExpressionPath.node
                   .arguments[3] as t.NumericLiteral;
@@ -99,7 +98,7 @@ export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
               const argumentPaths = path.get('arguments') as NodePath<t.Node>[];
               if (Array.isArray(argumentPaths) && argumentPaths.length === 4) {
                 const definitionsPath = argumentPaths[0];
-                if (definitionsPath?.isObjectExpression()) {
+                if (definitionsPath !== undefined) {
                   state.targetPaths?.push({
                     callee: calleePath as NodePath<t.Identifier>,
                     definition: definitionsPath,
