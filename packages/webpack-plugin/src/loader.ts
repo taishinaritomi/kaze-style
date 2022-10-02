@@ -132,8 +132,7 @@ export function pitch(this: LoaderContext) {
         callback(null);
       })
       .catch((error) => {
-        console.error({ resourcePath: this.resourcePath, error });
-        callback(null);
+        callback(error);
       });
   }
 }
