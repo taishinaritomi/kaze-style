@@ -1,8 +1,9 @@
 import type { CssRules, KazeGlobalStyle, KazeStyle } from '../types/style';
+import type { ValueOf } from '../types/utils';
 import { hyphenateProperty } from './hyphenateProperty';
 
 export const compileObjectCSS = (
-  style: KazeStyle | KazeGlobalStyle,
+  style: KazeStyle | ValueOf<KazeGlobalStyle>,
 ): string => {
   const cssRules: CssRules = [];
   for (const property in style) {

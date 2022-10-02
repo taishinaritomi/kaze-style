@@ -1,9 +1,7 @@
 import { createGlobalStyle as createGlobalStyleCore } from '@kaze-style/core';
 import type { KazeGlobalStyle } from '@kaze-style/core';
 
-export const createGlobalStyle = <Selector extends string>(
-  globalStyles: Record<Selector, KazeGlobalStyle>,
-): void => {
+export const createGlobalStyle = (globalStyles: KazeGlobalStyle): void => {
   const { cssRules } = createGlobalStyleCore(globalStyles);
 
   if (typeof document !== 'undefined') {

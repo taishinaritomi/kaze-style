@@ -2,6 +2,7 @@ import type {
   Pseudos,
   PropertiesFallback,
   PropertiesHyphenFallback,
+  AtRule,
 } from 'csstype';
 import type { ClassName } from '../utils/ClassName';
 import type { NestedObject, TrimPrefix } from './utils';
@@ -68,8 +69,15 @@ export type KazeStyle = NestedObject<
   NestedObject<NestedObject<NestedObject<NestedObject<SupportedAllStyle>>>>
 >;
 
-export type KazeGlobalStyle = PropertiesFallback<CSSValue> &
+type SupportedGlobalStyle = PropertiesFallback<CSSValue> &
   PropertiesHyphenFallback<CSSValue>;
+
+type FontFace = {
+  '@font-face'?: AtRule.FontFaceFallback<CSSValue> &
+    AtRule.FontFaceHyphenFallback<CSSValue>;
+};
+
+export type KazeGlobalStyle = FontFace | Record<string, SupportedGlobalStyle>;
 
 export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;

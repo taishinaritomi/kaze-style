@@ -1,16 +1,16 @@
 import type { CssRules, KazeGlobalStyle } from './types/style';
+import type { ValueOf } from './types/utils';
 import { compileObjectCSS } from './utils/compileObjectCSS';
 
 type Result = {
   cssRules: CssRules;
 };
 
-export const createGlobalStyle = <Selector extends string>(
-  globalStyles: Record<Selector, KazeGlobalStyle>,
-): Result => {
+export const createGlobalStyle = (globalStyles: KazeGlobalStyle): Result => {
   const allCSS = new Set<string>();
   for (const selector in globalStyles) {
-    const selectorStyle: KazeGlobalStyle = globalStyles[selector];
+    const selectorStyle =
+      globalStyles[selector as keyof ValueOf<KazeGlobalStyle>];
     const compiledStyle = compileObjectCSS(selectorStyle);
     compiledStyle !== '' && allCSS.add(`${selector} {${compiledStyle}}`);
   }
