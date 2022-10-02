@@ -77,7 +77,16 @@ type FontFace = {
     AtRule.FontFaceHyphenFallback<CSSValue>;
 };
 
-export type KazeGlobalStyle = FontFace | Record<string, SupportedGlobalStyle>;
+type PredictGlobalType =
+  | 'body'
+  | 'html'
+  | '*'
+  | '::before,::after'
+  | '*,::before,::after';
+
+export type KazeGlobalStyle =
+  | FontFace
+  | Record<string | PredictGlobalType, SupportedGlobalStyle>;
 
 export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;
