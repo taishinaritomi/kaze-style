@@ -1,3 +1,4 @@
+import type { Compilation } from 'webpack';
 import type { LoaderContext } from './loader';
 
 const compilerNamePrefix = 'kaze-style-compiler';
@@ -42,28 +43,30 @@ const compileVanillaSource = async (loader: LoaderContext) => {
   }>((resolve, reject) => {
     const webpack = loader._compiler.webpack;
 
-    const outputOptions = {
+    const outputOptions: Parameters<Compilation['createChildCompiler']>[1] = {
       filename: loader.resourcePath,
     };
 
-    const NodeTemplatePlugin = webpack.node.NodeTemplatePlugin;
-    const NodeTargetPlugin = webpack.node.NodeTargetPlugin;
-    // const LoaderTargetPlugin = webpack.LoaderTargetPlugin;
-    const EntryOptionPlugin = webpack.EntryOptionPlugin;
-    const ExternalsPlugin = webpack.ExternalsPlugin;
-    const LimitChunkCountPlugin = webpack.optimize.LimitChunkCountPlugin;
-    const EnableLibraryPlugin = webpack.library.EnableLibraryPlugin;
+    const {
+      ExternalsPlugin,
+      EntryOptionPlugin,
+      node: { NodeTemplatePlugin, NodeTargetPlugin },
+      optimize: { LimitChunkCountPlugin },
+      library: { EnableLibraryPlugin },
+    } = webpack;
 
     const compilerName = getCompilerName(loader.resourcePath);
     const childCompiler = getRootCompilation(loader).createChildCompiler(
       compilerName,
       outputOptions,
-      [],
+      [
+        new NodeTemplatePlugin(outputOptions),
+        new NodeTargetPlugin(),
+        new EnableLibraryPlugin('commonjs2'),
+        new LimitChunkCountPlugin({ maxChunks: 1 }),
+        new ExternalsPlugin('commonjs', ['@kaze-style/react']),
+      ],
     );
-
-    new NodeTemplatePlugin(outputOptions).apply(childCompiler);
-    new NodeTargetPlugin().apply(childCompiler);
-    new EnableLibraryPlugin('commonjs2').apply(childCompiler);
 
     EntryOptionPlugin.applyEntryOption(childCompiler, loader.context, {
       child: {
@@ -74,17 +77,11 @@ const compileVanillaSource = async (loader: LoaderContext) => {
       },
     });
 
-    new LimitChunkCountPlugin({ maxChunks: 1 }).apply(childCompiler);
-    new ExternalsPlugin('commonjs', ['@kaze-style/react']).apply(childCompiler);
-
     let source: string;
 
-    childCompiler.hooks.compilation.tap(compilerName, (compilation) => {
+    childCompiler.hooks.thisCompilation.tap(compilerName, (compilation) => {
       compilation.hooks.processAssets.tap(compilerName, () => {
-        source =
-          (compilation.assets[loader.resourcePath] &&
-            (compilation.assets[loader.resourcePath]?.source() as string)) ||
-          '';
+        source = compilation.assets[loader.resourcePath]?.source() as string;
 
         compilation.chunks.forEach((chunk) => {
           chunk.files.forEach((file) => {
