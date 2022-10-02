@@ -1,7 +1,7 @@
-import type { KazeStyle, SolveShorthandProperties } from '../types/style';
+import type { KazeStyle, SupportShorthandProperties } from '../types/style';
 
 export const isShortHandProperty = (
   property: keyof KazeStyle,
-): property is keyof SolveShorthandProperties => {
+): property is keyof SupportShorthandProperties => {
   return property.startsWith('$');
 };

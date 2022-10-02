@@ -31,7 +31,7 @@ type CSSAnimationNameProperty = {
   animationName?: CSSKeyframes | string;
 };
 
-export const solveShorthandProperties = [
+export const supportShorthandProperties = [
   'margin',
   'padding',
   'gap',
@@ -41,8 +41,8 @@ export const solveShorthandProperties = [
   'borderRadius',
 ] as const;
 
-export type SolveShorthandProperties = {
-  [Properties in `$${typeof solveShorthandProperties[number]}`]?: PropertiesFallback<CSSValue>[TrimPrefix<
+export type SupportShorthandProperties = {
+  [Properties in `$${typeof supportShorthandProperties[number]}`]?: PropertiesFallback<CSSValue>[TrimPrefix<
     Properties,
     '$'
   >];
@@ -51,7 +51,7 @@ export type SolveShorthandProperties = {
 export type SupportedCSSProperties = Omit<
   PropertiesFallback<CSSValue> &
     PropertiesHyphenFallback<CSSValue> &
-    SolveShorthandProperties,
+    SupportShorthandProperties,
   'animationName' | 'animation-name'
 >;
 
