@@ -1,4 +1,3 @@
-
 export const STYLE_START_COMMENT = '/* KAZE STYLE STYLE START */';
 export const STYLE_END_COMMENT = '/* KAZE STYLE STYLE END */';
 
