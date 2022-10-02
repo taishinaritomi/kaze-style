@@ -1,11 +1,10 @@
 import type {
-  AtRules,
   Pseudos,
   PropertiesFallback,
-  StandardShorthandProperties,
+  PropertiesHyphenFallback,
 } from 'csstype';
 import type { ClassName } from '../utils/ClassName';
-import type { NestedObject } from './utils';
+import type { NestedObject, TrimPrefix } from './utils';
 
 export type CSSValue = string | number;
 
@@ -13,8 +12,14 @@ type CSSPseudos = {
   [_ in Pseudos]?: SupportedAllStyle;
 };
 
-type CSSAtRules = {
-  [_ in AtRules]?: SupportedAllStyle;
+type PredictType =
+  | '@media screen and (max-width: 0)'
+  | '@media screen and (min-width: 0)'
+  | '@media (prefers-color-scheme: dark)'
+  | '@media (prefers-color-scheme: light)';
+
+type PredictTypeRules = {
+  [_ in PredictType]?: SupportedAllStyle;
 };
 
 export type CSSKeyframes = Record<
@@ -26,7 +31,7 @@ type CSSAnimationNameProperty = {
   animationName?: CSSKeyframes | string;
 };
 
-export const supportedShorthandProperties = [
+export const solveShorthandProperties = [
   'margin',
   'padding',
   'gap',
@@ -36,25 +41,31 @@ export const supportedShorthandProperties = [
   'borderRadius',
 ] as const;
 
-export type SupportedShorthandProperties =
-  typeof supportedShorthandProperties[number];
+export type SolveShorthandProperties = {
+  [Properties in `$${typeof solveShorthandProperties[number]}`]?: PropertiesFallback<CSSValue>[TrimPrefix<
+    Properties,
+    '$'
+  >];
+};
 
 export type SupportedCSSProperties = Omit<
-  PropertiesFallback<CSSValue>,
-  | 'animationName'
-  | keyof Omit<StandardShorthandProperties, SupportedShorthandProperties>
+  PropertiesFallback<CSSValue> &
+    PropertiesHyphenFallback<CSSValue> &
+    SolveShorthandProperties,
+  'animationName' | 'animation-name'
 >;
 
 export type SupportedAllStyle = SupportedCSSProperties &
   CSSPseudos &
-  CSSAtRules &
+  PredictTypeRules &
   CSSAnimationNameProperty;
 
 export type KazeStyle = NestedObject<
   NestedObject<NestedObject<NestedObject<NestedObject<SupportedAllStyle>>>>
 >;
 
-export type KazeGlobalStyle = PropertiesFallback<CSSValue>;
+export type KazeGlobalStyle = PropertiesFallback<CSSValue> &
+  PropertiesHyphenFallback<CSSValue>;
 
 export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;

@@ -6,6 +6,7 @@ import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';
 import { hashClassName } from './utils/hashClassName';
 import { hashSelector } from './utils/hashSelector';
+import { hyphenateProperty } from './utils/hyphenateProperty';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
 import { isObject } from './utils/isObject';
@@ -52,21 +53,22 @@ export const resolveStyle = ({
           resolvedStyle,
         });
       } else {
+        const hyphenatedProperty = hyphenateProperty(property);
         const className = hashClassName({
           media,
           pseudo,
-          property,
+          property: hyphenatedProperty,
           styleValue,
         });
         const selector = hashSelector({
           media,
           pseudo,
-          property,
+          property: hyphenatedProperty,
         });
         const cssRule = compileCSS({
           media,
           pseudo,
-          property,
+          property: hyphenatedProperty,
           styleValue,
           className,
         });

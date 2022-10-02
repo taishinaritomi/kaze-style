@@ -1,6 +1,5 @@
 import type { CSSValue } from '../types/style';
 import type { AndArray } from '../types/utils';
-import { hyphenateProperty } from './hyphenateProperty';
 
 type CompileCSS = {
   className: string;
@@ -29,11 +28,9 @@ export const compileCSS = ({
   }
 
   if (Array.isArray(styleValue)) {
-    rule = `${selector}{${hyphenateProperty(property)}:${styleValue.join(
-      ' ',
-    )};}`;
+    rule = `${selector}{${property}:${styleValue.join(' ')};}`;
   } else {
-    rule = `${selector}{${hyphenateProperty(property)}:${styleValue};}`;
+    rule = `${selector}{${property}:${styleValue};}`;
   }
 
   if (media) rule = `@media ${media} {${rule}}`;
