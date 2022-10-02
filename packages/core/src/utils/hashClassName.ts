@@ -6,6 +6,8 @@ type Args = {
   property?: string;
   pseudo?: string;
   media?: string;
+  layer?: string;
+  support?: string;
   styleValue?: AndArray<CSSValue>;
 };
 
@@ -14,9 +16,11 @@ export const hashClassName = ({
   pseudo = '',
   styleValue = '',
   media = '',
+  layer = '',
+  support = '',
 }: Args): string => {
   return `_${hash(
-    `${property}${pseudo}${media}${
+    `${property}${pseudo}${media}${layer}${support}${
       Array.isArray(styleValue) ? styleValue.join(' ') : styleValue
     }`,
   )}`;

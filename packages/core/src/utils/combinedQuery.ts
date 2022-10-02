@@ -1,9 +1,9 @@
 export const combinedQuery = (
-  currentMediaQuery: string,
-  nestedMediaQuery: string,
+  currentQuery: string,
+  nestedQuery: string,
 ): string => {
-  if (currentMediaQuery.length === 0) {
-    return nestedMediaQuery;
+  if (currentQuery.length === 0) {
+    return nestedQuery;
   }
-  return `${currentMediaQuery} and ${nestedMediaQuery}`;
+  return `${currentQuery} and ${nestedQuery}`;
 };

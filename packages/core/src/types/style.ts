@@ -16,7 +16,11 @@ type PredictType =
   | '@media screen and (max-width: 0)'
   | '@media screen and (min-width: 0)'
   | '@media (prefers-color-scheme: dark)'
-  | '@media (prefers-color-scheme: light)';
+  | '@media (prefers-color-scheme: light)'
+  | '@layer utilities'
+  | '@layer base'
+  | '@supports (display: grid)'
+  | '@supports not (display: grid)';
 
 type PredictTypeRules = {
   [_ in PredictType]?: SupportedAllStyle;

@@ -7,6 +7,8 @@ type CompileCSS = {
   styleValue: AndArray<CSSValue>;
   pseudo?: string;
   media?: string;
+  layer?: string;
+  support?: string;
 };
 
 export const compileCSS = ({
@@ -15,6 +17,8 @@ export const compileCSS = ({
   styleValue,
   pseudo,
   media,
+  layer,
+  support,
 }: CompileCSS): string => {
   let selector = '';
   let rule = '';
@@ -34,6 +38,8 @@ export const compileCSS = ({
   }
 
   if (media) rule = `@media ${media} {${rule}}`;
+  if (layer) rule = `@layer ${layer} {${rule}}`;
+  if (support) rule = `@supports ${support} {${rule}}`;
 
   return rule;
 };
