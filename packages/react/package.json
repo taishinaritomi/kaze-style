@@ -15,9 +15,7 @@
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
-    "LICENSE",
-    "reset.css",
-    "reset.css.d.ts"
+    "LICENSE"
   ],
   "scripts": {
     "dev": "tsx ./../../scripts/build.ts --watch",
