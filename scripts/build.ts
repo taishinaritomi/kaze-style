@@ -13,7 +13,6 @@ const args = arg({
 const isWatch = args['--watch'] || false;
 const entries = args['--entry'] || [];
 entries.push('./src/index.ts');
-console.log(entries);
 
 const cjsBuilds = (): Promise<BuildResult>[] => {
   return entries.map((entry) => {
