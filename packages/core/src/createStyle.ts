@@ -23,11 +23,7 @@ export const createStyle = <K extends string>(
   for (const key in styles) {
     const { cssRules, classNameObject } = resolveStyle({ style: styles[key] });
     allCssRules.push(...cssRules);
-    const className = Object.values(classNameObject).join(' ');
-    classes[key] = new ClassName(
-      className,
-      classNameObject,
-    ) as unknown as string;
+    classes[key] = new ClassName(classNameObject) as unknown as string;
     classesObject[key] = classNameObject;
   }
 

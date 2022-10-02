@@ -1,5 +1,8 @@
+import { createGlobalStyle } from '@kaze-style/react';
+import { resetStyle } from '@kaze-style/utilities';
 import type { AppProps } from 'next/app';
-import '@kaze-style/react/reset.css';
+
+createGlobalStyle(resetStyle);
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

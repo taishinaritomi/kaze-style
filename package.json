@@ -30,6 +30,8 @@
     "@types/stylis": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
+    "arg": "^5.0.2",
+    "benny": "^3.7.1",
     "esbuild": "^0.15.7",
     "esbuild-node-externals": "^1.5.0",
     "eslint": "^8.23.1",

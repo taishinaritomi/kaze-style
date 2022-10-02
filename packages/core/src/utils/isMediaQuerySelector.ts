@@ -1,3 +1,3 @@
-export const isMediaQuerySelector = (property: string): boolean => {
+export const isMediaQuerySelector = (property: string) => {
   return property.substr(0, 6) === '@media';
 };

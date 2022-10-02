@@ -6,10 +6,13 @@ import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';
 import { hashClassName } from './utils/hashClassName';
 import { hashSelector } from './utils/hashSelector';
+import { hyphenateProperty } from './utils/hyphenateProperty';
+import { isLayerSelector } from './utils/isLayerSelector';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
 import { isObject } from './utils/isObject';
 import { isShortHandProperty } from './utils/isShortHandProperty';
+import { isSupportQuerySelector } from './utils/isSupportQuerySelector';
 import { normalizeNestedProperty } from './utils/normalizeNestedProperty';
 import { omit } from './utils/omit';
 import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
@@ -23,6 +26,8 @@ type Args = {
   style: KazeStyle;
   pseudo?: string;
   media?: string;
+  layer?: string;
+  support?: string;
   resolvedStyle?: ResolvedStyle;
 };
 
@@ -30,6 +35,8 @@ export const resolveStyle = ({
   style,
   pseudo = '',
   media = '',
+  layer = '',
+  support = '',
   resolvedStyle = { classNameObject: {}, cssRules: [] },
 }: Args): ResolvedStyle => {
   for (const _property in style) {
@@ -49,24 +56,33 @@ export const resolveStyle = ({
           style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
           pseudo,
           media,
+          layer,
+          support,
           resolvedStyle,
         });
       } else {
+        const hyphenatedProperty = hyphenateProperty(property);
         const className = hashClassName({
           media,
           pseudo,
-          property,
+          property: hyphenatedProperty,
+          layer,
+          support,
           styleValue,
         });
         const selector = hashSelector({
           media,
           pseudo,
-          property,
+          layer,
+          support,
+          property: hyphenatedProperty,
         });
         const cssRule = compileCSS({
           media,
           pseudo,
-          property,
+          property: hyphenatedProperty,
+          layer,
+          support,
           styleValue,
           className,
         });
@@ -85,6 +101,8 @@ export const resolveStyle = ({
         style: { animationName: keyframeName },
         pseudo,
         media,
+        layer,
+        support,
         resolvedStyle,
       });
     } else if (isObject(styleValue)) {
@@ -96,7 +114,33 @@ export const resolveStyle = ({
         resolveStyle({
           style: styleValue,
           pseudo,
+          layer,
           media: combinedMediaQuery,
+          support,
+          resolvedStyle,
+        });
+      } else if (isLayerSelector(property)) {
+        const combinedLayerQuery =
+          (layer ? `${layer}.` : '') + property.slice(6).trim();
+        resolveStyle({
+          style: styleValue,
+          pseudo,
+          layer: combinedLayerQuery,
+          media,
+          support,
+          resolvedStyle,
+        });
+      } else if (isSupportQuerySelector(property)) {
+        const combinedSupportQuery = combinedQuery(
+          support,
+          property.slice(9).trim(),
+        );
+        resolveStyle({
+          style: styleValue,
+          pseudo,
+          layer,
+          media,
+          support: combinedSupportQuery,
           resolvedStyle,
         });
       } else if (isNestedSelector(property)) {
@@ -104,6 +148,8 @@ export const resolveStyle = ({
           style: styleValue,
           pseudo: pseudo + normalizeNestedProperty(property),
           media,
+          layer,
+          support,
           resolvedStyle,
         });
       }

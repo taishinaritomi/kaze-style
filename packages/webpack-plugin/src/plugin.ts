@@ -1,6 +1,5 @@
 import { sortCSS } from '@kaze-style/core';
 import type { Compiler, RuleSetRule } from 'webpack';
-import { ChildCompiler } from './compiler';
 import { getSource } from './utils/getSource';
 
 type PluginOptions = {
@@ -8,33 +7,27 @@ type PluginOptions = {
 };
 
 const pluginName = 'KazePlugin';
-const loader = '@kaze-style/webpack-plugin';
+const loader = '@kaze-style/webpack-plugin/loader';
+const preLoader = '@kaze-style/webpack-plugin/preLoader';
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
-  childCompiler: ChildCompiler;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
   }: Partial<PluginOptions> = {}) {
     this.test = test;
-    this.childCompiler = new ChildCompiler(undefined);
   }
 
   apply(compiler: Compiler) {
     compiler.options.module?.rules.splice(0, 0, {
       test: this.test,
+      exclude: /node_modules/,
       use: [
         {
           loader,
-          options: {
-            childCompiler: this.childCompiler,
-          },
         },
         {
-          loader,
-          options: {
-            pre: true,
-          },
+          loader: preLoader,
         },
       ],
     });

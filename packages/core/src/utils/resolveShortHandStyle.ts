@@ -1,15 +1,16 @@
 import type {
   CSSValue,
-  SupportedShorthandProperties,
+  SupportShorthandProperties,
   SupportedCSSProperties,
 } from '../types/style';
 import type { AndArray } from '../types/utils';
 import { generateStyles } from './generateStyles';
+import { normalizeShorthandProperty } from './normalizeShorthandProperty';
 
 type OverflowStyle = Pick<SupportedCSSProperties, 'overflowX' | 'overflowY'>;
 
 export const resolveShortHandStyle = (
-  property: SupportedShorthandProperties,
+  _property: keyof SupportShorthandProperties,
   styleValue: AndArray<CSSValue>,
 ): SupportedCSSProperties => {
   const values = Array.isArray(styleValue)
@@ -18,6 +19,8 @@ export const resolveShortHandStyle = (
         .toString()
         .split(' ')
         .filter((v) => v !== '');
+
+  const property = normalizeShorthandProperty(_property);
 
   if (property === 'margin' || property === 'padding') {
     const style = generateStyles(property, '', ...values);

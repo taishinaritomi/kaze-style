@@ -2,6 +2,5 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "jsx": "preserve"
-  },
-  "exclude": ["**/node_modules", "**/dist", "**/*.spec.*", "webpack.config.js"]
+  }
 }

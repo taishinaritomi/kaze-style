@@ -1,57 +1,44 @@
 import path from 'path';
 import * as Babel from '@babel/core';
-import { preTransformPlugin, transformPlugin } from '@kaze-style/babel-plugin';
+import { transformPlugin } from '@kaze-style/babel-plugin';
 import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
+import evalCode from 'eval';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
 } from 'webpack';
-import type { ChildCompiler } from './compiler';
+import { getCompiledSource, isChildCompiler } from './compiler';
+import { transformedComment } from './utils/constants';
 import { parseSourceMap } from './utils/parseSourceMap';
 import { toURIComponent } from './utils/toURIComponent';
 
-type Option = {
-  childCompiler?: ChildCompiler;
-  pre?: boolean;
+export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
+export type LoaderContext = _LoaderContext<never> & {
+  _compiler: NonNullable<_LoaderContext<never>['_compiler']>;
+  _compilation: NonNullable<_LoaderContext<never>['_compilation']>;
 };
 
-export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<Option>>;
-export type LoaderContext = _LoaderContext<Option> & {
-  _compiler: NonNullable<_LoaderContext<Option>['_compiler']>;
-  _compilation: NonNullable<_LoaderContext<Option>['_compilation']>;
-};
+const virtualLoaderPath = '@kaze-style/webpack-plugin/virtualLoader';
+const cssPath = '@kaze-style/webpack-plugin/assets/kaze.css';
 
-const virtualLoaderPath = path.resolve(
-  __dirname,
-  '..',
-  'virtual-loader',
-  'index.js',
-);
-
-const resourcePath = path.resolve(
-  __dirname,
-  '..',
-  'virtual-loader',
-  'kaze.css',
-);
-
-export const transformedComment = '/* Kaze style Transformed File */';
-
-export function loader(
+function loader(
   this: LoaderContext,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
 ) {
   this.cacheable(true);
-  const { pre, childCompiler } = this.getOptions();
-  const isChildCompiler = childCompiler?.isChildCompiler(this._compiler.name);
-
-  if (isChildCompiler) {
+  if (isChildCompiler(this._compiler.name)) {
     this.callback(null, sourceCode, inputSourceMap);
     return;
   }
 
-  if (pre) {
+  const styles = this.data.styles as ForBuildStyle<string>[] | undefined;
+
+  const globalStyles = this.data.globalStyles as
+    | ForBuildGlobalStyle[]
+    | undefined;
+
+  if (sourceCode.includes(transformedComment)) {
     const filePath = path.relative(process.cwd(), this.resourcePath);
 
     const babelFileResult = Babel.transformSync(sourceCode, {
@@ -60,7 +47,7 @@ export function loader(
       configFile: false,
       compact: false,
       filename: filePath,
-      plugins: [[preTransformPlugin]],
+      plugins: [[transformPlugin, { styles: styles || [] }]],
       sourceMaps: this.sourceMap || false,
       sourceFileName: filePath,
       inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
@@ -71,76 +58,81 @@ export function loader(
       return;
     }
 
-    if (
-      (
-        babelFileResult.metadata as
-          | (Babel.BabelFileMetadata & { transformed?: boolean })
-          | undefined
-      )?.transformed === true
-    ) {
-      this.callback(
-        null,
-        `${transformedComment}\n${babelFileResult.code}`,
-        babelFileResult.map as unknown as string,
-      );
-      return;
+    const cssRules: string[] = [];
+
+    if (styles && styles.length !== 0) {
+      cssRules.push(...styles.flatMap((style) => style.cssRules));
     }
 
-    this.callback(null, sourceCode, inputSourceMap);
-  } else {
-    const styles = this.data.styles as ForBuildStyle<string>[] | undefined;
+    if (globalStyles && globalStyles.length !== 0) {
+      cssRules.push(
+        ...globalStyles.flatMap((globalStyle) => globalStyle.cssRules),
+      );
+    }
 
-    const globalStyles = this.data.globalStyles as
-      | ForBuildGlobalStyle[]
-      | undefined;
+    const request = `import ${JSON.stringify(
+      this.utils.contextify(
+        this.context || this.rootContext,
+        `kaze.css!=!${virtualLoaderPath}!${cssPath}?style=${toURIComponent(
+          cssRules.join('\n'),
+        )}`,
+      ),
+    )};`;
+    this.callback(
+      null,
+      `${babelFileResult.code}\n\n${request}`,
+      babelFileResult.map as unknown as string,
+    );
 
-    if (sourceCode.includes(transformedComment)) {
-      const filePath = path.relative(process.cwd(), this.resourcePath);
+    return;
+  }
+  this.callback(null, sourceCode, inputSourceMap);
+}
 
-      const babelFileResult = Babel.transformSync(sourceCode, {
-        caller: { name: 'kaze' },
-        babelrc: false,
-        configFile: false,
-        compact: false,
-        filename: filePath,
-        plugins: [[transformPlugin, { styles: styles || [] }]],
-        sourceMaps: this.sourceMap || false,
-        sourceFileName: filePath,
-        inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
+export default loader;
+
+type ForBuild = {
+  fileName: string;
+  styles: ForBuildStyle<string>[];
+  globalStyles: ForBuildGlobalStyle[];
+};
+
+export function pitch(this: LoaderContext) {
+  this.cacheable(true);
+  if (!isChildCompiler(this._compiler.name)) {
+    const callback = this.async();
+    getCompiledSource(this)
+      .then((source) => {
+        if (source.includes(transformedComment)) {
+          const __forBuildByKazeStyle: ForBuild = {
+            fileName: this.resourcePath,
+            styles: [],
+            globalStyles: [],
+          };
+          const window = {};
+          evalCode(
+            source,
+            this.resourcePath,
+            {
+              console,
+              __forBuildByKazeStyle,
+              window,
+            },
+            true,
+          );
+
+          if (__forBuildByKazeStyle.styles.length !== 0) {
+            this.data.styles = __forBuildByKazeStyle.styles;
+          }
+
+          if (__forBuildByKazeStyle.globalStyles.length !== 0) {
+            this.data.globalStyles = __forBuildByKazeStyle.globalStyles;
+          }
+        }
+        callback(null);
+      })
+      .catch((error) => {
+        callback(error);
       });
-
-      if (babelFileResult === null) {
-        this.callback(null, sourceCode, inputSourceMap);
-        return;
-      }
-
-      const cssRules: string[] = [];
-
-      if (styles && styles.length !== 0) {
-        cssRules.push(...styles.flatMap((style) => style.cssRules));
-      }
-
-      if (globalStyles && globalStyles.length !== 0) {
-        cssRules.push(
-          ...globalStyles.flatMap((globalStyle) => globalStyle.cssRules),
-        );
-      }
-
-      const request = `import ${JSON.stringify(
-        this.utils.contextify(
-          this.context || this.rootContext,
-          `kaze.css!=!${virtualLoaderPath}!${resourcePath}?style=${toURIComponent(
-            cssRules.join('\n'),
-          )}`,
-        ),
-      )};`;
-      this.callback(
-        null,
-        `${babelFileResult.code}\n\n${request}`,
-        babelFileResult.map as unknown as string,
-      );
-      return;
-    }
-    this.callback(null, sourceCode, inputSourceMap);
   }
 }
