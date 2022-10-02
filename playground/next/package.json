@@ -11,6 +11,7 @@
   "dependencies": {
     "@kaze-style/react": "^0.4.0",
     "@kaze-style/next-plugin": "^0.4.0",
+    "@kaze-style/utilities": "^0.4.0",
     "@next/bundle-analyzer": "^12.3.0",
     "next": "12.3.0",
     "react": "18.2.0",

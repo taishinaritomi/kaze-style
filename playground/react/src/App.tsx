@@ -26,5 +26,5 @@ const classes = createStyle({
 });
 
 export const App = () => {
-  return <div className={classes.button}>App</div>;
+  return <button className={classes.button}>button</button>;
 };
