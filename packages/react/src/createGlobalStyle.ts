@@ -5,15 +5,27 @@ export const createGlobalStyle = (globalStyles: KazeGlobalStyle): void => {
   const { cssRules } = createGlobalStyleCore(globalStyles);
 
   if (typeof document !== 'undefined') {
-    let globalStyle = document.getElementById(
-      'kaze-global-style',
-    ) as HTMLStyleElement;
-    if (!globalStyle) {
-      globalStyle = document.createElement('style');
-      globalStyle.id = 'kaze-global-style';
-      document.head.prepend(globalStyle);
+    let div = document.getElementById('kaze') as HTMLDivElement;
+    if (!div) {
+      div = document.createElement('div');
+      div.id = 'kaze';
+      const style = document.createElement('style');
+      const styleMedia = document.createElement('style');
+      const styleGlobal = document.createElement('style');
+      style.id = 'kaze-style';
+      styleMedia.id = 'kaze-style-media';
+      styleGlobal.id = 'kaze-global-style';
+      div.appendChild(styleGlobal);
+      div.appendChild(style);
+      div.appendChild(styleMedia);
+      document.head.appendChild(div);
     }
-    const globalStyleSheet = globalStyle.sheet;
-    cssRules.forEach((css) => globalStyleSheet?.insertRule(css));
+
+    const styleGlobal = document.getElementById(
+      'kaze-global-style',
+    ) as HTMLStyleElement & { arr: string[] };
+
+    styleGlobal.arr = [...(styleGlobal.arr || []), ...cssRules];
+    styleGlobal.innerText = Array.from(new Set(styleGlobal.arr)).join('');
   }
 };
