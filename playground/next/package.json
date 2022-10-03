@@ -9,7 +9,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@kaze-style/react": "^0.5.0",
+    "@kaze-style/react": "^0.5.1",
     "@kaze-style/next-plugin": "^0.5.0",
     "@kaze-style/themes": "^0.5.0",
     "@next/bundle-analyzer": "^12.3.0",
