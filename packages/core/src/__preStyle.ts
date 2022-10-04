@@ -5,7 +5,6 @@ import type {
   CssRules,
   KazeStyle,
 } from './types/style';
-import { STYLE_START_COMMENT, STYLE_END_COMMENT } from './utils/constants';
 
 export type ForBuildStyle<K extends string> = {
   cssRules: CssRules;
@@ -24,7 +23,7 @@ export const __preStyle = <K extends string>(
   if (forBuild.fileName === fileName) {
     forBuild.styles.push({
       classesObject,
-      cssRules: [STYLE_START_COMMENT, ...cssRules, STYLE_END_COMMENT],
+      cssRules,
       index,
     });
   }

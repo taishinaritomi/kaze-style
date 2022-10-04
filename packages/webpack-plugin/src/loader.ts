@@ -1,6 +1,7 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import { transformPlugin } from '@kaze-style/babel-plugin';
+import { cssRulesToCssString } from '@kaze-style/build-man';
 import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
 import evalCode from 'eval';
 import type {
@@ -58,23 +59,16 @@ function loader(
       return;
     }
 
-    const cssRules: string[] = [];
-
-    if (styles && styles.length !== 0) {
-      cssRules.push(...styles.flatMap((style) => style.cssRules));
-    }
-
-    if (globalStyles && globalStyles.length !== 0) {
-      cssRules.push(
-        ...globalStyles.flatMap((globalStyle) => globalStyle.cssRules),
-      );
-    }
-
+    const cssString = cssRulesToCssString({
+      cssRules: styles?.flatMap((style) => style.cssRules) || [],
+      globalCssRules:
+        globalStyles?.flatMap((globalStyle) => globalStyle.cssRules) || [],
+    });
     const request = `import ${JSON.stringify(
       this.utils.contextify(
         this.context || this.rootContext,
         `kaze.css!=!${virtualLoaderPath}!${cssPath}?style=${toURIComponent(
-          cssRules.join('\n'),
+          cssString,
         )}`,
       ),
     )};`;

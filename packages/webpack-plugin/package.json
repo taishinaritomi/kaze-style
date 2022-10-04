@@ -45,6 +45,7 @@
     "@babel/core": "^7.19.1",
     "@kaze-style/babel-plugin": "0.5.0",
     "@kaze-style/core": "^0.5.0",
+    "@kaze-style/build-man": "^0.5.0",
     "eval": "^0.1.8"
   },
   "peerDependencies": {
