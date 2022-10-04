@@ -18,9 +18,6 @@ export const __preGlobalStyle = <Selector extends string>(
   const { cssRules } = createGlobalStyle(globalStyles);
 
   if (forBuild.fileName === fileName) {
-    forBuild.globalStyles.push({
-      cssRules,
-      index,
-    });
+    forBuild.globalStyles.push({ cssRules, index });
   }
 };

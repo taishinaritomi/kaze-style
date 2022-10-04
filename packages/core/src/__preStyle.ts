@@ -21,11 +21,7 @@ export const __preStyle = <K extends string>(
   const { classes, cssRules, classesObject } = createStyle(styles);
 
   if (forBuild.fileName === fileName) {
-    forBuild.styles.push({
-      classesObject,
-      cssRules,
-      index,
-    });
+    forBuild.styles.push({ classesObject, cssRules, index });
   }
 
   return classes;
