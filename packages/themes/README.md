@@ -78,7 +78,6 @@ const Component = () => {
   return <Button className={classes.blue} />;
 };
 ```
-
 ### createGlobalStyle
 
 ```ts
