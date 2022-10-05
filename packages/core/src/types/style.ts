@@ -4,7 +4,7 @@ import type {
   PropertiesHyphenFallback,
   AtRule,
 } from 'csstype';
-import type { ClassName } from '../utils/ClassName';
+import type { ClassName } from '../ClassName';
 import type { NestedObject, TrimPrefix } from './utils';
 
 export type CSSValue = string | number;
@@ -20,8 +20,8 @@ type PredictType =
   | '@media (prefers-color-scheme: light)'
   | '@layer utilities'
   | '@layer base'
-  | '@supports (display: grid)'
-  | '@supports not (display: grid)';
+  | '@supports ()'
+  | '@supports not ()';
 
 type PredictTypeRules = {
   [_ in PredictType]?: SupportedAllStyle;
@@ -36,7 +36,7 @@ type CSSAnimationNameProperty = {
   animationName?: CSSKeyframes | string;
 };
 
-export const supportShorthandProperties = [
+const supportShorthandProperties = [
   'margin',
   'padding',
   'gap',
@@ -60,7 +60,7 @@ export type SupportedCSSProperties = Omit<
   'animationName' | 'animation-name'
 >;
 
-export type SupportedAllStyle = SupportedCSSProperties &
+type SupportedAllStyle = SupportedCSSProperties &
   CSSPseudos &
   PredictTypeRules &
   CSSAnimationNameProperty;

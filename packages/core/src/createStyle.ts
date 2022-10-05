@@ -1,3 +1,4 @@
+import { ClassName } from './ClassName';
 import { resolveStyle } from './resolveStyle';
 import type {
   Classes,
@@ -5,7 +6,6 @@ import type {
   CssRules,
   KazeStyle,
 } from './types/style';
-import { ClassName } from './utils/ClassName';
 
 type Result<K extends string> = {
   cssRules: CssRules;

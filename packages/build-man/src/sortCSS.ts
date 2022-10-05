@@ -3,32 +3,15 @@ import {
   RULESET,
   KEYFRAMES,
   MEDIA,
-  COMMENT,
   serialize,
   stringify,
   compile,
 } from 'stylis';
 import {
-  GLOBAL_STYLE_END_COMMENT,
-  GLOBAL_STYLE_START_COMMENT,
-  STYLE_END_COMMENT,
-  STYLE_START_COMMENT,
-} from './utils/constants';
-
-const styleBucketOrdering = [
-  'global',
-  'normal',
-  'link',
-  'visited',
-  'focus-within',
-  'focus',
-  'focus-visible',
-  'hover',
-  'active',
-  'keyframes',
-  'at-rules',
-  'media',
-] as const;
+  GLOBAL_STYLE_LAYER,
+  NORMAL_STYLE_LAYER,
+  styleBucketOrdering,
+} from './constants';
 
 function getStyleBucketNameFromElement(
   element: Element,
@@ -60,9 +43,6 @@ function getElementReference(element: Element, suffix = ''): string {
 }
 
 export const sortCSS = (css: string): string => {
-  let targetFlag = false;
-  let globalFlag = false;
-
   const otherElements: Element[] = [];
   const targetElements: (Element & {
     bucketName: typeof styleBucketOrdering[number];
@@ -71,25 +51,16 @@ export const sortCSS = (css: string): string => {
   const globalElements: Element[] = [];
 
   compile(css).forEach((element) => {
-    if (element.type === COMMENT) {
-      if (element.value === GLOBAL_STYLE_START_COMMENT) {
-        globalFlag = true;
-      } else if (element.value === GLOBAL_STYLE_END_COMMENT) {
-        globalFlag = false;
-      }
-      if (element.value === STYLE_START_COMMENT) {
-        targetFlag = true;
-      } else if (element.value === STYLE_END_COMMENT) {
-        targetFlag = false;
-      }
-    } else if (targetFlag) {
-      targetElements.push({
-        ...element,
-        bucketName: getStyleBucketNameFromElement(element),
-        reference: getElementReference(element),
-      });
-    } else if (globalFlag) {
-      globalElements.push(element);
+    if (element.value === `@layer ${NORMAL_STYLE_LAYER}`) {
+      targetElements.push(
+        ...(element.children as Element[]).map((element) => ({
+          ...element,
+          bucketName: getStyleBucketNameFromElement(element),
+          reference: getElementReference(element),
+        })),
+      );
+    } else if (element.value === `@layer ${GLOBAL_STYLE_LAYER}`) {
+      globalElements.push(...(element.children as Element[]));
     } else {
       otherElements.push(element);
     }
