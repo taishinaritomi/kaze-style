@@ -31,8 +31,9 @@
 
 ## Example
 
+### createStyle
 ```ts
-//Component.tsx
+//Button.tsx
 import { createStyle } from '@kaze-style/react';
 
 const classes = createStyle({
@@ -41,8 +42,57 @@ const classes = createStyle({
   },
 });
 
-const Component = () => {
+const Button = () => {
   return <button className={classes.button}>button</button>;
+};
+```
+
+### mergeStyle
+
+```ts
+//Button.tsx
+import { createStyle, mergeStyle } from '@kaze-style/react';
+
+const classes = createStyle({
+  red: {
+    color: 'red',
+  },
+});
+
+const Button = (props) => {
+  return <button className={mergeStyle(classes.red, props.className)}>button</button>;
+};
+```
+```ts
+//Component.tsx
+import { createStyle } from '@kaze-style/react';
+import { Button } from '@kaze-style/react';
+
+const classes = createStyle({
+  blue: {
+    color: 'blue',
+  },
+});
+
+const Component = () => {
+  return <Button className={classes.blue} />;
+};
+```
+
+### createGlobalStyle
+
+```ts
+//App.tsx
+import { createGlobalStyle } from '@kaze-style/react';
+
+createGlobalStyle({
+  html: {
+    color: 'red',
+  },
+});
+
+const App = () => {
+  return <div></div>;
 };
 ```
 
