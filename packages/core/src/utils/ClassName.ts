@@ -1,7 +1,12 @@
 export class ClassName extends String {
   object: Record<string, string>;
-  constructor(object: ClassName['object']) {
-    super(Object.values(object).join(' '));
+  others: string[];
+  constructor(
+    object: ClassName['object'],
+    others:ClassName['others'] = []
+  ) {
+    super([...Object.values(object),...others].join(' '));
+    this.others = others;
     this.object = object;
   }
 }
