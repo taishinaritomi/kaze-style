@@ -32,6 +32,7 @@
 ## Example
 
 ### createStyle
+
 ```ts
 //Button.tsx
 import { createStyle } from '@kaze-style/react';
@@ -60,9 +61,12 @@ const classes = createStyle({
 });
 
 const Button = (props) => {
-  return <button className={mergeStyle(classes.red, props.className)}>button</button>;
+  return (
+    <button className={mergeStyle(classes.red, props.className)}>button</button>
+  );
 };
 ```
+
 ```ts
 //Component.tsx
 import { createStyle } from '@kaze-style/react';
@@ -78,6 +82,7 @@ const Component = () => {
   return <Button className={classes.blue} />;
 };
 ```
+
 ### createGlobalStyle
 
 ```ts
