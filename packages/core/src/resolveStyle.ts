@@ -1,6 +1,6 @@
+import type { ClassName } from './ClassName';
 import type { CSSKeyframes, CssRules, KazeStyle } from './types/style';
 import type { ValueOf } from './types/utils';
-import type { ClassName } from './utils/ClassName';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';

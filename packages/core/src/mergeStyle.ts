@@ -1,4 +1,4 @@
-import { ClassName } from './utils/ClassName';
+import { ClassName } from './ClassName';
 
 type ClassNamesArgs = (string | false | undefined | null | ClassName)[];
 

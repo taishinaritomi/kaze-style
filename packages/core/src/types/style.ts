@@ -4,7 +4,7 @@ import type {
   PropertiesHyphenFallback,
   AtRule,
 } from 'csstype';
-import type { ClassName } from '../utils/ClassName';
+import type { ClassName } from '../ClassName';
 import type { NestedObject, TrimPrefix } from './utils';
 
 export type CSSValue = string | number;
