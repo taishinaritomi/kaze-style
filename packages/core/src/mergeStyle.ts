@@ -14,5 +14,5 @@ export const mergeStyle = (..._classNames: ClassNamesArgs): string => {
       Object.assign(styles, className.object);
     }
   });
-  return new ClassName(styles,others) as unknown as string;
+  return new ClassName(styles, others) as unknown as string;
 };
