@@ -6,8 +6,8 @@ export type ForBuildGlobalStyle = {
   index: number;
 };
 
-export const __preGlobalStyle = <Selector extends string>(
-  globalStyles: Record<Selector, KazeGlobalStyle>,
+export const __preGlobalStyle = (
+  globalStyles: KazeGlobalStyle,
   forBuild: {
     fileName: string;
     globalStyles: ForBuildGlobalStyle[];

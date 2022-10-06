@@ -5,13 +5,9 @@ import type {
   AtRule,
 } from 'csstype';
 import type { ClassName } from '../ClassName';
-import type { NestedObject, TrimPrefix } from './utils';
+import type { AndArray, NestedObject, TrimPrefix } from './utils';
 
 export type CSSValue = string | number;
-
-type CSSPseudos = {
-  [_ in Pseudos]?: SupportedAllStyle;
-};
 
 type PredictType =
   | '@media screen and (max-width: 0)'
@@ -27,13 +23,16 @@ type PredictTypeRules = {
   [_ in PredictType]?: SupportedAllStyle;
 };
 
-export type CSSKeyframes = Record<
-  'from' | 'to' | string,
-  SupportedCSSProperties
->;
+type CSSPseudosRules = {
+  [_ in Pseudos]?: SupportedAllStyle;
+};
+
+export type CSSKeyframesRules = {
+  [_ in 'from' | 'to' | string]?: SupportedCSSProperties;
+};
 
 type CSSAnimationNameProperty = {
-  animationName?: CSSKeyframes | string;
+  animationName?: CSSKeyframesRules | string;
 };
 
 const supportShorthandProperties = [
@@ -61,7 +60,7 @@ export type SupportedCSSProperties = Omit<
 >;
 
 type SupportedAllStyle = SupportedCSSProperties &
-  CSSPseudos &
+  CSSPseudosRules &
   PredictTypeRules &
   CSSAnimationNameProperty;
 
@@ -72,21 +71,22 @@ export type KazeStyle = NestedObject<
 type SupportedGlobalStyle = PropertiesFallback<CSSValue> &
   PropertiesHyphenFallback<CSSValue>;
 
-type FontFace = {
-  '@font-face'?: AtRule.FontFaceFallback<CSSValue> &
-    AtRule.FontFaceHyphenFallback<CSSValue>;
-};
+type FontFaceStyle = AtRule.FontFaceFallback<CSSValue> &
+  AtRule.FontFaceHyphenFallback<CSSValue>;
 
-type PredictGlobalType =
+type PredictGlobalSelector =
   | 'body'
   | 'html'
   | '*'
   | '::before,::after'
   | '*,::before,::after';
 
-export type KazeGlobalStyle =
-  | FontFace
-  | Record<string | PredictGlobalType, SupportedGlobalStyle>;
+export type KazeGlobalStyle = {
+  '@font-face'?: FontFaceStyle;
+} & {
+  [_ in PredictGlobalSelector]?: SupportedGlobalStyle;
+} & Record<string, SupportedGlobalStyle> &
+  Record<string, Record<string, AndArray<CSSValue>>>;
 
 export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;
