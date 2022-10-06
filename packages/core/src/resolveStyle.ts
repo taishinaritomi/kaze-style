@@ -1,5 +1,5 @@
 import type { ClassName } from './ClassName';
-import type { CSSKeyframes, CssRules, KazeStyle } from './types/style';
+import type { CSSKeyframesRules, CssRules, KazeStyle } from './types/style';
 import type { ValueOf } from './types/utils';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCSS } from './utils/compileCSS';
@@ -90,7 +90,7 @@ export const resolveStyle = ({
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
     } else if (property === 'animationName') {
-      const animationNameValue = styleValue as CSSKeyframes;
+      const animationNameValue = styleValue as CSSKeyframesRules;
       const { keyframesRule, keyframeName } =
         compileKeyFrameCSS(animationNameValue);
       resolvedStyle.cssRules.push(keyframesRule);
