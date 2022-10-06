@@ -108,7 +108,6 @@ export function pitch(this: LoaderContext) {
             source,
             this.resourcePath,
             {
-              console,
               __forBuildByKazeStyle,
               window,
             },
