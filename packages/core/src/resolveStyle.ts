@@ -1,12 +1,12 @@
 import type { ClassName } from './ClassName';
-import type { CSSKeyframesRules, CssRules, KazeStyle } from './types/style';
+import type { CssKeyframesRules, CssRules, KazeStyle } from './types/style';
 import { combinedQuery } from './utils/combinedQuery';
-import { compileCSS } from './utils/compileCSS';
-import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';
+import { compileCss } from './utils/compileCss';
+import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
 import { hashClassName } from './utils/hashClassName';
 import { hashSelector } from './utils/hashSelector';
 import { hyphenateProperty } from './utils/hyphenateProperty';
-import { isCSSValue } from './utils/isCSSValue';
+import { isCssValue } from './utils/isCssValue';
 import { isLayerSelector } from './utils/isLayerSelector';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
@@ -44,7 +44,7 @@ export const resolveStyle = ({
   for (const _property in style) {
     const property = _property as keyof KazeStyle;
     const styleValue = style[property];
-    if (isCSSValue(styleValue)) {
+    if (isCssValue(styleValue)) {
       if (isShortHandProperty(property)) {
         const resolvedShortHandStyle = resolveShortHandStyle(
           property,
@@ -69,7 +69,7 @@ export const resolveStyle = ({
           atRules,
           property: hyphenatedProperty,
         });
-        const cssRule = compileCSS({
+        const cssRule = compileCss({
           className,
           pseudo,
           atRules,
@@ -80,9 +80,9 @@ export const resolveStyle = ({
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
     } else if (property === 'animationName') {
-      const animationNameValue = styleValue as CSSKeyframesRules;
+      const animationNameValue = styleValue as CssKeyframesRules;
       const { keyframesRule, keyframeName } =
-        compileKeyFrameCSS(animationNameValue);
+        compileKeyFrameCss(animationNameValue);
       resolvedStyle.cssRules.push(keyframesRule);
       Object.assign(resolvedStyle.classNameObject, {
         [keyframeName]: keyframeName,

@@ -1,13 +1,13 @@
 import { hash } from '../hash';
 import type { AtRules } from '../resolveStyle';
-import type { CSSValue } from '../types/style';
+import type { CssValue } from '../types/style';
 import type { AndArray } from '../types/utils';
 
 type Args = {
   pseudo: string;
   atRules: AtRules;
   property: string;
-  styleValue: AndArray<CSSValue>;
+  styleValue: AndArray<CssValue>;
 };
 
 export const hashClassName = ({

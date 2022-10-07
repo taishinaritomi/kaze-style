@@ -1,12 +1,12 @@
-import type { CSSValue, SupportedCSSProperties } from '../types/style';
+import type { CssValue, SupportedCssProperties } from '../types/style';
 import type { AndArray } from '../types/utils';
 
 const positionMap = ['Top', 'Right', 'Bottom', 'Left'];
 
-export function generateStyles<Styles extends SupportedCSSProperties>(
+export function generateStyles<Styles extends SupportedCssProperties>(
   property: 'border' | 'padding' | 'margin',
   suffix: '' | 'Color' | 'Style' | 'Width',
-  ...values: AndArray<CSSValue>[]
+  ...values: AndArray<CssValue>[]
 ): Styles {
   const [
     firstValue,
