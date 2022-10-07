@@ -1,12 +1,12 @@
 import type { ClassName } from './ClassName';
 import type { CSSKeyframesRules, CssRules, KazeStyle } from './types/style';
-import type { ValueOf } from './types/utils';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCSS } from './utils/compileCSS';
 import { compileKeyFrameCSS } from './utils/compileKeyFrameCSS';
 import { hashClassName } from './utils/hashClassName';
 import { hashSelector } from './utils/hashSelector';
 import { hyphenateProperty } from './utils/hyphenateProperty';
+import { isCSSValue } from './utils/isCSSValue';
 import { isLayerSelector } from './utils/isLayerSelector';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
@@ -43,12 +43,8 @@ export const resolveStyle = ({
 }: Args): ResolvedStyle => {
   for (const _property in style) {
     const property = _property as keyof KazeStyle;
-    const styleValue: ValueOf<KazeStyle> = style[property];
-    if (
-      typeof styleValue === 'string' ||
-      typeof styleValue === 'number' ||
-      Array.isArray(styleValue)
-    ) {
+    const styleValue = style[property];
+    if (isCSSValue(styleValue)) {
       if (isShortHandProperty(property)) {
         const resolvedShortHandStyle = resolveShortHandStyle(
           property,
