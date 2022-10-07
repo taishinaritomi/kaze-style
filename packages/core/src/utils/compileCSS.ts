@@ -1,34 +1,29 @@
+import type { AtRules } from '../resolveStyle';
 import type { CSSValue } from '../types/style';
 import type { AndArray } from '../types/utils';
 
 type CompileCSS = {
   className: string;
+  pseudo: string;
+  atRules: AtRules;
   property: string;
   styleValue: AndArray<CSSValue>;
-  pseudo?: string;
-  media?: string;
-  layer?: string;
-  support?: string;
 };
 
 export const compileCSS = ({
   className,
+  pseudo,
+  atRules,
   property,
   styleValue,
-  pseudo,
-  media,
-  layer,
-  support,
 }: CompileCSS): string => {
   let selector = '';
   let rule = '';
 
   if (!pseudo) {
     selector = `.${className}`;
-  } else if (/^(:|\[|>|\ )/.test(pseudo)) {
-    selector = `.${className}${pseudo.replace(/&/g, `.${className}`)}`;
   } else {
-    selector = `${pseudo.replace(/&/g, `.${className}`)}`;
+    selector = `.${className}${pseudo.replace(/&/g, `.${className}`)}`;
   }
 
   if (Array.isArray(styleValue)) {
@@ -37,9 +32,9 @@ export const compileCSS = ({
     rule = `${selector}{${property}:${styleValue};}`;
   }
 
-  if (media) rule = `@media ${media} {${rule}}`;
-  if (layer) rule = `@layer ${layer} {${rule}}`;
-  if (support) rule = `@supports ${support} {${rule}}`;
+  if (atRules.media) rule = `@media ${atRules.media} {${rule}}`;
+  if (atRules.layer) rule = `@layer ${atRules.layer} {${rule}}`;
+  if (atRules.support) rule = `@supports ${atRules.support} {${rule}}`;
 
   return rule;
 };

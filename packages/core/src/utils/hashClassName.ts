@@ -1,26 +1,23 @@
 import { hash } from '../hash';
+import type { AtRules } from '../resolveStyle';
 import type { CSSValue } from '../types/style';
 import type { AndArray } from '../types/utils';
 
 type Args = {
-  property?: string;
-  pseudo?: string;
-  media?: string;
-  layer?: string;
-  support?: string;
-  styleValue?: AndArray<CSSValue>;
+  pseudo: string;
+  atRules: AtRules;
+  property: string;
+  styleValue: AndArray<CSSValue>;
 };
 
 export const hashClassName = ({
-  property = '',
-  pseudo = '',
-  styleValue = '',
-  media = '',
-  layer = '',
-  support = '',
+  pseudo,
+  atRules,
+  property,
+  styleValue,
 }: Args): string => {
   return `_${hash(
-    `${property}${pseudo}${media}${layer}${support}${
+    `${property}${pseudo}${atRules.media}${atRules.layer}${atRules.support}${
       Array.isArray(styleValue) ? styleValue.join(' ') : styleValue
     }`,
   )}`;

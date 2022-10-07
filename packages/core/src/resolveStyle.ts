@@ -17,26 +17,28 @@ import { normalizeNestedProperty } from './utils/normalizeNestedProperty';
 import { omit } from './utils/omit';
 import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
 
-export type ResolvedStyle = {
+type ResolvedStyle = {
   classNameObject: ClassName['object'];
   cssRules: CssRules;
+};
+
+export type AtRules = {
+  media: string;
+  layer: string;
+  support: string;
 };
 
 type Args = {
   style: KazeStyle;
   pseudo?: string;
-  media?: string;
-  layer?: string;
-  support?: string;
+  atRules?: AtRules;
   resolvedStyle?: ResolvedStyle;
 };
 
 export const resolveStyle = ({
   style,
   pseudo = '',
-  media = '',
-  layer = '',
-  support = '',
+  atRules = { media: '', layer: '', support: '' },
   resolvedStyle = { classNameObject: {}, cssRules: [] },
 }: Args): ResolvedStyle => {
   for (const _property in style) {
@@ -55,36 +57,28 @@ export const resolveStyle = ({
         resolveStyle({
           style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
           pseudo,
-          media,
-          layer,
-          support,
+          atRules,
           resolvedStyle,
         });
       } else {
         const hyphenatedProperty = hyphenateProperty(property);
         const className = hashClassName({
-          media,
           pseudo,
+          atRules,
           property: hyphenatedProperty,
-          layer,
-          support,
           styleValue,
         });
         const selector = hashSelector({
-          media,
           pseudo,
-          layer,
-          support,
+          atRules,
           property: hyphenatedProperty,
         });
         const cssRule = compileCSS({
-          media,
-          pseudo,
-          property: hyphenatedProperty,
-          layer,
-          support,
-          styleValue,
           className,
+          pseudo,
+          atRules,
+          property: hyphenatedProperty,
+          styleValue,
         });
         resolvedStyle.cssRules.push(cssRule);
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
@@ -100,56 +94,46 @@ export const resolveStyle = ({
       resolveStyle({
         style: { animationName: keyframeName },
         pseudo,
-        media,
-        layer,
-        support,
+        atRules,
         resolvedStyle,
       });
     } else if (isObject(styleValue)) {
       if (isMediaQuerySelector(property)) {
         const combinedMediaQuery = combinedQuery(
-          media,
+          atRules.media,
           property.slice(6).trim(),
         );
         resolveStyle({
           style: styleValue,
           pseudo,
-          layer,
-          media: combinedMediaQuery,
-          support,
+          atRules: { ...atRules, media: combinedMediaQuery },
           resolvedStyle,
         });
       } else if (isLayerSelector(property)) {
         const combinedLayerQuery =
-          (layer ? `${layer}.` : '') + property.slice(6).trim();
+          (atRules.layer ? `${atRules.layer}.` : '') + property.slice(6).trim();
         resolveStyle({
           style: styleValue,
           pseudo,
-          layer: combinedLayerQuery,
-          media,
-          support,
+          atRules: { ...atRules, layer: combinedLayerQuery },
           resolvedStyle,
         });
       } else if (isSupportQuerySelector(property)) {
         const combinedSupportQuery = combinedQuery(
-          support,
+          atRules.support,
           property.slice(9).trim(),
         );
         resolveStyle({
           style: styleValue,
           pseudo,
-          layer,
-          media,
-          support: combinedSupportQuery,
+          atRules: { ...atRules, support: combinedSupportQuery },
           resolvedStyle,
         });
       } else if (isNestedSelector(property)) {
         resolveStyle({
           style: styleValue,
           pseudo: pseudo + normalizeNestedProperty(property),
-          media,
-          layer,
-          support,
+          atRules,
           resolvedStyle,
         });
       }
