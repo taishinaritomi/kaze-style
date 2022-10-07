@@ -42,7 +42,7 @@ function getElementReference(element: Element, suffix = ''): string {
   return '';
 }
 
-export const sortCSS = (css: string): string => {
+export const sortCss = (css: string): string => {
   const otherElements: Element[] = [];
   const targetElements: (Element & {
     bucketName: typeof styleBucketOrdering[number];
