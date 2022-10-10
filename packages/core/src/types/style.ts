@@ -88,6 +88,5 @@ export type KazeGlobalStyle = {
 } & Record<string, SupportedGlobalStyle> &
   Record<string, Record<string, AndArray<CssValue>>>;
 
-export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;
 export type ClassesObject<K extends string> = Record<K, ClassName['object']>;

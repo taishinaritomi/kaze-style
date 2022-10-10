@@ -1,5 +1,7 @@
 import type { ClassName } from './ClassName';
-import type { CssKeyframesRules, CssRules, KazeStyle } from './types/style';
+import type { CssRuleObject } from './styleOrder';
+import type { CssKeyframesRules, KazeStyle } from './types/style';
+import { checkStyleOrder } from './utils/checkStyleOrder';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
@@ -19,7 +21,7 @@ import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
 
 type ResolvedStyle = {
   classNameObject: ClassName['object'];
-  cssRules: CssRules;
+  cssRuleObjects: CssRuleObject[];
 };
 
 export type AtRules = {
@@ -39,7 +41,10 @@ export const resolveStyle = ({
   style,
   pseudo = '',
   atRules = { media: '', layer: '', support: '' },
-  resolvedStyle = { classNameObject: {}, cssRules: [] },
+  resolvedStyle = {
+    classNameObject: {},
+    cssRuleObjects: [],
+  },
 }: Args): ResolvedStyle => {
   for (const _property in style) {
     const property = _property as keyof KazeStyle;
@@ -76,14 +81,23 @@ export const resolveStyle = ({
           property: hyphenatedProperty,
           styleValue,
         });
-        resolvedStyle.cssRules.push(cssRule);
+
+        const order = checkStyleOrder({
+          atRules,
+          pseudo,
+        });
+
+        resolvedStyle.cssRuleObjects.push({ cssRule, order });
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
     } else if (property === 'animationName') {
       const animationNameValue = styleValue as CssKeyframesRules;
       const { keyframesRule, keyframeName } =
         compileKeyFrameCss(animationNameValue);
-      resolvedStyle.cssRules.push(keyframesRule);
+      resolvedStyle.cssRuleObjects.push({
+        cssRule: keyframesRule,
+        order: 'keyframes',
+      });
       Object.assign(resolvedStyle.classNameObject, {
         [keyframeName]: keyframeName,
       });
