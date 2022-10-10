@@ -13,6 +13,7 @@
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
+    "dev:packages": "turbo run dev  --filter=./packages/*",
     "test": "turbo run test --filter=./packages/*",
     "code:fix": "eslint . --fix --ignore-path .gitignore && prettier . --write --ignore-path .gitignore",
     "code:check": "yarn workspaces run tsc --noEmit && eslint . --ignore-path .gitignore && prettier . --check --ignore-path .gitignore",
