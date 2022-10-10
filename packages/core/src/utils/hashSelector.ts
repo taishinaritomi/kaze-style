@@ -1,19 +1,14 @@
 import { hash } from '../hash';
+import type { AtRules } from '../resolveStyle';
 
 type Args = {
-  property?: string;
   pseudo?: string;
-  media?: string;
-  layer?: string;
-  support?: string;
+  atRules: AtRules;
+  property?: string;
 };
 
-export const hashSelector = ({
-  property = '',
-  pseudo = '',
-  media = '',
-  layer = '',
-  support = '',
-}: Args): string => {
-  return `_${hash(`${property}${pseudo}${media}${layer}${support}`)}`;
+export const hashSelector = ({ pseudo, atRules, property }: Args): string => {
+  return `_${hash(
+    `${property}${pseudo}${atRules.media}${atRules.layer}${atRules.support}`,
+  )}`;
 };

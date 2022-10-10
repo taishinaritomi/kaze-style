@@ -1,2 +1,2 @@
-export * from './sortCSS';
-export * from './cssRulesToCssString';
+export * from './sortCss';
+export * from './cssRuleObjectsToCssString';

@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/core",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -13,13 +13,25 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./runtime": {
+      "import": "./dist/runtime.js",
+      "require": "./dist/runtime.cjs",
+      "types": "./dist/runtime.d.ts"
+    }
+  },
   "files": [
     "dist",
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts",
+    "dev": "tsx ./../../scripts/build.ts --watch  --entry ./src/runtime.ts",
+    "build": "tsx ./../../scripts/build.ts  --entry ./src/runtime.ts",
     "test": "tsdx test"
   },
   "dependencies": {

@@ -7,7 +7,7 @@ import type {
 import type { ClassName } from '../ClassName';
 import type { AndArray, NestedObject, TrimPrefix } from './utils';
 
-export type CSSValue = string | number;
+export type CssValue = string | number;
 
 type PredictType =
   | '@media screen and (max-width: 0)'
@@ -23,16 +23,16 @@ type PredictTypeRules = {
   [_ in PredictType]?: SupportedAllStyle;
 };
 
-type CSSPseudosRules = {
+type CssPseudosRules = {
   [_ in Pseudos]?: SupportedAllStyle;
 };
 
-export type CSSKeyframesRules = {
-  [_ in 'from' | 'to' | string]?: SupportedCSSProperties;
+export type CssKeyframesRules = {
+  [_ in 'from' | 'to' | string]?: SupportedCssProperties;
 };
 
-type CSSAnimationNameProperty = {
-  animationName?: CSSKeyframesRules | string;
+type CssAnimationNameProperty = {
+  animationName?: CssKeyframesRules | string;
 };
 
 const supportShorthandProperties = [
@@ -46,33 +46,33 @@ const supportShorthandProperties = [
 ] as const;
 
 export type SupportShorthandProperties = {
-  [Properties in `$${typeof supportShorthandProperties[number]}`]?: PropertiesFallback<CSSValue>[TrimPrefix<
+  [Properties in `$${typeof supportShorthandProperties[number]}`]?: PropertiesFallback<CssValue>[TrimPrefix<
     Properties,
     '$'
   >];
 };
 
-export type SupportedCSSProperties = Omit<
-  PropertiesFallback<CSSValue> &
-    PropertiesHyphenFallback<CSSValue> &
+export type SupportedCssProperties = Omit<
+  PropertiesFallback<CssValue> &
+    PropertiesHyphenFallback<CssValue> &
     SupportShorthandProperties,
   'animationName' | 'animation-name'
 >;
 
-type SupportedAllStyle = SupportedCSSProperties &
-  CSSPseudosRules &
+type SupportedAllStyle = SupportedCssProperties &
+  CssPseudosRules &
   PredictTypeRules &
-  CSSAnimationNameProperty;
+  CssAnimationNameProperty;
 
 export type KazeStyle = NestedObject<
   NestedObject<NestedObject<NestedObject<NestedObject<SupportedAllStyle>>>>
 >;
 
-type SupportedGlobalStyle = PropertiesFallback<CSSValue> &
-  PropertiesHyphenFallback<CSSValue>;
+type SupportedGlobalStyle = PropertiesFallback<CssValue> &
+  PropertiesHyphenFallback<CssValue>;
 
-type FontFaceStyle = AtRule.FontFaceFallback<CSSValue> &
-  AtRule.FontFaceHyphenFallback<CSSValue>;
+type FontFaceStyle = AtRule.FontFaceFallback<CssValue> &
+  AtRule.FontFaceHyphenFallback<CssValue>;
 
 type PredictGlobalSelector =
   | 'body'
@@ -86,8 +86,7 @@ export type KazeGlobalStyle = {
 } & {
   [_ in PredictGlobalSelector]?: SupportedGlobalStyle;
 } & Record<string, SupportedGlobalStyle> &
-  Record<string, Record<string, AndArray<CSSValue>>>;
+  Record<string, Record<string, AndArray<CssValue>>>;
 
-export type CssRules = string[];
 export type Classes<K extends string> = Record<K, string>;
 export type ClassesObject<K extends string> = Record<K, ClassName['object']>;

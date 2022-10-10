@@ -1,20 +1,20 @@
 import type {
-  CSSValue,
+  CssValue,
   SupportShorthandProperties,
-  SupportedCSSProperties,
+  SupportedCssProperties,
 } from '../types/style';
 import type { AndArray } from '../types/utils';
 import { generateStyles } from './generateStyles';
 import { normalizeShorthandProperty } from './normalizeShorthandProperty';
 
-type OverflowStyle = Pick<SupportedCSSProperties, 'overflowX' | 'overflowY'>;
+type OverflowStyle = Pick<SupportedCssProperties, 'overflowX' | 'overflowY'>;
 
 export const resolveShortHandStyle = (
   _property: keyof SupportShorthandProperties,
-  styleValue: AndArray<CSSValue>,
-): SupportedCSSProperties => {
+  styleValue: AndArray<CssValue>,
+): SupportedCssProperties => {
   const values = Array.isArray(styleValue)
-    ? (styleValue as CSSValue[]).map((v) => v.toString())
+    ? (styleValue as CssValue[]).map((v) => v.toString())
     : styleValue
         .toString()
         .split(' ')
