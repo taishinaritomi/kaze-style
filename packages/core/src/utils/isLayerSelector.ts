@@ -1,3 +1,4 @@
 export const isLayerSelector = (property: string) => {
-  return property.substr(0, 6) === '@layer';
+  const layer = '@layer';
+  return property.substring(0, layer.length) === layer;
 };

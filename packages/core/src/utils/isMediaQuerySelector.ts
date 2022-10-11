@@ -1,3 +1,4 @@
 export const isMediaQuerySelector = (property: string) => {
-  return property.substr(0, 6) === '@media';
+  const media = '@media';
+  return property.substring(0, media.length) === media;
 };

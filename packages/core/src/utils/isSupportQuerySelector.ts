@@ -1,3 +1,4 @@
 export const isSupportQuerySelector = (property: string) => {
-  return property.substr(0, 9) === '@supports';
+  const supports = '@supports';
+  return property.substring(0, supports.length) === supports;
 };
