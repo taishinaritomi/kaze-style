@@ -116,7 +116,7 @@ export const resolveStyle = ({
         resolveStyle({
           style: styleValue,
           pseudo,
-          atRules: Object.assign(atRules, { media: combinedMediaQuery }),
+          atRules: Object.assign({}, atRules, { media: combinedMediaQuery }),
           resolvedStyle,
         });
       } else if (isLayerSelector(property)) {
@@ -125,7 +125,7 @@ export const resolveStyle = ({
         resolveStyle({
           style: styleValue,
           pseudo,
-          atRules: Object.assign(atRules, { layer: combinedLayerQuery }),
+          atRules: Object.assign({}, atRules, { layer: combinedLayerQuery }),
           resolvedStyle,
         });
       } else if (isSupportQuerySelector(property)) {
@@ -136,7 +136,9 @@ export const resolveStyle = ({
         resolveStyle({
           style: styleValue,
           pseudo,
-          atRules: Object.assign(atRules, { support: combinedSupportQuery }),
+          atRules: Object.assign({}, atRules, {
+            support: combinedSupportQuery,
+          }),
           resolvedStyle,
         });
       } else if (isNestedSelector(property)) {
