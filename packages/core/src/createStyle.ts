@@ -28,6 +28,13 @@ export const createStyle = <K extends string>(
   return {
     classes,
     classesObject,
-    cssRuleObjects: Array.from(new Set(allCssRuleObjects)),
+    cssRuleObjects: Array.from(
+      new Map(
+        allCssRuleObjects.map((allCssRuleObject) => [
+          allCssRuleObject.cssRule,
+          allCssRuleObject,
+        ]),
+      ).values(),
+    ),
   };
 };

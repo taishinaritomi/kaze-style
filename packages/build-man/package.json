@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/build-man",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -23,7 +23,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.6.1",
+    "@kaze-style/core": "^0.6.2",
     "stylis": "^4.1.2"
   }
 }
