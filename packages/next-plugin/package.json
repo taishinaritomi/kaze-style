@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/next-plugin",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -22,7 +22,7 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@kaze-style/webpack-plugin": "^0.6.2",
+    "@kaze-style/webpack-plugin": "^0.6.3",
     "browserslist": "^4.21.4"
   },
   "peerDependencies": {
