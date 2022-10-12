@@ -2,7 +2,6 @@ import path from 'path';
 import * as Babel from '@babel/core';
 import { preTransformPlugin } from '@kaze-style/babel-plugin';
 import type { LoaderDefinitionFunction, LoaderContext } from 'webpack';
-import { transformedComment } from './utils/constants';
 import { parseSourceMap } from './utils/parseSourceMap';
 
 type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
@@ -15,6 +14,7 @@ function loader(
   this: LoaderContext<never>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
+  additionalData: WebpackLoaderParams[2],
 ) {
   this.cacheable(true);
   const filePath = path.relative(process.cwd(), this.resourcePath);
@@ -39,8 +39,9 @@ function loader(
   if ((babelFileResult.metadata as BabelFileMetadata)?.transformed === true) {
     this.callback(
       null,
-      `${transformedComment}\n${babelFileResult.code}`,
+      `${babelFileResult.code}`,
       babelFileResult.map as unknown as string,
+      Object.assign({}, additionalData, { kazeTransformed: true }),
     );
     return;
   }
