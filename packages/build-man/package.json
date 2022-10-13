@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@kaze-style/core": "^0.6.3",
+    "eval": "^0.1.8",
     "stylis": "^4.1.2"
   }
 }

@@ -1,9 +1,7 @@
 import path from 'path';
 import * as Babel from '@babel/core';
 import { transformPlugin } from '@kaze-style/babel-plugin';
-import { cssRuleObjectsToCssString } from '@kaze-style/build-man';
-import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
-import evalCode from 'eval';
+import { cssRuleObjectsToCssString, extractStyle } from '@kaze-style/build-man';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
@@ -16,12 +14,6 @@ export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 export type LoaderContext = _LoaderContext<never> & {
   _compiler: NonNullable<_LoaderContext<never>['_compiler']>;
   _compilation: NonNullable<_LoaderContext<never>['_compilation']>;
-};
-
-type ForBuild = {
-  fileName: string;
-  styles: ForBuildStyle<string>[];
-  globalStyles: ForBuildGlobalStyle[];
 };
 
 const virtualLoaderPath = require.resolve('./virtualLoader.cjs');
@@ -45,25 +37,10 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const __forBuildByKazeStyle: ForBuild = {
-          fileName: this.resourcePath,
-          styles: [],
-          globalStyles: [],
-        };
-
-        const window = {};
-        evalCode(
-          source,
-          this.resourcePath,
-          {
-            __forBuildByKazeStyle,
-            window,
-          },
-          true,
-        );
-
-        const styles = __forBuildByKazeStyle?.styles || [];
-        const globalStyles = __forBuildByKazeStyle?.globalStyles || [];
+        const { styles, cssRuleObjects } = extractStyle({
+          code: source,
+          path: this.resourcePath,
+        });
 
         const filePath = path.relative(process.cwd(), this.resourcePath);
 
@@ -84,11 +61,7 @@ function loader(
           return;
         }
 
-        const cssString = cssRuleObjectsToCssString([
-          ...(styles.flatMap(({ cssRuleObjects }) => cssRuleObjects) || []),
-          ...(globalStyles.flatMap(({ cssRuleObjects }) => cssRuleObjects) ||
-            []),
-        ]);
+        const cssString = cssRuleObjectsToCssString(cssRuleObjects);
 
         const request = `import ${JSON.stringify(
           this.utils.contextify(
