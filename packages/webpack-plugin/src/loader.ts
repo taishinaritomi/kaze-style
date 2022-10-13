@@ -69,8 +69,6 @@ function loader(
           ),
         )};`;
 
-        console.log(code);
-
         callback(null, `${code}\n\n${request}`, map as unknown as string);
       })
       .catch((error) => {
