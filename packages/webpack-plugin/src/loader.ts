@@ -1,7 +1,8 @@
-import path from 'path';
-import * as Babel from '@babel/core';
-import { transformPlugin } from '@kaze-style/babel-plugin';
-import { cssRuleObjectsToCssString, extractStyle } from '@kaze-style/build-man';
+import {
+  cssRuleObjectsToCssString,
+  extractStyle,
+  transform,
+} from '@kaze-style/build-man';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,
@@ -42,21 +43,17 @@ function loader(
           path: this.resourcePath,
         });
 
-        const filePath = path.relative(process.cwd(), this.resourcePath);
-
-        const babelFileResult = Babel.transformSync(sourceCode, {
-          caller: { name: 'kaze' },
-          babelrc: false,
-          configFile: false,
-          compact: false,
-          filename: filePath,
-          plugins: [[transformPlugin, { styles: styles || [] }]],
-          sourceMaps: this.sourceMap || false,
-          sourceFileName: filePath,
+        const { code, map } = transform({
+          code: sourceCode,
+          path: this.resourcePath,
+          sourceMaps: this.sourceMap,
           inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
+          options: {
+            styles,
+          },
         });
 
-        if (babelFileResult === null) {
+        if (!code) {
           callback(null, sourceCode, inputSourceMap);
           return;
         }
@@ -72,11 +69,9 @@ function loader(
           ),
         )};`;
 
-        callback(
-          null,
-          `${babelFileResult.code}\n\n${request}`,
-          babelFileResult.map as unknown as string,
-        );
+        console.log(code);
+
+        callback(null, `${code}\n\n${request}`, map as unknown as string);
       })
       .catch((error) => {
         callback(error);

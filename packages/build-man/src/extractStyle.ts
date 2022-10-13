@@ -32,14 +32,14 @@ export const extractStyle = ({ code, path }: Args) => {
 
   const { globalStyles, styles } = __forBuildByKazeStyle;
 
-  const cssRuleObjects = ([
+  const cssRuleObjects = [
     ...styles.flatMap(({ cssRuleObjects }) => cssRuleObjects),
-    ...globalStyles.flatMap(({ cssRuleObjects }) => cssRuleObjects)
-  ]);
+    ...globalStyles.flatMap(({ cssRuleObjects }) => cssRuleObjects),
+  ];
 
   return {
     globalStyles,
     styles,
-    cssRuleObjects
+    cssRuleObjects,
   };
 };
