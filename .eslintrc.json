@@ -11,12 +11,12 @@
   "overrides": [
     {
       "files": [
-        "./packages/babel-plugin/src/index.ts",
         "./packages/webpack-plugin/src/preLoader.ts",
         "./packages/webpack-plugin/src/loader.ts",
         "./packages/webpack-plugin/src/virtualLoader.ts",
         "./playground/next/src/pages/**",
-        "./playground/next/next.config.*"
+        "./playground/next/next.config.*",
+        "./playground/react-vite/vite.config.*"
       ],
       "rules": {
         "import/no-default-export": "off",
