@@ -1,17 +1,15 @@
-import type * as Babel from '@babel/core';
+import type { InputSourceMap } from '@kaze-style/build-man';
 import type { WebpackLoaderParams } from '../loader';
 
 export const parseSourceMap = (
   inputSourceMap: WebpackLoaderParams[1],
-): Babel.TransformOptions['inputSourceMap'] => {
+): InputSourceMap => {
   try {
     if (typeof inputSourceMap === 'string') {
-      return JSON.parse(
-        inputSourceMap,
-      ) as Babel.TransformOptions['inputSourceMap'];
+      return JSON.parse(inputSourceMap) as InputSourceMap;
     }
 
-    return inputSourceMap as Babel.TransformOptions['inputSourceMap'];
+    return inputSourceMap as InputSourceMap;
   } catch (err) {
     return undefined;
   }

@@ -1,0 +1,6 @@
+{
+  "main": "../dist/preLoader.cjs",
+  "module": "../dist/preLoader.js",
+  "typings": "../dist/preLoader.d.ts",
+  "sideEffects": false
+}

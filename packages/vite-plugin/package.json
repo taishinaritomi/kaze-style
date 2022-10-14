@@ -1,5 +1,5 @@
 {
-  "name": "@kaze-style/babel-plugin",
+  "name": "@kaze-style/vite-plugin",
   "version": "0.7.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
@@ -7,8 +7,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/taishinaritomi/kaze-style.git",
-    "directory": "packages/babel-plugin"
+    "directory": "packages/vite-plugin"
   },
+  "sideEffects": false,
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -22,12 +23,13 @@
     "test": "echo 'no test specified'"
   },
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.19.0"
+    "@kaze-style/build-man": "^0.7.0",
+    "esbuild": "^0.15.10"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.7.0"
   },
   "peerDependencies": {
-    "@babel/core": ">=7"
+    "vite": "^3.0.0"
   }
 }

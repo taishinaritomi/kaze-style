@@ -13,20 +13,34 @@ type TargetElement = Element & {
 export const sortCss = (css: string): string => {
   const otherElements: Element[] = [];
   const targetElements: TargetElement[] = [];
+  const globalElements: TargetElement[] = [];
 
   compile(css).forEach((element) => {
     if (element.value.startsWith(`@layer ${layerPrefix}`)) {
-      targetElements.push(
-        ...(element.children as Element[]).map((childElement) => {
-          return {
-            ...childElement,
-            bucketName: element.value.substring(
-              `@layer ${layerPrefix}`.length,
-            ) as StyleOrder,
-            key: createElementKey(childElement),
-          };
-        }),
-      );
+      const bucketName = element.value.substring(
+        `@layer ${layerPrefix}`.length,
+      ) as StyleOrder;
+      if (bucketName === 'global') {
+        globalElements.push(
+          ...(element.children as Element[]).map((childElement) => {
+            return {
+              ...childElement,
+              bucketName,
+              key: createElementKey(childElement),
+            };
+          }),
+        );
+      } else {
+        targetElements.push(
+          ...(element.children as Element[]).map((childElement) => {
+            return {
+              ...childElement,
+              bucketName,
+              key: createElementKey(childElement),
+            };
+          }),
+        );
+      }
     } else {
       otherElements.push(element);
     }
@@ -39,16 +53,16 @@ export const sortCss = (css: string): string => {
     return acc;
   }, {});
 
-  const sortedTargetElements = Object.values(uniqueTargetElements).sort(
-    (elementA, elementB) => {
-      if (elementA.bucketName === elementB.bucketName) {
-        return 0;
-      }
-      return (
-        styleOrder.indexOf(elementA.bucketName) -
-        styleOrder.indexOf(elementB.bucketName)
-      );
-    },
-  );
+  const elements = [...Object.values(uniqueTargetElements), ...globalElements];
+
+  const sortedTargetElements = elements.sort((elementA, elementB) => {
+    if (elementA.bucketName === elementB.bucketName) {
+      return 0;
+    }
+    return (
+      styleOrder.indexOf(elementA.bucketName) -
+      styleOrder.indexOf(elementB.bucketName)
+    );
+  });
   return serialize([...otherElements, ...sortedTargetElements], stringify);
 };

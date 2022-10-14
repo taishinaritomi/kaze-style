@@ -3,7 +3,11 @@ import type { ComponentProps, FC } from 'react';
 
 const classes = createStyle({
   button: {
-    color: 'red',
+    background: 'red',
+    borderRadius: '6px',
+    ':hover': {
+      background: 'orange',
+    },
   },
 });
 
