@@ -1,0 +1,6 @@
+{
+  "main": "../dist/virtualLoader.cjs",
+  "module": "../dist/virtualLoader.js",
+  "typings": "../dist/virtualLoader.d.ts",
+  "sideEffects": false
+}

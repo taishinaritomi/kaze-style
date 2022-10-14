@@ -17,7 +17,7 @@ export type LoaderContext = _LoaderContext<never> & {
   _compilation: NonNullable<_LoaderContext<never>['_compilation']>;
 };
 
-const virtualLoaderPath = require.resolve('./virtualLoader.cjs');
+const virtualLoaderPath = require.resolve('../virtualLoader');
 const cssPath = require.resolve('../assets/kaze.css');
 
 function loader(

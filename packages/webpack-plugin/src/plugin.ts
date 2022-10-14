@@ -7,8 +7,8 @@ type PluginOptions = {
 };
 
 const pluginName = 'KazePlugin';
-const loader = require.resolve('./loader.cjs');
-const preLoader = require.resolve('./preLoader.cjs');
+const loader = require.resolve('../loader');
+const preLoader = require.resolve('../preLoader');
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
