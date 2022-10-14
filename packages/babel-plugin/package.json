@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/babel-plugin",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -25,7 +25,7 @@
     "@babel/helper-plugin-utils": "^7.19.0"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.6.3"
+    "@kaze-style/core": "^0.7.0"
   },
   "peerDependencies": {
     "@babel/core": ">=7"
