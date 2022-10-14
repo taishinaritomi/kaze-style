@@ -144,7 +144,7 @@ export const resolveStyle = ({
       } else if (isNestedSelector(property)) {
         resolveStyle({
           style: styleValue,
-          pseudo: normalizeNestedProperty(property,pseudo),
+          pseudo: normalizeNestedProperty(property, pseudo),
           atRules,
           resolvedStyle,
         });
