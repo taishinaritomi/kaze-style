@@ -6,8 +6,8 @@ const classes = createStyle({
     background: 'red',
     borderRadius: '6px',
     ':hover': {
-      background: 'orange'
-    }
+      background: 'orange',
+    },
   },
 });
 

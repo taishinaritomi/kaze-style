@@ -7,10 +7,10 @@ const classes = createStyle({
   button: {
     background: 'red',
     borderRadius: '6px',
-    padding: ['10px','20px'],
+    padding: ['10px', '20px'],
     ':hover': {
-      background: 'orange'
-    }
+      background: 'orange',
+    },
   },
 });
 
