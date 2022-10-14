@@ -23,7 +23,7 @@ export const compileCss = ({
   if (!pseudo) {
     selector = `.${className}`;
   } else {
-    selector = `.${className}${pseudo.replace(/&/g, `.${className}`)}`;
+    selector = `${pseudo.replace(/&/g, `.${className}`)}`;
   }
 
   if (Array.isArray(styleValue)) {
