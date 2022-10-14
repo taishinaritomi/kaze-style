@@ -1,27 +1,16 @@
-import { createStyle } from '@kaze-style/react';
+import { createStyle, createGlobalStyle } from '@kaze-style/react';
+import { resetStyle } from '@kaze-style/themes';
+
+createGlobalStyle(resetStyle);
 
 const classes = createStyle({
   button: {
-    color: 'red',
-    backgroundColor: 'blue',
-    '@media (max-width: 600px)': {
-      color: 'blue',
-      backgroundColor: 'red',
-    },
-    animationIterationCount: 'infinite',
-    animationTimingFunction: 'linear',
-    animationDuration: '1s',
-    animationName: {
-      from: {
-        transform: 'rotate(0deg)',
-      },
-      '50%': {
-        transform: 'rotate(340deg)',
-      },
-      to: {
-        transform: 'rotate(360deg)',
-      },
-    },
+    background: 'red',
+    borderRadius: '6px',
+    padding: ['10px','20px'],
+    ':hover': {
+      background: 'orange'
+    }
   },
 });
 

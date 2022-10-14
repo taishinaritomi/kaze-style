@@ -3,23 +3,17 @@ import { resetStyle } from '@kaze-style/themes';
 
 createGlobalStyle(resetStyle);
 
-createGlobalStyle({
-  html: {
-    backgroundColor: 'blue',
-  },
-});
-
 const classes = createStyle({
   button: {
-    margin: '100px',
+    background: 'red',
+    borderRadius: '6px',
+    padding: ['10px','20px'],
+    ':hover': {
+      background: 'orange'
+    }
   },
 });
 
 export const App = () => {
-  return (
-    <div className="App">
-      <div className={classes.button}>button</div>
-      App
-    </div>
-  );
+  return <button className={classes.button}>button</button>;
 };
