@@ -10,7 +10,7 @@ type Result<K extends string> = {
 };
 
 export const createStyle = <K extends string>(
-  styles: Record<K, KazeStyle>,
+  styles: KazeStyle<K>,
 ): Result<K> => {
   const classes = {} as Classes<K>;
   const classesObject = {} as ClassesObject<K>;

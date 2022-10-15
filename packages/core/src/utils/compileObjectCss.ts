@@ -1,10 +1,10 @@
-import type { SupportedCssProperties } from '../types/style';
+import type { SupportProperties } from '../types/style';
 import { hyphenateProperty } from './hyphenateProperty';
 
-export const compileObjectCss = (style: SupportedCssProperties): string => {
+export const compileObjectCss = (style: SupportProperties): string => {
   const cssRules: string[] = [];
   for (const property in style) {
-    const value = style[property as keyof SupportedCssProperties];
+    const value = style[property as keyof SupportProperties];
     if (typeof value === 'string' || typeof value === 'number') {
       cssRules.push(
         hyphenateProperty(property) +

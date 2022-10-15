@@ -9,7 +9,7 @@ export type ForBuildStyle<K extends string> = {
 };
 
 export const __preStyle = <K extends string>(
-  styles: Record<K, KazeStyle>,
+  styles: KazeStyle<K>,
   forBuild: { fileName: string; styles: ForBuildStyle<K>[] },
   fileName: string,
   index: number,
