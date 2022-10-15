@@ -1,6 +1,6 @@
 import type { ClassName } from './ClassName';
 import type { CssRuleObject } from './styleOrder';
-import type { CssKeyframesRules, KazeStyle } from './types/style';
+import type { CssKeyframesRules, SupportStyle } from './types/style';
 import { checkStyleOrder } from './utils/checkStyleOrder';
 import { combinedQuery } from './utils/combinedQuery';
 import { compileCss } from './utils/compileCss';
@@ -31,7 +31,7 @@ export type AtRules = {
 };
 
 type Args = {
-  style: KazeStyle;
+  style: SupportStyle;
   pseudo?: string;
   atRules?: AtRules;
   resolvedStyle?: ResolvedStyle;
@@ -47,7 +47,7 @@ export const resolveStyle = ({
   },
 }: Args): ResolvedStyle => {
   for (const _property in style) {
-    const property = _property as keyof KazeStyle;
+    const property = _property as keyof SupportStyle;
     const styleValue = style[property];
     if (isCssValue(styleValue)) {
       if (isShortHandProperty(property)) {

@@ -15,7 +15,7 @@ export const resolveTransform = async (path: string) => {
     outfile: path + '.out',
     plugins: [
       {
-        name: 'check',
+        name: 'kaze-style-pre-transform',
         setup(build) {
           build.onLoad(
             { filter: new RegExp('^' + path + '$') },
