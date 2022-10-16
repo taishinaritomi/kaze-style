@@ -18,8 +18,7 @@
   ],
   "scripts": {
     "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts",
-    "test": "echo 'no test specified'"
+    "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.19.0"

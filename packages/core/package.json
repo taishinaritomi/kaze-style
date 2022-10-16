@@ -32,8 +32,7 @@
   ],
   "scripts": {
     "dev": "tsx ./../../scripts/build.ts --watch  --entry ./src/runtime.ts",
-    "build": "tsx ./../../scripts/build.ts  --entry ./src/runtime.ts",
-    "test": "tsdx test"
+    "build": "tsx ./../../scripts/build.ts  --entry ./src/runtime.ts"
   },
   "dependencies": {
     "csstype": "^3.1.1"
