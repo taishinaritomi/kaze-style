@@ -16,7 +16,8 @@
         "./packages/webpack-plugin/src/virtualLoader.ts",
         "./playground/next/src/pages/**",
         "./playground/next/next.config.*",
-        "./playground/react-vite/vite.config.*"
+        "./playground/react-vite/vite.config.*",
+        "./vitest.config.ts"
       ],
       "rules": {
         "import/no-default-export": "off",

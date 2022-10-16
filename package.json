@@ -13,8 +13,8 @@
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
-    "dev:packages": "turbo run dev  --filter=./packages/*",
-    "test": "turbo run test --filter=./packages/*",
+    "dev:packages": "turbo run dev --filter=./packages/*",
+    "test": "vitest run",
     "code:fix": "eslint . --fix --ignore-path .gitignore && prettier . --write --ignore-path .gitignore",
     "code:check": "yarn workspaces run tsc --noEmit && eslint . --ignore-path .gitignore && prettier . --check --ignore-path .gitignore",
     "readme:copy": "tsx scripts/copyReadme.ts",
@@ -31,6 +31,7 @@
     "@types/stylis": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",
+    "@vitest/coverage-c8": "^0.24.3",
     "arg": "^5.0.2",
     "benny": "^3.7.1",
     "esbuild": "^0.15.7",
@@ -43,9 +44,9 @@
     "prettier": "^2.7.1",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
-    "tsdx": "^0.14.1",
     "tsx": "^3.9.0",
     "turbo": "^1.4.6",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "vitest": "^0.24.3"
   }
 }

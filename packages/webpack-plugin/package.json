@@ -42,8 +42,7 @@
   ],
   "scripts": {
     "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts",
-    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts",
-    "test": "echo 'no test specified'"
+    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts"
   },
   "dependencies": {
     "@kaze-style/build-man": "^0.7.2"
