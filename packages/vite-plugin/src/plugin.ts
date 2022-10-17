@@ -25,14 +25,16 @@ export const plugin = (): Plugin => {
       return;
     },
 
-    async transform(_, id) {
+    async transform(code, id) {
       const [validId] = id.split('?');
-      if (!/.(tsx|ts)$/.test(validId || '')) {
+      if (!/.(tsx|ts|js|jsx)$/.test(validId || '')) {
         return null;
       }
-      const { code, cssRuleObjects: _cssRuleObjects } = await resolveTransform(
-        validId || '',
-      );
+
+      const { code: transformedCode, cssRuleObjects: _cssRuleObjects } = await resolveTransform({
+        code,
+        path: validId || '',
+      });
       let rootRelativeId = '';
       if (_cssRuleObjects.length !== 0) {
         rootRelativeId = `import "${validId}.kaze.css";`;
@@ -40,7 +42,7 @@ export const plugin = (): Plugin => {
       }
 
       return {
-        code: `${rootRelativeId}\n${code}`,
+        code: `${rootRelativeId}\n${transformedCode}`,
         map: { mappings: '' },
       };
     },
