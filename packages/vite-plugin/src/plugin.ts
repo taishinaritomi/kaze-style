@@ -31,10 +31,11 @@ export const plugin = (): Plugin => {
         return null;
       }
 
-      const { code: transformedCode, cssRuleObjects: _cssRuleObjects } = await resolveTransform({
-        code,
-        path: validId || '',
-      });
+      const { code: transformedCode, cssRuleObjects: _cssRuleObjects } =
+        await resolveTransform({
+          code,
+          path: validId || '',
+        });
       let rootRelativeId = '';
       if (_cssRuleObjects.length !== 0) {
         rootRelativeId = `import "${validId}.kaze.css";`;

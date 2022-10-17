@@ -5,10 +5,9 @@ import { build } from 'esbuild';
 type Args = {
   path: string;
   code: string;
-}
+};
 
-export const resolveTransform = async ({code, path }: Args) => {
-
+export const resolveTransform = async ({ code, path }: Args) => {
   const { code: preTransformedCode, metadata } = preTransform({
     code,
     path,
@@ -16,7 +15,7 @@ export const resolveTransform = async ({code, path }: Args) => {
     sourceMaps: false,
   });
 
-  if(preTransformedCode && metadata?.transformed) {
+  if (preTransformedCode && metadata?.transformed) {
     const result = await build({
       entryPoints: [path],
       bundle: true,
@@ -29,7 +28,8 @@ export const resolveTransform = async ({code, path }: Args) => {
           name: 'kaze-style-pre-transform',
           setup(build) {
             build.onLoad(
-              { filter: new RegExp('^' + path + '$') }, ({ path: buildPath }) => {
+              { filter: new RegExp('^' + path + '$') },
+              ({ path: buildPath }) => {
                 return {
                   contents: preTransformedCode,
                   loader: buildPath.split('.').pop() as Loader,
@@ -58,7 +58,6 @@ export const resolveTransform = async ({code, path }: Args) => {
       code,
       cssRuleObjects: cssRuleObjects,
     };
-
   } else {
     return {
       code: code,
