@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/core",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
