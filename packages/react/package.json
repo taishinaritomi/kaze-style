@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/react",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -25,6 +25,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.7.2"
+    "@kaze-style/core": "^0.7.3"
   }
 }
