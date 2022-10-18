@@ -12,6 +12,7 @@ export type {
   KazeGlobalStyle,
   SupportStyle,
   SupportGlobalStyle,
+  Classes,
 } from './types/style';
 export type { ForBuildStyle } from './__preStyle';
 export type { ForBuildGlobalStyle } from './__preGlobalStyle';
