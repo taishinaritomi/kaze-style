@@ -11,7 +11,7 @@ function loader(
 ) {
   this.cacheable(true);
 
-  const { code, metadata, map } = preTransform({
+  const { code, metadata } = preTransform({
     code: sourceCode,
     path: this.resourcePath,
     sourceMaps: this.sourceMap,
@@ -26,7 +26,7 @@ function loader(
   this.callback(
     null,
     code,
-    map as unknown as string,
+    undefined,
     Object.assign({}, additionalData, { kazeTransformed: true }),
   );
 }

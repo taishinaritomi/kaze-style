@@ -35,6 +35,5 @@ export const transform = ({
   return {
     code: result?.code,
     metadata: result?.metadata as Metadata | undefined,
-    map: result?.map,
   };
 };

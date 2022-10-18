@@ -43,7 +43,7 @@ function loader(
           path: this.resourcePath,
         });
 
-        const { code, map } = transform({
+        const { code } = transform({
           code: sourceCode,
           path: this.resourcePath,
           sourceMaps: this.sourceMap,
@@ -69,7 +69,7 @@ function loader(
           ),
         )};`;
 
-        callback(null, `${code}\n\n${request}`, map as unknown as string);
+        callback(null, `${code}\n\n${request}`);
       })
       .catch((error) => {
         callback(error);
