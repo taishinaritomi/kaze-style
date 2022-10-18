@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/themes",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -22,6 +22,6 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "peerDependencies": {
-    "@kaze-style/core": "^0.7.3"
+    "@kaze-style/core": "^0.7.4"
   }
 }

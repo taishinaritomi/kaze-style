@@ -1,3 +1,5 @@
-export function isObject(val: unknown): val is Record<string, unknown> {
-  return val != null && typeof val === 'object' && Array.isArray(val) === false;
+export function isObject(obj: unknown): obj is object {
+  return (
+    obj !== null && typeof obj === 'object' && Array.isArray(obj) === false
+  );
 }
