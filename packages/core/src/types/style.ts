@@ -24,7 +24,7 @@ type CssPseudosRules = {
 
 type CssStringRules = {
   [_ in IncludeChar<
-    ':' | '&' | ' ' | '@' | ',' | '>' | '~' | '+' | '['
+    ':' | '&' | ' ' | '@' | ',' | '>' | '~' | '+' | '[' | '.' | '#'
   >]?: SupportStyle;
 };
 
