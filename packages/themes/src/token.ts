@@ -14,6 +14,6 @@ export const token = {
     return fontSize[size];
   },
   media: (size: keyof typeof media) => {
-    return media[size]
-  }
+    return media[size];
+  },
 };
