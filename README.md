@@ -1,7 +1,7 @@
 <div>
   <br>
   <div align="center">
-    <img src='https://raw.githubusercontent.com/taishinaritomi/kaze-style/dev/assets/icon.svg' width="300" height="auto" alt="Kaze">
+    <img src='https://raw.githubusercontent.com/taishinaritomi/kaze-style/dev/assets/icon.svg' width="250" height="auto" alt="Kaze">
   </div>
   <hr />
   <p align="center">Kaze [風] zero-runtime CSS in JS for React.<p>
@@ -22,7 +22,7 @@
 
 # Features
 
-- **Build** - can choose when to extract css. (build time & run time)
+- **Build** - can choose when to extract css (build time & run time)
 - **TypeScript** - Type-safe styles via [csstype](https://github.com/frenic/csstype)
 - **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by build time extract
 - **Merge** - Style merging ignoring css specificity
