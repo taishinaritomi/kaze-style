@@ -1,7 +1,7 @@
 <div>
   <br>
   <div align="center">
-    <img src='assets/icon.svg' width="200" height="auto" alt="Kaze">
+    <img src='assets/icon.svg' width="500" height="auto" alt="Kaze">
   </div>
   <hr />
   <p align="center">Kaze [風] zero-runtime CSS in JS for React.<p>
