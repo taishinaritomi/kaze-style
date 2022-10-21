@@ -1,8 +1,11 @@
 <div>
   <br>
-  <h1 align="center"><b>🎐Kaze Style</b></h1>
+  <div align="center">
+    <img src='https://raw.githubusercontent.com/taishinaritomi/kaze-style/dev/assets/icon.svg' width="250" height="auto" alt="Kaze">
+  </div>
+  <hr />
   <p align="center">Kaze [風] zero-runtime CSS in JS for React.<p>
-  <p align="center"><b>🚧 Kaze Style is under development 🚧</b></p>
+  <p align="center"><b>🚧 under development 🚧</b></p>
   <div align="center">
     <a href='https://www.npmjs.com/package/@kaze-style/react'>
       <img src='https://img.shields.io/npm/v/@kaze-style/react?style=for-the-badge'>
@@ -17,86 +20,44 @@
   <br>
 </div>
 
-## Feature
+# Features
 
-🛠 &nbsp; KazeStyle can choose when to extract css. (build time & run time)
+- **Build** - can choose when to extract css (build time & run time)
+- **TypeScript** - Type-safe styles via [csstype](https://github.com/frenic/csstype)
+- **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by build time extract
+- **Merge** - Style merging ignoring css specificity
+- **Theme** - Consistent styling using "@kaze-style/themes"
 
-💪 &nbsp; Type-safe styles via [csstype](https://github.com/frenic/csstype)
-
-🦷 &nbsp; Reuse styles using Atomic CSS
-
-👘 &nbsp; Can ignore specificity and merge styles
-
-🎨 &nbsp; Consistent styling using "@kaze-style/themes" (under development)
-
-## Example
-
-### createStyle
+# Example
 
 ```ts
-//Button.tsx
-import { createStyle } from '@kaze-style/react';
+import { createStyle, createGlobalStyle, mergeStyle } from '@kaze-style/react';
 
-const classes = createStyle({
-  button: {
-    color: 'red',
+createGlobalStyle({
+  html: {
+    lineHeight: '1.5',
   },
 });
 
-const Button = () => {
-  return <button className={classes.button}>button</button>;
-};
-```
-
-### mergeStyle
-
-```ts
-//Button.tsx
-import { createStyle, mergeStyle } from '@kaze-style/react';
-
 const classes = createStyle({
-  red: {
-    color: 'red',
+  container: {
+    margin: '20px',
   },
-});
-
-const Button = (props) => {
-  return (
-    <button className={mergeStyle(classes.red, props.className)}>button</button>
-  );
-};
-```
-
-```ts
-//Component.tsx
-import { createStyle } from '@kaze-style/react';
-import { Button } from '@kaze-style/react';
-
-const classes = createStyle({
-  blue: {
+  base: {
+    color: 'red',
+    background: 'black',
+  },
+  action: {
     color: 'blue',
   },
 });
 
-const Component = () => {
-  return <Button className={classes.blue} />;
-};
-```
-
-### createGlobalStyle
-
-```ts
-//App.tsx
-import { createGlobalStyle } from '@kaze-style/react';
-
-createGlobalStyle({
-  html: {
-    color: 'red',
-  },
-});
-
-const App = () => {
-  return <div></div>;
+export const App = ({ action }) => {
+  return (
+    <div className={classes.container}>
+      <p className={mergeStyle(classes.base, action && classes.action)}></p>
+    </div>
+  );
 };
 ```
 
@@ -112,7 +73,7 @@ const nextConfig = {};
 export default withKazeStyle(nextConfig);
 ```
 
-## Inspiration
+# Inspiration
 
 KazeStyle was designed with reference to several CSS in JS libraries.
 
@@ -124,10 +85,10 @@ KazeStyle was designed with reference to several CSS in JS libraries.
 
 [callstack/linaria](https://github.com/callstack/linaria)
 
-## Author
+# Author
 
 [Taishi Naritomi](https://github.com/taishinaritomi)
 
-## License
+# License
 
 [MIT](https://github.com/taishinaritomi/kaze-style/blob/main/LICENSE)

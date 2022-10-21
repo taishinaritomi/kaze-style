@@ -1,5 +1,6 @@
 import { fontSize } from './fontSize';
 import { fontWeight } from './fontWeight';
+import { media } from './media';
 import { size } from './size';
 
 export const token = {
@@ -11,5 +12,8 @@ export const token = {
   },
   fontSize: (size: keyof typeof fontSize) => {
     return fontSize[size];
+  },
+  media: (size: keyof typeof media) => {
+    return media[size];
   },
 };
