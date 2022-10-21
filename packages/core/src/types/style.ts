@@ -5,8 +5,8 @@ import type { AndArray, IncludeChar, TrimPrefix } from './utils';
 export type CssValue = string | number;
 
 type PredictType =
-  | '@media (max-width: 0)'
-  | '@media (min-width: 0)'
+  | '@media screen and (max-width: 0)'
+  | '@media screen and (min-width: 0)'
   | '@media (prefers-color-scheme: dark)'
   | '@media (prefers-color-scheme: light)'
   | '@layer utilities'
