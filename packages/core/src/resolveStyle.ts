@@ -24,23 +24,22 @@ type ResolvedStyle = {
   cssRuleObjects: CssRuleObject[];
 };
 
-export type AtRules = {
+export type Selectors = {
   media: string;
   layer: string;
   support: string;
+  pseudo: string;
 };
 
 type Args = {
   style: SupportStyle;
-  pseudo?: string;
-  atRules?: AtRules;
+  selectors?: Selectors;
   resolvedStyle?: ResolvedStyle;
 };
 
 export const resolveStyle = ({
   style,
-  pseudo = '',
-  atRules = { media: '', layer: '', support: '' },
+  selectors = { media: '', layer: '', support: '', pseudo: '' },
   resolvedStyle = {
     classNameObject: {},
     cssRuleObjects: [],
@@ -57,86 +56,80 @@ export const resolveStyle = ({
         );
         resolveStyle({
           style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
-          pseudo,
-          atRules,
+          selectors,
           resolvedStyle,
         });
       } else {
         const hyphenatedProperty = hyphenateProperty(property);
         const className = hashClassName({
-          pseudo,
-          atRules,
+          selectors,
           property: hyphenatedProperty,
           styleValue,
         });
         const selector = hashSelector({
-          pseudo,
-          atRules,
+          selectors,
           property: hyphenatedProperty,
         });
         const cssRule = compileCss({
           className,
-          pseudo,
-          atRules,
+          selectors,
           property: hyphenatedProperty,
           styleValue,
         });
 
-        const order = checkStyleOrder({
-          atRules,
-          pseudo,
-        });
+        const order = checkStyleOrder({ selectors });
 
         resolvedStyle.cssRuleObjects.push({ cssRule, order });
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
-    } else if (property === 'animationName') {
-      const animationNameValue = styleValue as CssKeyframesRules;
-      const { keyframesRule, keyframeName } =
-        compileKeyFrameCss(animationNameValue);
-      resolvedStyle.cssRuleObjects.push({
-        cssRule: keyframesRule,
-        order: 'keyframes',
-      });
-      Object.assign(resolvedStyle.classNameObject, {
-        [keyframeName]: keyframeName,
-      });
-      resolveStyle({
-        style: { animationName: keyframeName },
-        pseudo,
-        atRules,
-        resolvedStyle,
-      });
     } else if (isObject(styleValue)) {
-      if (isMediaQuerySelector(property)) {
+      if (property === 'animationName') {
+        const animationNameValue = styleValue as CssKeyframesRules;
+        const { keyframesRule, keyframeName } =
+          compileKeyFrameCss(animationNameValue);
+        resolvedStyle.cssRuleObjects.push({
+          cssRule: keyframesRule,
+          order: 'keyframes',
+        });
+        Object.assign(resolvedStyle.classNameObject, {
+          [keyframeName]: keyframeName,
+        });
+        resolveStyle({
+          style: { animationName: keyframeName },
+          selectors,
+          resolvedStyle,
+        });
+      } else if (isMediaQuerySelector(property)) {
         const combinedMediaQuery = combinedQuery(
-          atRules.media,
+          selectors.media,
           property.slice(6).trim(),
         );
         resolveStyle({
           style: styleValue,
-          pseudo,
-          atRules: Object.assign({}, atRules, { media: combinedMediaQuery }),
+          selectors: Object.assign({}, selectors, {
+            media: combinedMediaQuery,
+          }),
           resolvedStyle,
         });
       } else if (isLayerSelector(property)) {
         const combinedLayerQuery =
-          (atRules.layer ? `${atRules.layer}.` : '') + property.slice(6).trim();
+          (selectors.layer ? `${selectors.layer}.` : '') +
+          property.slice(6).trim();
         resolveStyle({
           style: styleValue,
-          pseudo,
-          atRules: Object.assign({}, atRules, { layer: combinedLayerQuery }),
+          selectors: Object.assign({}, selectors, {
+            layer: combinedLayerQuery,
+          }),
           resolvedStyle,
         });
       } else if (isSupportQuerySelector(property)) {
         const combinedSupportQuery = combinedQuery(
-          atRules.support,
+          selectors.support,
           property.slice(9).trim(),
         );
         resolveStyle({
           style: styleValue,
-          pseudo,
-          atRules: Object.assign({}, atRules, {
+          selectors: Object.assign({}, selectors, {
             support: combinedSupportQuery,
           }),
           resolvedStyle,
@@ -144,8 +137,9 @@ export const resolveStyle = ({
       } else if (isNestedSelector(property)) {
         resolveStyle({
           style: styleValue,
-          pseudo: normalizeNestedProperty(property, pseudo),
-          atRules,
+          selectors: Object.assign({}, selectors, {
+            pseudo: normalizeNestedProperty(property, selectors.pseudo),
+          }),
           resolvedStyle,
         });
       }
