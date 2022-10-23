@@ -40,4 +40,28 @@ describe('createStyle', () => {
       { order: 'normal', cssRule: '._1ujbck9::after{color:green;}' },
     ]);
   });
+
+  it('nested pseudo', () => {
+    const { classes, classesObject, cssRuleObjects } = createStyle({
+      base: {
+        ':hover': {
+          '::after': {
+            color: 'green',
+          },
+          color: 'red',
+        },
+      },
+    });
+
+    expect(classes).toEqual({
+      base: new ClassName({ _6cx5yh: "_l244st", _1qpompn: "_5d93c1" }),
+    });
+    expect(classesObject).toEqual({
+      base: { _6cx5yh: "_l244st", _1qpompn: "_5d93c1" },
+    });
+    expect(cssRuleObjects).toEqual([
+      { order: 'hover', cssRule: '._l244st:hover::after{color:green;}' },
+      { order: 'hover', cssRule: '._5d93c1:hover{color:red;}' },
+    ]);
+  });
 });
