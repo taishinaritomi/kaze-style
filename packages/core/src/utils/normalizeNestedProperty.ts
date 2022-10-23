@@ -9,10 +9,9 @@ export const normalizeNestedProperty = (
         ? nestedProperty.slice(1)
         : nestedProperty;
   } else {
-    pseudo =
-      nestedProperty.includes('&')
-        ? nestedProperty
-        : '&' + nestedProperty;
+    pseudo = nestedProperty.includes('&')
+      ? nestedProperty
+      : '&' + nestedProperty;
   }
   return pseudo;
 };
