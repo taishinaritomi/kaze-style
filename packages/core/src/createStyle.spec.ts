@@ -54,10 +54,10 @@ describe('createStyle', () => {
     });
 
     expect(classes).toEqual({
-      base: new ClassName({ _6cx5yh: "_l244st", _1qpompn: "_5d93c1" }),
+      base: new ClassName({ _6cx5yh: '_l244st', _1qpompn: '_5d93c1' }),
     });
     expect(classesObject).toEqual({
-      base: { _6cx5yh: "_l244st", _1qpompn: "_5d93c1" },
+      base: { _6cx5yh: '_l244st', _1qpompn: '_5d93c1' },
     });
     expect(cssRuleObjects).toEqual([
       { order: 'hover', cssRule: '._l244st:hover::after{color:green;}' },
