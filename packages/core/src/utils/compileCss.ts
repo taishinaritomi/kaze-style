@@ -1,7 +1,7 @@
 import type { Selectors } from '../resolveStyle';
 import type { CssValue } from '../types/style';
 import type { AndArray } from '../types/utils';
-import { normalizeStyleValue } from './normalizeStyleValue';
+import { styleValueStringify } from './styleValueStringify';
 
 type CompileCss = {
   className: string;
@@ -25,7 +25,7 @@ export const compileCss = ({
     selector = `${pseudo.replace(/&/g, `.${className}`)}`;
   }
 
-  rule = `${selector}{${property}:${normalizeStyleValue(styleValue)};}`;
+  rule = `${selector}{${property}:${styleValueStringify(styleValue)};}`;
 
   if (media) rule = `@media ${media} {${rule}}`;
   if (layer) rule = `@layer ${layer} {${rule}}`;

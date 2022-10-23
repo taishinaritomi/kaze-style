@@ -2,7 +2,7 @@ import { hash } from '../hash';
 import type { Selectors } from '../resolveStyle';
 import type { CssValue } from '../types/style';
 import type { AndArray } from '../types/utils';
-import { normalizeStyleValue } from './normalizeStyleValue';
+import { styleValueStringify } from './styleValueStringify';
 
 type Args = {
   selectors: Selectors;
@@ -16,7 +16,7 @@ export const hashClassName = ({
   styleValue,
 }: Args): string => {
   return `_${hash(
-    `${property}${pseudo}${media}${layer}${support}${normalizeStyleValue(
+    `${property}${pseudo}${media}${layer}${support}${styleValueStringify(
       styleValue,
     )}`,
   )}`;
