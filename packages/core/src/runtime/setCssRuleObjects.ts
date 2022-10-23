@@ -5,7 +5,7 @@ export const setCssRuleObjects = (cssRuleObjects: CssRuleObject[]) => {
   const styleElements = getStyleElements();
   cssRuleObjects.forEach((cssRuleObject) => {
     const style = styleElements[cssRuleObject.order];
-    style.rules = Array.from(new Set([...style.rules, cssRuleObject.cssRule]));
+    style.rules = Array.from(new Set([...style.rules, cssRuleObject.rule]));
     style.innerText = style.rules.join('');
   });
 };

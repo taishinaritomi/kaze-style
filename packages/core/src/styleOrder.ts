@@ -15,4 +15,4 @@ export const styleOrder = [
 
 export type StyleOrder = typeof styleOrder[number];
 
-export type CssRuleObject = { order: StyleOrder; cssRule: string };
+export type CssRuleObject = { order: StyleOrder; rule: string };

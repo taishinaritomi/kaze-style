@@ -13,7 +13,7 @@ describe('createStyle', () => {
     expect(classes).toEqual({ base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
     expect(classesObject).toEqual({ base: { _1ylxx6h: '_18ffsfk' } });
     expect(cssRuleObjects).toEqual([
-      { order: 'normal', cssRule: '._18ffsfk{color:red;}' },
+      { order: 'normal', rule: '._18ffsfk{color:red;}' },
     ]);
   });
 
@@ -36,8 +36,8 @@ describe('createStyle', () => {
       base: { _1qpompn: '_5d93c1', _1hal8q2: '_1ujbck9' },
     });
     expect(cssRuleObjects).toEqual([
-      { order: 'hover', cssRule: '._5d93c1:hover{color:red;}' },
-      { order: 'normal', cssRule: '._1ujbck9::after{color:green;}' },
+      { order: 'hover', rule: '._5d93c1:hover{color:red;}' },
+      { order: 'normal', rule: '._1ujbck9::after{color:green;}' },
     ]);
   });
 
@@ -60,8 +60,8 @@ describe('createStyle', () => {
       base: { _6cx5yh: '_l244st', _1qpompn: '_5d93c1' },
     });
     expect(cssRuleObjects).toEqual([
-      { order: 'hover', cssRule: '._l244st:hover::after{color:green;}' },
-      { order: 'hover', cssRule: '._5d93c1:hover{color:red;}' },
+      { order: 'hover', rule: '._l244st:hover::after{color:green;}' },
+      { order: 'hover', rule: '._5d93c1:hover{color:red;}' },
     ]);
   });
 });

@@ -13,7 +13,7 @@ export const createGlobalStyle = (globalStyles: KazeGlobalStyle): Result => {
     const compiledStyle = compileObjectCss(selectorStyle || {});
     if (compiledStyle !== '') {
       allCssRuleObjects.push({
-        cssRule: `${selector} {${compiledStyle}}`,
+        rule: `${selector} {${compiledStyle}}`,
         order: 'global',
       });
     }

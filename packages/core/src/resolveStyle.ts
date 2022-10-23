@@ -70,7 +70,7 @@ export const resolveStyle = ({
           selectors,
           property: hyphenatedProperty,
         });
-        const cssRule = compileCss({
+        const rule = compileCss({
           className,
           selectors,
           property: hyphenatedProperty,
@@ -79,7 +79,7 @@ export const resolveStyle = ({
 
         const order = checkStyleOrder({ selectors });
 
-        resolvedStyle.cssRuleObjects.push({ cssRule, order });
+        resolvedStyle.cssRuleObjects.push({ rule, order });
         Object.assign(resolvedStyle.classNameObject, { [selector]: className });
       }
     } else if (isObject(styleValue)) {
@@ -88,7 +88,7 @@ export const resolveStyle = ({
         const { keyframesRule, keyframeName } =
           compileKeyFrameCss(animationNameValue);
         resolvedStyle.cssRuleObjects.push({
-          cssRule: keyframesRule,
+          rule: keyframesRule,
           order: 'keyframes',
         });
         Object.assign(resolvedStyle.classNameObject, {
