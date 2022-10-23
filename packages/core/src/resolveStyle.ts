@@ -50,10 +50,10 @@ export const resolveStyle = ({
     const styleValue = style[property];
     if (isCssValue(styleValue)) {
       if (isShortHandProperty(property)) {
-        const resolvedShortHandStyle = resolveShortHandStyle(
+        const resolvedShortHandStyle = resolveShortHandStyle({
           property,
           styleValue,
-        );
+        });
         resolveStyle({
           style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
           selectors,
