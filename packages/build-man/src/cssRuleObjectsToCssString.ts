@@ -6,8 +6,8 @@ export const cssRuleObjectsToCssString = (cssRuleObjects: CssRuleObject[]) => {
   return `
     @layer ${styleOrder.map((order) => `${layerPrefix}${order}`).join(',')};
     ${cssRuleObjects
-      .map((cssRuleObject) => {
-        return `@layer ${layerPrefix}${cssRuleObject.order}{${cssRuleObject.rule}}`;
+      .map(({ order, rule }) => {
+        return `@layer ${layerPrefix}${order}{${rule}}`;
       })
       .join('')}
   `;
