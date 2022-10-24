@@ -1,6 +1,6 @@
 import type { Pseudos, PropertiesFallback, AtRule } from 'csstype';
 import type { ClassName } from '../ClassName';
-import type { AndArray, IncludeChar, TrimPrefix } from './utils';
+import type { AndArray, IncludeChar } from './utils';
 
 export type CssValue = string | number;
 
@@ -38,25 +38,8 @@ type CssAnimationNameProperty = {
   animationName?: CssKeyframesRules | string;
 };
 
-const supportShorthandProperties = [
-  'margin',
-  'padding',
-  'gap',
-  'inset',
-  'overflow',
-  'outline',
-  'borderRadius',
-] as const;
-
-export type SupportShorthandProperties = {
-  [Properties in `$${typeof supportShorthandProperties[number]}`]?: PropertiesFallback<CssValue>[TrimPrefix<
-    Properties,
-    '$'
-  >];
-};
-
 export type SupportProperties = Omit<
-  PropertiesFallback<CssValue> & SupportShorthandProperties,
+  PropertiesFallback<CssValue>,
   'animationName'
 >;
 
