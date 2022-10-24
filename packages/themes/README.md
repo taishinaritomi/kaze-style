@@ -10,11 +10,11 @@
     <a href='https://www.npmjs.com/package/@kaze-style/react'>
       <img src='https://img.shields.io/npm/v/@kaze-style/react?style=for-the-badge'>
     </a>
-    <a href='https://bundlephobia.com/package/@kaze-style/react'>
-      <img src='https://img.shields.io/bundlephobia/minzip/@kaze-style/react?style=for-the-badge'>
-    </a>
     <a href='https://github.com/taishinaritomi/kaze-style/blob/main/LICENSE'>
       <img src='https://img.shields.io/github/license/taishinaritomi/kaze-style?style=for-the-badge'>
+    </a>
+    <a href='https://bundlephobia.com/package/@kaze-style/react'>
+      <img src='https://img.shields.io/bundlephobia/minzip/@kaze-style/react?style=for-the-badge'>
     </a>
     <a href='https://github.com/microsoft/typescript'>
       <img src='https://img.shields.io/npm/types/@kaze-style/react?style=for-the-badge'>
