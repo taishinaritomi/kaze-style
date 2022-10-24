@@ -1,19 +1,20 @@
-import type { AtRules } from '../resolveStyle';
+import type { Selectors } from '../resolveStyle';
 import type { StyleOrder } from '../styleOrder';
 
 type Args = {
-  pseudo: string;
-  atRules: AtRules;
+  selectors: Selectors;
 };
 
-export const checkStyleOrder = ({ pseudo, atRules }: Args) => {
+export const checkStyleOrder = ({
+  selectors: { pseudo, media, layer, support },
+}: Args) => {
   let order: StyleOrder = 'normal';
 
-  if (atRules.media) {
+  if (media) {
     order = 'media';
-  } else if (atRules.support) {
+  } else if (support) {
     order = 'atRules';
-  } else if (atRules.layer) {
+  } else if (layer) {
     order = 'atRules';
   } else if (pseudo.includes(':active')) {
     order = 'active';

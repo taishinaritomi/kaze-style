@@ -3,16 +3,15 @@ export const normalizeNestedProperty = (
   nowProperty: string,
 ): string => {
   let pseudo = nowProperty;
-  if (nowProperty !== '') {
+  if (nowProperty) {
     pseudo +=
       nestedProperty.charAt(0) === '&'
         ? nestedProperty.slice(1)
         : nestedProperty;
   } else {
-    pseudo =
-      nestedProperty.includes('&') === true
-        ? nestedProperty
-        : '&' + nestedProperty;
+    pseudo = nestedProperty.includes('&')
+      ? nestedProperty
+      : '&' + nestedProperty;
   }
   return pseudo;
 };

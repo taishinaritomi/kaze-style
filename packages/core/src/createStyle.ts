@@ -31,7 +31,7 @@ export const createStyle = <K extends string>(
     cssRuleObjects: Array.from(
       new Map(
         allCssRuleObjects.map((allCssRuleObject) => [
-          allCssRuleObject.cssRule,
+          allCssRuleObject.rule,
           allCssRuleObject,
         ]),
       ).values(),

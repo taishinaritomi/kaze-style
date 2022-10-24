@@ -1,5 +1,5 @@
-export const normalizeShorthandProperty = (nestedProperty: string): string => {
-  return nestedProperty.charAt(0) === '$'
-    ? nestedProperty.slice(1)
-    : nestedProperty;
+export const normalizeShorthandProperty = <T extends string>(
+  property: `$${T}`,
+): T => {
+  return (property.charAt(0) === '$' ? property.slice(1) : property) as T;
 };

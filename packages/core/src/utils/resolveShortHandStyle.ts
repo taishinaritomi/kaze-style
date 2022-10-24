@@ -4,71 +4,53 @@ import type {
   SupportProperties,
 } from '../types/style';
 import type { AndArray } from '../types/utils';
-import { generateStyles } from './generateStyles';
 import { normalizeShorthandProperty } from './normalizeShorthandProperty';
+import { resolvePositionShortHandStyle } from './resolvePositionShortHandStyle';
+import { styleValueToArray } from './styleValueToArray';
 
-type OverflowStyle = Pick<SupportProperties, 'overflowX' | 'overflowY'>;
+type Args = {
+  property: keyof SupportShorthandProperties;
+  styleValue: AndArray<CssValue>;
+};
 
-export const resolveShortHandStyle = (
-  _property: keyof SupportShorthandProperties,
-  styleValue: AndArray<CssValue>,
-): SupportProperties => {
-  const values = Array.isArray(styleValue)
-    ? (styleValue as CssValue[]).map((v) => v.toString())
-    : styleValue
-        .toString()
-        .split(' ')
-        .filter((v) => v !== '');
-
+export const resolveShortHandStyle = ({
+  property: _property,
+  styleValue,
+}: Args): SupportProperties => {
+  const values = styleValueToArray(styleValue);
   const property = normalizeShorthandProperty(_property);
 
   if (property === 'margin' || property === 'padding') {
-    const style = generateStyles(property, '', ...values);
-    return style;
-  } else if (property === 'gap') {
-    const [firstValue, secondValue = firstValue] = values;
-    return {
-      columnGap: firstValue,
-      rowGap: secondValue,
-    };
-  } else if (property === 'inset') {
-    const [
-      firstValue,
-      secondValue = firstValue,
-      thirdValue = firstValue,
-      fourthValue = secondValue,
-    ] = values;
-    return {
-      top: firstValue,
-      right: secondValue,
-      bottom: thirdValue,
-      left: fourthValue,
-    };
+    return resolvePositionShortHandStyle({ styleValue, property });
   } else if (property === 'borderRadius') {
-    const [
-      firstValue,
-      secondValue = firstValue,
-      thirdValue = firstValue,
-      fourthValue = secondValue,
-    ] = values;
-    return {
-      borderTopLeftRadius: firstValue,
-      borderTopRightRadius: secondValue,
-      borderBottomRightRadius: thirdValue,
-      borderBottomLeftRadius: fourthValue,
-    };
+    return resolvePositionShortHandStyle({
+      styleValue,
+      property,
+      positionMap: ['TopLeft', 'TopRight', 'BottomRight', 'BottomLeft'],
+    });
+  } else if (property === 'inset') {
+    return resolvePositionShortHandStyle({
+      styleValue,
+      positionMap: ['top', 'right', 'bottom', 'left'],
+    });
+  } else if (property === 'gap') {
+    return resolvePositionShortHandStyle({
+      styleValue,
+      suffix: 'Gap',
+      positionMap: ['column', 'row'],
+    });
   } else if (property === 'overflow') {
-    const [firstValue, secondValue = firstValue] = values;
-    return {
-      overflowX: firstValue,
-      overflowY: secondValue,
-    } as OverflowStyle;
+    return resolvePositionShortHandStyle({
+      styleValue,
+      property,
+      positionMap: ['X', 'Y'],
+    });
   } else if (property === 'outline') {
     const [firstValue, secondValue, thirdValue] = values;
     return {
       outlineWidth: firstValue,
-      ...(secondValue && { outlineColor: secondValue }),
-      ...(thirdValue && { outlineStyle: thirdValue }),
+      outlineColor: secondValue,
+      outlineStyle: thirdValue,
     };
   } else {
     return {};
