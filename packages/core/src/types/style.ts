@@ -61,7 +61,7 @@ type GlobalSelector = keyof HTMLElementTagNameMap | '*';
 type PredictGlobalSelector =
   | Pseudos
   | GlobalSelector
-  | `${GlobalSelector}${Pseudos}`
+  | `${GlobalSelector}${Pseudos}`;
 
 export type KazeGlobalStyle = {
   '@font-face'?: FontFaceStyle;
