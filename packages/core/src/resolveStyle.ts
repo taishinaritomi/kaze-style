@@ -13,11 +13,8 @@ import { isLayerSelector } from './utils/isLayerSelector';
 import { isMediaQuerySelector } from './utils/isMediaQuerySelector';
 import { isNestedSelector } from './utils/isNestedSelector';
 import { isObject } from './utils/isObject';
-import { isShortHandProperty } from './utils/isShortHandProperty';
 import { isSupportQuerySelector } from './utils/isSupportQuerySelector';
 import { normalizeNestedProperty } from './utils/normalizeNestedProperty';
-import { omit } from './utils/omit';
-import { resolveShortHandStyle } from './utils/resolveShortHandStyle';
 
 type ResolvedStyle = {
   classNameObject: ClassName['object'];
@@ -49,39 +46,27 @@ export const resolveStyle = ({
     const property = _property as keyof SupportStyle;
     const styleValue = style[property];
     if (isCssValue(styleValue)) {
-      if (isShortHandProperty(property)) {
-        const resolvedShortHandStyle = resolveShortHandStyle({
-          property,
-          styleValue,
-        });
-        resolveStyle({
-          style: Object.assign(omit(style, [property]), resolvedShortHandStyle),
-          selectors,
-          resolvedStyle,
-        });
-      } else {
-        const hyphenatedProperty = hyphenateProperty(property);
-        const className = hashClassName({
-          selectors,
-          property: hyphenatedProperty,
-          styleValue,
-        });
-        const selector = hashSelector({
-          selectors,
-          property: hyphenatedProperty,
-        });
-        const rule = compileCss({
-          className,
-          selectors,
-          property: hyphenatedProperty,
-          styleValue,
-        });
+      const hyphenatedProperty = hyphenateProperty(property);
+      const className = hashClassName({
+        selectors,
+        property: hyphenatedProperty,
+        styleValue,
+      });
+      const selector = hashSelector({
+        selectors,
+        property: hyphenatedProperty,
+      });
+      const rule = compileCss({
+        className,
+        selectors,
+        property: hyphenatedProperty,
+        styleValue,
+      });
 
-        const order = checkStyleOrder({ selectors });
+      const order = checkStyleOrder({ selectors });
 
-        resolvedStyle.cssRuleObjects.push({ rule, order });
-        Object.assign(resolvedStyle.classNameObject, { [selector]: className });
-      }
+      resolvedStyle.cssRuleObjects.push({ rule, order });
+      Object.assign(resolvedStyle.classNameObject, { [selector]: className });
     } else if (isObject(styleValue)) {
       if (property === 'animationName') {
         const animationNameValue = styleValue as CssKeyframesRules;

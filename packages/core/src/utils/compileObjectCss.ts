@@ -1,5 +1,6 @@
 import type { SupportProperties } from '../types/style';
 import { hyphenateProperty } from './hyphenateProperty';
+import { styleValueStringify } from './styleValueStringify';
 
 export const compileObjectCss = (style: SupportProperties): string => {
   const cssRules: string[] = [];
@@ -7,10 +8,7 @@ export const compileObjectCss = (style: SupportProperties): string => {
     const value = style[property as keyof SupportProperties];
     if (typeof value === 'string' || typeof value === 'number') {
       cssRules.push(
-        hyphenateProperty(property) +
-          ':' +
-          (Array.isArray(value) ? value.join(' ') : value) +
-          ';',
+        hyphenateProperty(property) + ':' + styleValueStringify(value) + ';',
       );
     }
   }
