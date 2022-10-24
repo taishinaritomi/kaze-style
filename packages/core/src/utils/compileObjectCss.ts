@@ -8,10 +8,7 @@ export const compileObjectCss = (style: SupportProperties): string => {
     const value = style[property as keyof SupportProperties];
     if (typeof value === 'string' || typeof value === 'number') {
       cssRules.push(
-        hyphenateProperty(property) +
-          ':' +
-          styleValueStringify(value) +
-          ';',
+        hyphenateProperty(property) + ':' + styleValueStringify(value) + ';',
       );
     }
   }
