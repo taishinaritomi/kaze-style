@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/webpack-plugin",
-  "version": "0.7.7",
+  "version": "0.8.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -45,10 +45,10 @@
     "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts"
   },
   "dependencies": {
-    "@kaze-style/build-man": "^0.7.7"
+    "@kaze-style/build-man": "^0.8.0"
   },
   "peerDependencies": {
-    "@kaze-style/react": "^0.7.7",
+    "@kaze-style/react": "^0.8.0",
     "webpack": "^5"
   }
 }
