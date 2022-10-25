@@ -5,17 +5,15 @@ type Args = {
   selectors: Selectors;
 };
 
-export const checkStyleOrder = ({
-  selectors: { pseudo, media, layer, support },
-}: Args) => {
+export const checkStyleOrder = ({ selectors: { pseudo, atRules } }: Args) => {
   let order: StyleOrder = 'normal';
 
-  if (media) {
-    order = 'media';
-  } else if (support) {
-    order = 'atRules';
-  } else if (layer) {
-    order = 'atRules';
+  if (atRules.length !== 0) {
+    if (atRules.some((atRule) => atRule.includes('media'))) {
+      order = 'media';
+    } else {
+      order = 'atRules';
+    }
   } else if (pseudo.includes(':active')) {
     order = 'active';
   } else if (pseudo.includes(':hover')) {

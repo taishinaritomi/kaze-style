@@ -12,7 +12,7 @@ type CompileCss = {
 
 export const compileCss = ({
   className,
-  selectors: { pseudo, media, layer, support },
+  selectors: { pseudo, atRules },
   property,
   styleValue,
 }: CompileCss): string => {
@@ -27,9 +27,9 @@ export const compileCss = ({
 
   rule = `${selector}{${property}:${styleValueStringify(styleValue)};}`;
 
-  if (media) rule = `@media ${media} {${rule}}`;
-  if (layer) rule = `@layer ${layer} {${rule}}`;
-  if (support) rule = `@supports ${support} {${rule}}`;
+  if (atRules.length !== 0) {
+    atRules.forEach((atRule) => (rule = `${atRule} {${rule}}`));
+  }
 
   return rule;
 };

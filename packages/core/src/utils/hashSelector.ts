@@ -7,8 +7,8 @@ type Args = {
 };
 
 export const hashSelector = ({
-  selectors: { pseudo, media, layer, support },
+  selectors: { pseudo, atRules },
   property,
 }: Args): string => {
-  return `_${hash(`${property}${pseudo}${media}${layer}${support}`)}`;
+  return `_${hash(`${property}${pseudo}${atRules.join('')}`)}`;
 };
