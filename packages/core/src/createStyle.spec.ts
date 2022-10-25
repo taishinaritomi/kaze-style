@@ -64,4 +64,53 @@ describe('createStyle', () => {
       { order: 'hover', rule: '._5d93c1:hover{color:red;}' },
     ]);
   });
+
+  it('atRules', () => {
+    const { classes, classesObject, cssRuleObjects } = createStyle({
+      base: {
+        '@media (max-width: 512px)': {
+          color: 'red',
+        },
+      },
+    });
+
+    expect(classes).toEqual({ base: new ClassName({ _16lwaja: '_1usel6w' }) });
+    expect(classesObject).toEqual({ base: { _16lwaja: '_1usel6w' } });
+    expect(cssRuleObjects).toEqual([
+      {
+        order: 'media',
+        rule: '@media (max-width: 512px) {._1usel6w{color:red;}}',
+      },
+    ]);
+  });
+
+  it('nested atRules', () => {
+    const { classes, classesObject, cssRuleObjects } = createStyle({
+      base: {
+        '@media (max-width: 512px)': {
+          color: 'red',
+          '@supports not (display: grid)': {
+            display: 'flex',
+          },
+        },
+      },
+    });
+
+    expect(classes).toEqual({
+      base: new ClassName({ _16lwaja: '_1usel6w', _1b0ehn0: '_16aqfzc' }),
+    });
+    expect(classesObject).toEqual({
+      base: { _16lwaja: '_1usel6w', _1b0ehn0: '_16aqfzc' },
+    });
+    expect(cssRuleObjects).toEqual([
+      {
+        order: 'media',
+        rule: '@media (max-width: 512px) {._1usel6w{color:red;}}',
+      },
+      {
+        order: 'media',
+        rule: '@media (max-width: 512px) {@supports not (display: grid) {._16aqfzc{display:flex;}}}',
+      },
+    ]);
+  });
 });
