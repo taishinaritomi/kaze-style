@@ -5,7 +5,7 @@ type Args = {
   selectors: Selectors;
 };
 
-export const checkStyleOrder = ({ selectors: { pseudo, atRules } }: Args) => {
+export const checkStyleOrder = ({ selectors: { nested, atRules } }: Args) => {
   let order: StyleOrder = 'normal';
 
   if (atRules.length !== 0) {
@@ -14,19 +14,19 @@ export const checkStyleOrder = ({ selectors: { pseudo, atRules } }: Args) => {
     } else {
       order = 'atRules';
     }
-  } else if (pseudo.includes(':active')) {
+  } else if (nested.includes(':active')) {
     order = 'active';
-  } else if (pseudo.includes(':hover')) {
+  } else if (nested.includes(':hover')) {
     order = 'hover';
-  } else if (pseudo.includes(':focus-visible')) {
+  } else if (nested.includes(':focus-visible')) {
     order = 'focusVisible';
-  } else if (pseudo.includes(':focus')) {
+  } else if (nested.includes(':focus')) {
     order = 'focus';
-  } else if (pseudo.includes(':focus-within')) {
+  } else if (nested.includes(':focus-within')) {
     order = 'focusWithin';
-  } else if (pseudo.includes(':visited')) {
+  } else if (nested.includes(':visited')) {
     order = 'visited';
-  } else if (pseudo.includes(':link')) {
+  } else if (nested.includes(':link')) {
     order = 'link';
   }
   return order;

@@ -2,7 +2,20 @@ import type { Pseudos, PropertiesFallback, AtRule } from 'csstype';
 import type { ClassName } from '../ClassName';
 import type { AndArray, IncludeChar } from './utils';
 
-export type CssValue = string | number;
+export type CssValue = string | number | undefined;
+
+type NestedChar =
+  | ':'
+  | '&'
+  | ' '
+  | '@'
+  | ','
+  | '>'
+  | '~'
+  | '+'
+  | '['
+  | '.'
+  | '#';
 
 type PredictType =
   | '@media (max-width: 0)'
@@ -18,24 +31,22 @@ type PredictTypeRules = {
   [_ in PredictType]?: SupportStyle;
 };
 
-type CssPseudosRules = {
+type PseudosCssRules = {
   [_ in Pseudos]?: SupportStyle;
 };
 
-type CssStringRules = {
-  [_ in IncludeChar<
-    ':' | '&' | ' ' | '@' | ',' | '>' | '~' | '+' | '[' | '.' | '#'
-  >]?: SupportStyle;
+type StringCssRules = {
+  [_ in IncludeChar<NestedChar>]?: SupportStyle;
 };
 
-export type CssKeyframesRules = {
+export type KeyframesCssRules = {
   [_ in 'from' | 'to']?: SupportProperties;
 } & {
   [_ in string]?: SupportProperties;
 };
 
 type CssAnimationNameProperty = {
-  animationName?: CssKeyframesRules | string;
+  animationName?: KeyframesCssRules | string;
 };
 
 export type SupportProperties = Omit<
@@ -44,14 +55,28 @@ export type SupportProperties = Omit<
 >;
 
 export type SupportStyle = SupportProperties &
-  CssPseudosRules &
+  PseudosCssRules &
   PredictTypeRules &
-  CssStringRules &
+  StringCssRules &
   CssAnimationNameProperty;
 
 export type KazeStyle<T extends string> = Record<T, SupportStyle>;
 
-export type SupportGlobalStyle = PropertiesFallback<CssValue>;
+type SupportGlobalProperties = PropertiesFallback<AndArray<CssValue>>;
+
+type GlobalPseudosCssRules = {
+  [_ in Pseudos]?: SupportGlobalStyle;
+};
+
+type GlobalStringCssRules = {
+  [P in IncludeChar<NestedChar>]?: P extends '@font-face'
+    ? FontFaceStyle
+    : SupportGlobalStyle;
+};
+
+export type SupportGlobalStyle = SupportGlobalProperties &
+  GlobalPseudosCssRules &
+  GlobalStringCssRules;
 
 type FontFaceStyle = AtRule.FontFaceFallback<CssValue> &
   AtRule.FontFaceHyphenFallback<CssValue>;
@@ -67,8 +92,7 @@ export type KazeGlobalStyle = {
   '@font-face'?: FontFaceStyle;
 } & {
   [_ in PredictGlobalSelector]?: SupportGlobalStyle;
-} & Record<string, SupportGlobalStyle> &
-  Record<string, Record<string, AndArray<CssValue>>>;
+} & Record<string, Record<string, AndArray<CssValue>> | SupportGlobalStyle>;
 
 export type Classes<K extends string> = Record<K, string>;
 export type ClassesObject<K extends string> = Record<K, ClassName['object']>;
