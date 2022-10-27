@@ -79,7 +79,7 @@ describe('createStyle', () => {
     expect(cssRuleObjects).toEqual([
       {
         order: 'media',
-        rule: '@media (max-width: 512px) {._1usel6w{color:red;}}',
+        rule: '@media (max-width: 512px){._1usel6w{color:red;}}',
       },
     ]);
   });
@@ -105,11 +105,11 @@ describe('createStyle', () => {
     expect(cssRuleObjects).toEqual([
       {
         order: 'media',
-        rule: '@media (max-width: 512px) {._1usel6w{color:red;}}',
+        rule: '@media (max-width: 512px){._1usel6w{color:red;}}',
       },
       {
         order: 'media',
-        rule: '@media (max-width: 512px) {@supports not (display: grid) {._16aqfzc{display:flex;}}}',
+        rule: '@media (max-width: 512px){@supports not (display: grid){._16aqfzc{display:flex;}}}',
       },
     ]);
   });
