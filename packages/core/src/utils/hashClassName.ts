@@ -11,13 +11,11 @@ type Args = {
 };
 
 export const hashClassName = ({
-  selectors: { pseudo, media, layer, support },
+  selectors: { nested, atRules },
   property,
   styleValue,
 }: Args): string => {
   return `_${hash(
-    `${property}${pseudo}${media}${layer}${support}${styleValueStringify(
-      styleValue,
-    )}`,
+    `${property}${nested}${atRules.join('')}${styleValueStringify(styleValue)}`,
   )}`;
 };
