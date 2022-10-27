@@ -23,7 +23,7 @@ export const compileCss = ({
   rule = `${resolvedSelector}{${declaration}}`;
 
   if (atRules.length !== 0) {
-    atRules.forEach((atRule) => (rule = `${atRule} {${rule}}`));
+    atRules.forEach((atRule) => (rule = `${atRule}{${rule}}`));
   }
 
   return rule;
