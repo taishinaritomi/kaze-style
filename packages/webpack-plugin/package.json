@@ -9,6 +9,7 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/webpack-plugin"
   },
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",

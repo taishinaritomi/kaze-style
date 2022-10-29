@@ -4,6 +4,7 @@
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/taishinaritomi/kaze-style.git",
@@ -31,8 +32,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch  --entry ./src/runtime.ts",
-    "build": "tsx ./../../scripts/build.ts  --entry ./src/runtime.ts"
+    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/runtime.ts",
+    "build": "tsx ./../../scripts/build.ts --entry ./src/runtime.ts"
   },
   "dependencies": {
     "csstype": "^3.1.1"

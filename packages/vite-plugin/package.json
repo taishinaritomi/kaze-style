@@ -9,6 +9,7 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/vite-plugin"
   },
+  "type": "module",
   "sideEffects": false,
   "main": "dist/index.cjs",
   "module": "dist/index.js",
