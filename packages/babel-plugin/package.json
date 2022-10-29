@@ -10,9 +10,16 @@
     "directory": "packages/babel-plugin"
   },
   "type": "module",
-  "main": "dist/index.cjs",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist",
     "LICENSE"

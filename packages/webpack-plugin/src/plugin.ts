@@ -7,8 +7,10 @@ type PluginOptions = {
 };
 
 const pluginName = 'KazePlugin';
-const loader = require.resolve('../loader');
-const preLoader = require.resolve('../preLoader');
+
+//TODO not support esm
+const loader = require.resolve('./loader');
+const preLoader = require.resolve('./preLoader');
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;

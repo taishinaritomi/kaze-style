@@ -11,18 +11,18 @@
     "directory": "packages/core"
   },
   "sideEffects": false,
-  "main": "dist/index.cjs",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "require": "./dist/cjs/index.js",
       "types": "./dist/index.d.ts"
     },
     "./runtime": {
       "import": "./dist/runtime.js",
-      "require": "./dist/runtime.cjs",
+      "require": "./dist/cjs/runtime.js",
       "types": "./dist/runtime.d.ts"
     }
   },
@@ -32,8 +32,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/runtime.ts",
-    "build": "tsx ./../../scripts/build.ts --entry ./src/runtime.ts"
+    "dev": "tsx ./../../scripts/build.ts --watch",
+    "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
     "csstype": "^3.1.1"

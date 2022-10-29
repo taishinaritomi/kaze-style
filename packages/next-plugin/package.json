@@ -10,7 +10,7 @@
     "directory": "packages/next-plugin"
   },
   "type": "module",
-  "main": "dist/index.cjs",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [

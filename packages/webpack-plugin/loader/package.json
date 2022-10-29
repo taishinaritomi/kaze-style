@@ -1,6 +1,0 @@
-{
-  "main": "../dist/loader.cjs",
-  "module": "../dist/loader.js",
-  "typings": "../dist/loader.d.ts",
-  "sideEffects": false
-}
