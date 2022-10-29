@@ -17,13 +17,18 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./runtime": {
       "import": "./dist/runtime.js",
-      "require": "./dist/cjs/runtime.js",
-      "types": "./dist/runtime.d.ts"
+      "require": "./dist/cjs/runtime.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "runtime": [
+        "./dist/runtime"
+      ]
     }
   },
   "files": [
