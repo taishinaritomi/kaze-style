@@ -2,13 +2,8 @@
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     "target": "esnext",
-    "moduleResolution": "NodeNext"
+    "module": "esnext",
+    "moduleResolution": "node"
   },
-  "exclude": [
-    "**/node_modules",
-    "**/dist",
-    "**/*.spec.*",
-    "**/*.js",
-    "**/*.mjs"
-  ]
+  "exclude": ["**/node_modules", "**/dist", "**/*.spec.*", "**/*.*js"]
 }

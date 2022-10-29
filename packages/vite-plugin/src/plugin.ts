@@ -1,6 +1,5 @@
 import { cssRuleObjectsToCssString, sortCss } from '@kaze-style/build-man';
 import type { CssRuleObject } from '@kaze-style/core';
-//@ts-expect-error type
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';
 

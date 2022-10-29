@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/babel-plugin",
-  "version": "0.9.0",
+  "version": "0.9.0-0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -9,9 +9,16 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/babel-plugin"
   },
-  "main": "dist/index.cjs",
+  "type": "module",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "files": [
     "dist",
     "LICENSE"
@@ -24,7 +31,7 @@
     "@babel/helper-plugin-utils": "^7.19.0"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.9.0"
+    "@kaze-style/core": "^0.9.0-0"
   },
   "peerDependencies": {
     "@babel/core": ">=7"

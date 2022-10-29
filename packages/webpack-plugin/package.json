@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/webpack-plugin",
-  "version": "0.9.0",
+  "version": "0.9.0-0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -9,26 +9,26 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/webpack-plugin"
   },
-  "main": "dist/index.cjs",
+  "type": "module",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/cjs/index.js"
     },
     "./virtualLoader": {
       "import": "./dist/virtualLoader.js",
-      "require": "./dist/virtualLoader.cjs"
+      "require": "./dist/cjs/virtualLoader.js"
     },
     "./preLoader": {
       "import": "./dist/preLoader.js",
-      "require": "./dist/preLoader.cjs"
+      "require": "./dist/cjs/preLoader.js"
     },
     "./loader": {
       "import": "./dist/loader.js",
-      "require": "./dist/loader.cjs"
+      "require": "./dist/cjs/loader.js"
     },
     "./assets/*": "./assets/*"
   },
@@ -41,14 +41,14 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsx ./../../scripts/build.ts --watch --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts",
-    "build": "tsx ./../../scripts/build.ts --entry ./src/virtualLoader.ts --entry ./src/preLoader.ts --entry ./src/loader.ts"
+    "dev": "tsx ./../../scripts/build.ts --watch",
+    "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@kaze-style/build-man": "^0.9.0"
+    "@kaze-style/build-man": "^0.9.0-0"
   },
   "peerDependencies": {
-    "@kaze-style/react": "^0.9.0",
+    "@kaze-style/react": "^0.9.0-0",
     "webpack": "^5"
   }
 }

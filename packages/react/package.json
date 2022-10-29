@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/react",
-  "version": "0.9.0",
+  "version": "0.9.0-0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -9,10 +9,17 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/react"
   },
+  "type": "module",
   "sideEffects": false,
-  "main": "dist/index.cjs",
+  "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "files": [
     "dist",
     "LICENSE"
@@ -25,6 +32,6 @@
     "react": ">=16"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.9.0"
+    "@kaze-style/core": "^0.9.0-0"
   }
 }

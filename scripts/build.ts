@@ -1,51 +1,74 @@
 import { exec } from 'child_process';
+import path from 'path';
 import arg from 'arg';
-import type { BuildResult } from 'esbuild';
+import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
-import { nodeExternalsPlugin } from 'esbuild-node-externals';
-import glob from 'fast-glob';
+import fs from 'fs-extra';
+import glob from 'glob';
+
+const addExtensionPlugin = (): Plugin => {
+  return {
+    name: 'add-extension',
+    setup(build: PluginBuild) {
+      build.onResolve({ filter: /.*/ }, (args) => {
+        if (args.importer) {
+          const resolvedPath = path.join(args.resolveDir, args.path);
+          if (glob.sync(`${resolvedPath}.ts`).length) {
+            return { path: `${args.path}.js`, external: true };
+          } else if (glob.sync(`${resolvedPath}/index.ts`).length) {
+            return { path: `${args.path}/index.js`, external: true };
+          }
+          return { external: true };
+        }
+        return undefined;
+      });
+    },
+  };
+};
 
 const args = arg({
-  '--entry': [String],
   '--watch': Boolean,
 });
 
-const isWatch = args['--watch'] || false;
-const entries = args['--entry'] || [];
-entries.push('./src/index.ts');
+const outDir = 'dist';
+const entryDir = 'src';
 
-const cjsBuilds = (): Promise<BuildResult>[] => {
-  return entries.map((entry) => {
-    const fileName = entry.split('/').slice(-1)[0]?.split('.')[0];
-    return build({
-      watch: isWatch,
-      entryPoints: [entry],
-      logLevel: 'info',
-      bundle: true,
-      platform: 'node',
-      format: 'cjs',
-      minify: true,
-      sourcemap: true,
-      outfile: `./dist/${fileName}.cjs`,
-      plugins: [nodeExternalsPlugin()],
-    });
-  });
+const isWatch = args['--watch'] || false;
+
+const options: BuildOptions = {
+  watch: isWatch,
+  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
+    ignore: ['./**/*.spec.ts'],
+  }),
+  logLevel: 'info',
+  minify: true,
+  platform: 'node',
 };
 
-Promise.all([
-  build({
-    watch: isWatch,
-    entryPoints: glob.sync('./src/**/*.ts', { ignore: ['**/*.spec.ts'] }),
-    logLevel: 'info',
-    format: 'esm',
-    minify: true,
-    outdir: 'dist',
-  }),
-  ...cjsBuilds(),
-]);
+const main = async () => {
+  await fs.remove(outDir);
+  await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' });
 
-exec(
-  `tsc ${
-    isWatch ? '-w' : ''
-  } --declaration --emitDeclarationOnly --outDir dist`,
-);
+  await Promise.all([
+    build({
+      ...options,
+      format: 'esm',
+      outdir: outDir,
+      bundle: true,
+      plugins: [addExtensionPlugin()],
+    }),
+    build({
+      ...options,
+      format: 'cjs',
+      outdir: `${outDir}/cjs`,
+    }),
+  ]);
+
+  exec(
+    `tsc ${
+      isWatch ? '-w' : ''
+    } --declaration --emitDeclarationOnly --outDir dist`,
+  );
+};
+
+main();
