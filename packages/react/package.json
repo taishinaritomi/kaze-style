@@ -25,13 +25,14 @@
     "LICENSE"
   ],
   "scripts": {
+    "type-check": "tsc --noEmit",
     "dev": "tsx ./../../scripts/build.ts --watch",
     "build": "tsx ./../../scripts/build.ts"
   },
-  "peerDependencies": {
-    "react": ">=16"
-  },
   "dependencies": {
     "@kaze-style/core": "^0.9.0-0"
+  },
+  "peerDependencies": {
+    "react": ">=16"
   }
 }

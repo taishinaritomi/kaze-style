@@ -25,6 +25,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "type-check": "tsc --noEmit",
     "dev": "tsx ./../../scripts/build.ts --watch",
     "build": "tsx ./../../scripts/build.ts"
   },

@@ -10,6 +10,7 @@
     "directory": "packages/webpack-plugin"
   },
   "type": "module",
+  "sideEffects": false,
   "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -34,13 +35,11 @@
   },
   "files": [
     "dist",
-    "loader",
-    "preLoader",
-    "virtualLoader",
     "assets",
     "LICENSE"
   ],
   "scripts": {
+    "type-check": "tsc --noEmit",
     "dev": "tsx ./../../scripts/build.ts --watch",
     "build": "tsx ./../../scripts/build.ts"
   },
