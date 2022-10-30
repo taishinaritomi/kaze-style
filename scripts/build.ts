@@ -38,7 +38,7 @@ const outDir = 'dist';
 const entryDir = 'src';
 
 const isWatch = args['--watch'] || false;
-const isCjsOnly= args['--cjsOnly'] || false;
+const isCjsOnly = args['--cjsOnly'] || false;
 
 const options: BuildOptions = {
   watch: isWatch,
@@ -52,16 +52,18 @@ const options: BuildOptions = {
 
 const main = async () => {
   await fs.remove(outDir);
-  !isCjsOnly && await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' });
+  !isCjsOnly &&
+    (await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' }));
 
   await Promise.all([
-    !isCjsOnly && build({
-      ...options,
-      format: 'esm',
-      outdir: outDir,
-      bundle: true,
-      plugins: [addExtensionPlugin()],
-    }),
+    !isCjsOnly &&
+      build({
+        ...options,
+        format: 'esm',
+        outdir: outDir,
+        bundle: true,
+        plugins: [addExtensionPlugin()],
+      }),
     build({
       ...options,
       format: 'cjs',
