@@ -17,9 +17,8 @@ export type LoaderContext = _LoaderContext<never> & {
   _compilation: NonNullable<_LoaderContext<never>['_compilation']>;
 };
 
-//TODO not support esm
 const virtualLoaderPath = require.resolve('./virtualLoader');
-const cssPath = require.resolve('../../assets/kaze.css');
+const cssPath = require.resolve('../assets/kaze.css');
 
 function loader(
   this: LoaderContext,

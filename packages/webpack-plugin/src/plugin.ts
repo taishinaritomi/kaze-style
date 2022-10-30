@@ -8,7 +8,6 @@ type PluginOptions = {
 
 const pluginName = 'KazePlugin';
 
-//TODO not support esm
 const loader = require.resolve('./loader');
 const preLoader = require.resolve('./preLoader');
 
