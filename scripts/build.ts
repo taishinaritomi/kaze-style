@@ -30,6 +30,7 @@ const addExtensionPlugin = (): Plugin => {
 };
 
 const args = arg({
+  '--cjsOnly': Boolean,
   '--watch': Boolean,
 });
 
@@ -37,6 +38,7 @@ const outDir = 'dist';
 const entryDir = 'src';
 
 const isWatch = args['--watch'] || false;
+const isCjsOnly= args['--cjsOnly'] || false;
 
 const options: BuildOptions = {
   watch: isWatch,
@@ -50,10 +52,10 @@ const options: BuildOptions = {
 
 const main = async () => {
   await fs.remove(outDir);
-  await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' });
+  !isCjsOnly && await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' });
 
   await Promise.all([
-    build({
+    !isCjsOnly && build({
       ...options,
       format: 'esm',
       outdir: outDir,
@@ -63,7 +65,7 @@ const main = async () => {
     build({
       ...options,
       format: 'cjs',
-      outdir: `${outDir}/cjs`,
+      outdir: isCjsOnly ? outDir : `${outDir}/cjs`,
     }),
     exec(
       `tsc ${

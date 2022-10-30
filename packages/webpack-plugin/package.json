@@ -9,28 +9,14 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/webpack-plugin"
   },
-  "type": "module",
   "sideEffects": false,
-  "main": "dist/cjs/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js"
-    },
-    "./virtualLoader": {
-      "import": "./dist/virtualLoader.js",
-      "require": "./dist/cjs/virtualLoader.js"
-    },
-    "./preLoader": {
-      "import": "./dist/preLoader.js",
-      "require": "./dist/cjs/preLoader.js"
-    },
-    "./loader": {
-      "import": "./dist/loader.js",
-      "require": "./dist/cjs/loader.js"
-    },
+    ".": "./dist/index.js",
+    "./virtualLoader": "./dist/virtualLoader.js",
+    "./preLoader": "./dist/preLoader.js",
+    "./loader": "./dist/loader.js",
     "./assets/*": "./assets/*"
   },
   "files": [
@@ -40,8 +26,8 @@
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts"
+    "dev": "tsx ./../../scripts/build.ts --watch --cjsOnly",
+    "build": "tsx ./../../scripts/build.ts --cjsOnly"
   },
   "dependencies": {
     "@kaze-style/build-man": "^0.9.0-0"
