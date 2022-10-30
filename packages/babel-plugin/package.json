@@ -10,7 +10,6 @@
     "directory": "packages/babel-plugin"
   },
   "type": "module",
-  "sideEffects": false,
   "main": "dist/cjs/index.js",
   "module": "dist/index.js",
   "typings": "dist/index.d.ts",
