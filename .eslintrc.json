@@ -11,23 +11,14 @@
   "overrides": [
     {
       "files": [
-        "./packages/webpack-plugin/src/preLoader.ts",
-        "./packages/webpack-plugin/src/loader.ts",
-        "./packages/webpack-plugin/src/virtualLoader.ts",
-        "./playground/next/src/pages/**",
-        "./playground/next/next.config.*",
-        "./playground/react-vite/vite.config.*",
-        "./vitest.config.ts"
+        "./packages/webpack-plugin/src/{preLoader,loader,virtualLoader}.ts",
+        "./playground/next*/src/{pages,app}/**",
+        "./playground/next*/next.config.*",
+        "./playground/react-vite/vite.config.*"
       ],
       "rules": {
         "import/no-default-export": "off",
         "import/prefer-default-export": "error"
-      }
-    },
-    {
-      "files": ["./packages/webpack-plugin/src/compiler.ts"],
-      "rules": {
-        "@typescript-eslint/no-explicit-any": "off"
       }
     },
     {
