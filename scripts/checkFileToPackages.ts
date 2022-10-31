@@ -20,6 +20,6 @@ const main = async () => {
       throw new Error('README has not been copied.');
     }
   }
-}
+};
 
 main();
