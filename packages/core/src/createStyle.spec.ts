@@ -119,15 +119,15 @@ describe('createStyle', () => {
       base: {
         animationName: {
           from: {
-            color: 'green'
+            color: 'green',
           },
           to: {
-            color: 'red'
+            color: 'red',
           },
         },
       },
     });
-    
+
     expect(classes).toEqual({
       base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
     });
