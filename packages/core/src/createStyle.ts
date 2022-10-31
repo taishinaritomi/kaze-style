@@ -2,6 +2,7 @@ import { ClassName } from './ClassName';
 import { resolveStyle } from './resolveStyle';
 import type { CssRuleObject } from './styleOrder';
 import type { Classes, ClassesObject, KazeStyle } from './types/style';
+import { cssRuleObjectsUniquify } from './utils/cssRuleObjectsUniquify';
 
 type Result<K extends string> = {
   cssRuleObjects: CssRuleObject[];
@@ -28,13 +29,6 @@ export const createStyle = <K extends string>(
   return {
     classes,
     classesObject,
-    cssRuleObjects: Array.from(
-      new Map(
-        allCssRuleObjects.map((allCssRuleObject) => [
-          allCssRuleObject.rule,
-          allCssRuleObject,
-        ]),
-      ).values(),
-    ),
+    cssRuleObjects: cssRuleObjectsUniquify(allCssRuleObjects),
   };
 };

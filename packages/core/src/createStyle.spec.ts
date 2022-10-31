@@ -137,7 +137,7 @@ describe('createStyle', () => {
     expect(cssRuleObjects).toEqual([
       {
         order: 'keyframes',
-        rule: '@keyframes _6qto8h {from{color:green;}to{color:red;}}',
+        rule: '@keyframes _6qto8h{from{color:green;}to{color:red;}}',
       },
       {
         order: 'normal',

@@ -9,12 +9,19 @@ describe('createStyle', () => {
         '@media (max-width:1024px)': {
           color: 'green',
         },
+        '@media (max-width:512px)': {
+          color: 'blue',
+        },
       },
     });
     expect(cssRuleObjects).toEqual([
       {
         order: 'global',
         rule: '@media (max-width:1024px){html{color:green;}}',
+      },
+      {
+        order: 'global',
+        rule: '@media (max-width:512px){html{color:blue;}}',
       },
       { order: 'global', rule: 'html{color:red;}' },
     ]);

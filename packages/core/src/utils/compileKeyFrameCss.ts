@@ -11,12 +11,12 @@ export const compileKeyFrameCss = (keyframeObject: KeyframesCssRules) => {
       `${compileObjectCss({
         selector: percentage,
         style: value || {},
-      })}`,
+      }).join('')}`,
     );
   }
   const css = percentageRules.join('');
   const keyframeName = `_${hash(css)}`;
-  const keyframesRule = `@keyframes ${keyframeName} {${css}}`;
+  const keyframesRule = `@keyframes ${keyframeName}{${css}}`;
 
   return { keyframesRule, keyframeName };
 };
