@@ -113,4 +113,36 @@ describe('createStyle', () => {
       },
     ]);
   });
+
+  it('keyframes', () => {
+    const { classes, classesObject, cssRuleObjects } = createStyle({
+      base: {
+        animationName: {
+          from: {
+            color: 'green'
+          },
+          to: {
+            color: 'red'
+          },
+        },
+      },
+    });
+    
+    expect(classes).toEqual({
+      base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
+    });
+    expect(classesObject).toEqual({
+      base: { _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' },
+    });
+    expect(cssRuleObjects).toEqual([
+      {
+        order: 'keyframes',
+        rule: '@keyframes _6qto8h {from{color:green;}to{color:red;}}',
+      },
+      {
+        order: 'normal',
+        rule: '._ep4wyi{animation-name:_6qto8h;}',
+      },
+    ]);
+  });
 });
