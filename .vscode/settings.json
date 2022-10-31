@@ -6,6 +6,7 @@
     "stylis",
     "cacheable",
     "esbuild",
-    "outfile"
+    "outfile",
+    "uniquify"
   ]
 }

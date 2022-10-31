@@ -22,8 +22,8 @@
     "code:check:type": "turbo run type-check --parallel",
     "code:check:lint": "eslint . --ignore-path .gitignore",
     "code:check:format": "prettier . --check --ignore-path .gitignore",
-    "readme:copy": "tsx scripts/copy.ts --file README.md",
-    "readme:check": "tsx scripts/check.ts --file README.md",
+    "readme:copy": "tsx scripts/copyFileToPackages.ts README.md",
+    "readme:check": "tsx scripts/checkFileToPackages.ts README.md",
     "release": "changeset publish"
   },
   "devDependencies": {

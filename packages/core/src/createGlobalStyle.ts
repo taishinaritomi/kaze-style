@@ -2,6 +2,7 @@ import type { CssRuleObject } from './styleOrder';
 import type { CssValue, KazeGlobalStyle } from './types/style';
 import type { AndArray, NestedObj } from './types/utils';
 import { compileObjectCss } from './utils/compileObjectCss';
+import { cssRuleObjectsUniquify } from './utils/cssRuleObjectsUniquify';
 
 type Result = {
   cssRuleObjects: CssRuleObject[];
@@ -17,14 +18,17 @@ export const createGlobalStyle = (globalStyles: KazeGlobalStyle): Result => {
       style: selectorStyle || {},
       selector,
     });
-    cssRules.forEach((cssRule) => {
-      allCssRuleObjects.push({
-        rule: cssRule,
-        order: 'global',
-      });
-    });
+    allCssRuleObjects.push(
+      ...cssRules.map(
+        (cssRule) =>
+          ({
+            rule: cssRule,
+            order: 'global',
+          } as const),
+      ),
+    );
   }
   return {
-    cssRuleObjects: Array.from(new Set(allCssRuleObjects)),
+    cssRuleObjects: cssRuleObjectsUniquify(allCssRuleObjects),
   };
 };
