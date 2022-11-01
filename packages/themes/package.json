@@ -31,5 +31,8 @@
   },
   "devDependencies": {
     "@kaze-style/core": "^0.9.0-3"
+  },
+  "peerDependencies": {
+    "@kaze-style/core": "^0.9.0-3"
   }
 }
