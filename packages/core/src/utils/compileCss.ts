@@ -1,6 +1,6 @@
 import type { Selectors } from '../resolveStyle';
 
-type CompileCss = {
+type Args = {
   selector: string;
   selectors: Selectors;
   declaration: string;
@@ -10,7 +10,7 @@ export const compileCss = ({
   selector,
   selectors: { nested, atRules },
   declaration,
-}: CompileCss): string => {
+}: Args): string => {
   let resolvedSelector = '';
   let rule = '';
 

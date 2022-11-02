@@ -1,6 +1,6 @@
 import type { Selectors } from '../resolveStyle';
 import { isNestedSelector } from './isNestedSelector';
-import { normalizeNestedProperty } from './normalizeNestedProperty';
+import { normalizeNestedSelector } from './normalizeNestedSelector';
 
 type Args = {
   property: string;
@@ -14,7 +14,10 @@ export const resolveSelectors = ({ property, selectors }: Args) => {
     });
   } else if (isNestedSelector(property)) {
     return Object.assign({}, selectors, {
-      nested: normalizeNestedProperty(property, selectors.nested),
+      nested: normalizeNestedSelector({
+        current: selectors.nested,
+        nested: property,
+      }),
     });
   } else {
     return selectors;
