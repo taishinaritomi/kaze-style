@@ -1,6 +1,5 @@
 import { hash } from '../hash';
-import type { Selectors } from '../resolveStyle';
-import type { CssValue } from '../types/style';
+import type { CssValue, Selectors } from '../types/style';
 import type { AndArray } from '../types/utils';
 import { styleValueStringify } from './styleValueStringify';
 

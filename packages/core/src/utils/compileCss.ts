@@ -1,4 +1,4 @@
-import type { Selectors } from '../resolveStyle';
+import type { Selectors } from '../types/style';
 
 type Args = {
   selector: string;

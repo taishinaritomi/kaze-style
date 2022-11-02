@@ -96,3 +96,8 @@ export type KazeGlobalStyle = {
 
 export type Classes<K extends string> = Record<K, string>;
 export type ClassesObject<K extends string> = Record<K, ClassName['object']>;
+
+export type Selectors = {
+  nested: string;
+  atRules: string[];
+};
