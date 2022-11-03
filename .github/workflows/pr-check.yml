@@ -5,7 +5,7 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  code-check:
+  pr-check:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
