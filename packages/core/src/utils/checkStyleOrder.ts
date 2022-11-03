@@ -1,5 +1,5 @@
-import type { Selectors } from '../resolveStyle';
 import type { StyleOrder } from '../styleOrder';
+import type { Selectors } from '../types/common';
 
 type Args = {
   selectors: Selectors;

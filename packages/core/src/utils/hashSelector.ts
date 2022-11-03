@@ -1,5 +1,5 @@
 import { hash } from '../hash';
-import type { Selectors } from '../resolveStyle';
+import type { Selectors } from '../types/common';
 
 type Args = {
   selectors: Selectors;

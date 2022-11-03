@@ -1,4 +1,4 @@
-import type { CssValue } from '../types/style';
+import type { CssValue, Selectors } from '../types/common';
 import type { AndArray, NestedObj } from '../types/utils';
 import { compileCss } from './compileCss';
 import { isCssValue } from './isCssValue';
@@ -9,10 +9,7 @@ import { styleDeclarationStringify } from './styleDeclarationStringify';
 type Args = {
   style: NestedObj<AndArray<CssValue>>;
   selector: string;
-  selectors?: {
-    nested: string;
-    atRules: string[];
-  };
+  selectors?: Selectors;
   resolvedStyle?: {
     cssRules: string[];
   };

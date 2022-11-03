@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/vite-plugin",
-  "version": "0.9.0-3",
+  "version": "0.9.0-4",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -29,11 +29,11 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@kaze-style/build-man": "^0.9.0-3",
+    "@kaze-style/build-man": "^0.9.0-4",
     "esbuild": "^0.15.10"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.9.0-3"
+    "@kaze-style/core": "^0.9.0-4"
   },
   "peerDependencies": {
     "vite": "^3.0.0"

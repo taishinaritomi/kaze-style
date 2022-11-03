@@ -1,6 +1,7 @@
 import { createStyle } from './createStyle';
 import type { CssRuleObject } from './styleOrder';
-import type { Classes, ClassesObject, KazeStyle } from './types/style';
+import type { ClassesObject, Classes } from './types/common';
+import type { KazeStyle } from './types/style';
 
 export type ForBuildStyle<K extends string> = {
   classesObject: ClassesObject<K>;

@@ -1,7 +1,8 @@
 import { ClassName } from './ClassName';
 import { resolveStyle } from './resolveStyle';
 import type { CssRuleObject } from './styleOrder';
-import type { Classes, ClassesObject, KazeStyle } from './types/style';
+import type { Classes, ClassesObject } from './types/common';
+import type { KazeStyle } from './types/style';
 import { cssRuleObjectsUniquify } from './utils/cssRuleObjectsUniquify';
 
 type Result<K extends string> = {

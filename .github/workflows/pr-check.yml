@@ -1,11 +1,11 @@
-name: Test
+name: Pull request check
 on:
   pull_request:
     branches:
       - main
   workflow_dispatch:
 jobs:
-  test:
+  pr-check:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -16,8 +16,12 @@ jobs:
           node-version: '16.x'
           cache: npm
       - name: install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
       - name: build packages
-        run: yarn build:packages
-      - name: test run
+        run: yarn build
+      - name: code check
+        run: yarn code:check
+      - name: readme check
+        run: yarn readme:check
+      - name: test
         run: yarn test
