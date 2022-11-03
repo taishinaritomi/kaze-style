@@ -1,5 +1,6 @@
 import type { CssRuleObject } from './styleOrder';
-import type { CssValue, KazeGlobalStyle } from './types/style';
+import type { CssValue } from './types/common';
+import type { KazeGlobalStyle } from './types/globalStyle';
 import type { AndArray, NestedObj } from './types/utils';
 import { compileObjectCss } from './utils/compileObjectCss';
 import { cssRuleObjectsUniquify } from './utils/cssRuleObjectsUniquify';
@@ -8,14 +9,15 @@ type Result = {
   cssRuleObjects: CssRuleObject[];
 };
 
-export const createGlobalStyle = (globalStyles: KazeGlobalStyle): Result => {
+export const createGlobalStyle = <T extends string>(
+  _styles: KazeGlobalStyle<T>,
+): Result => {
   const allCssRuleObjects: CssRuleObject[] = [];
-  for (const selector in globalStyles) {
-    const selectorStyle = globalStyles[selector] as NestedObj<
-      AndArray<CssValue>
-    >;
+  const styles = _styles as Record<T, NestedObj<AndArray<CssValue>>>;
+  for (const selector in styles) {
+    const style = styles[selector];
     const cssRules = compileObjectCss({
-      style: selectorStyle || {},
+      style: style,
       selector,
     });
     allCssRuleObjects.push(

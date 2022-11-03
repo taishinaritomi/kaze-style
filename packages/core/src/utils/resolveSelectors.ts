@@ -1,4 +1,4 @@
-import type { Selectors } from '../types/style';
+import type { Selectors } from '../types/common';
 import { isNestedSelector } from './isNestedSelector';
 import { normalizeNestedSelector } from './normalizeNestedSelector';
 

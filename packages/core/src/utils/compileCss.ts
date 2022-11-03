@@ -1,4 +1,4 @@
-import type { Selectors } from '../types/style';
+import type { Selectors } from '../types/common';
 
 type Args = {
   selector: string;

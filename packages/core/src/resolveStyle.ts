@@ -1,6 +1,7 @@
 import type { ClassName } from './ClassName';
 import type { CssRuleObject } from './styleOrder';
-import type { KeyframesCssRules, Selectors, SupportStyle } from './types/style';
+import type { Selectors } from './types/common';
+import type { SupportStyle, KeyframesCssRules } from './types/style';
 import { checkStyleOrder } from './utils/checkStyleOrder';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';

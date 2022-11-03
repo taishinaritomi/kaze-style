@@ -1,14 +1,14 @@
 import { createGlobalStyle } from './createGlobalStyle';
 import type { CssRuleObject } from './styleOrder';
-import type { KazeGlobalStyle } from './types/style';
+import type { KazeGlobalStyle } from './types/globalStyle';
 
 export type ForBuildGlobalStyle = {
   cssRuleObjects: CssRuleObject[];
   index: number;
 };
 
-export const __preGlobalStyle = (
-  globalStyles: KazeGlobalStyle,
+export const __preGlobalStyle = <T extends string>(
+  globalStyles: KazeGlobalStyle<T>,
   forBuild: {
     fileName: string;
     globalStyles: ForBuildGlobalStyle[];

@@ -163,4 +163,4 @@ export const resetStyle = {
     height: 'auto',
   },
 } as const;
-export const __type__: KazeGlobalStyle = resetStyle;
+export const __type__: KazeGlobalStyle<string> = resetStyle;

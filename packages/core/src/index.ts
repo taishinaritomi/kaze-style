@@ -7,12 +7,8 @@ export * from './__preStyle';
 export * from './__preGlobalStyle';
 export * from './ClassName';
 export * from './styleOrder';
-export type {
-  KazeStyle,
-  KazeGlobalStyle,
-  SupportStyle,
-  SupportGlobalStyle,
-  Classes,
-} from './types/style';
+export type { Classes } from './types/common';
+export type { KazeStyle, SupportStyle } from './types/style';
+export type { KazeGlobalStyle, SupportGlobalStyle } from './types/globalStyle';
 export type { ForBuildStyle } from './__preStyle';
 export type { ForBuildGlobalStyle } from './__preGlobalStyle';

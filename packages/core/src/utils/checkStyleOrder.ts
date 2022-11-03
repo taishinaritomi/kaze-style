@@ -1,5 +1,5 @@
 import type { StyleOrder } from '../styleOrder';
-import type { Selectors } from '../types/style';
+import type { Selectors } from '../types/common';
 
 type Args = {
   selectors: Selectors;

@@ -1,4 +1,4 @@
-import type { CssValue, Selectors } from '../types/style';
+import type { CssValue, Selectors } from '../types/common';
 import type { AndArray, NestedObj } from '../types/utils';
 import { compileCss } from './compileCss';
 import { isCssValue } from './isCssValue';
