@@ -25,3 +25,8 @@ jobs:
         run: yarn readme:check
       - name: test
         run: yarn test
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+  
