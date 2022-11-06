@@ -30,11 +30,11 @@ const addExtensionPlugin = (): Plugin => {
 };
 
 const formatBytes = (x: number) => {
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
-  if (x === 0) return 'n/a'
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (x === 0) return 'n/a';
   const i = Math.floor(Math.log(x) / Math.log(1024));
-  if (i === 0) return `${x}${sizes[i]}`
-  return `${(x / (1024 ** i)).toFixed(1)}${sizes[i]}`;
+  if (i === 0) return `${x}${sizes[i]}`;
+  return `${(x / 1024 ** i).toFixed(1)}${sizes[i]}`;
 };
 
 const args = arg({
