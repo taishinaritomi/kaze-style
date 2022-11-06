@@ -27,7 +27,7 @@ export const preTransform = ({
     compact: false,
     filename: path,
     sourceMaps: sourceMaps || false,
-    plugins: [preTransformPlugin,typescriptSyntax],
+    plugins: [preTransformPlugin, typescriptSyntax],
     sourceFileName: path,
     inputSourceMap: inputSourceMap,
   });

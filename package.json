@@ -15,7 +15,7 @@
     "dev": "turbo run dev",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "test": "vitest run",
-    "code:fix": "run-s  code:fix:*",
+    "code:fix": "run-s code:fix:*",
     "code:fix:lint": "eslint . --fix --ignore-path .gitignore",
     "code:fix:format": "prettier . --write --ignore-path .gitignore",
     "code:check": "run-p code:check:*",

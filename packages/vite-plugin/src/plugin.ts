@@ -7,7 +7,7 @@ export const plugin = (): Plugin => {
   const cssRuleObjects: CssRuleObject[] = [];
   return {
     name: 'kaze-transform',
-    enforce: "pre",
+    enforce: 'pre',
     resolveId(source) {
       const [validId] = source.split('?');
       if (/kaze.css$/.test(validId || '')) {
