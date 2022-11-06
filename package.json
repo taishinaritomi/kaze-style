@@ -9,13 +9,13 @@
     "playground/*"
   ],
   "scripts": {
-    "clean": "rimraf **/dist **/.next **/.turbo **/node_modules",
+    "clean": "rimraf **/dist* **/.next **/.turbo **/node_modules",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
     "dev:packages": "turbo run dev --filter=./packages/*",
     "test": "vitest run",
-    "code:fix": "run-s  code:fix:*",
+    "code:fix": "run-s code:fix:*",
     "code:fix:lint": "eslint . --fix --ignore-path .gitignore",
     "code:fix:format": "prettier . --write --ignore-path .gitignore",
     "code:check": "run-p code:check:*",
@@ -48,6 +48,7 @@
     "eslint-plugin-unused-imports": "^2.0.0",
     "fs-extra": "^10.1.0",
     "glob": "^8.0.3",
+    "gzip-size": "^7.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "process": "^0.11.10",

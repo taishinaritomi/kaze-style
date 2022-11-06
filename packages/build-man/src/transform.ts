@@ -1,5 +1,7 @@
 import type { BabelFileMetadata, TransformOptions } from '@babel/core';
 import { transformSync } from '@babel/core';
+// @ts-expect-error type
+import typescriptSyntax from '@babel/plugin-syntax-typescript';
 import type { Options } from '@kaze-style/babel-plugin';
 import { transformPlugin } from '@kaze-style/babel-plugin';
 
@@ -28,7 +30,7 @@ export const transform = ({
     compact: false,
     filename: path,
     sourceMaps: sourceMaps || false,
-    plugins: [[transformPlugin, options]],
+    plugins: [[transformPlugin, options], typescriptSyntax],
     sourceFileName: path,
     inputSourceMap: inputSourceMap,
   });
