@@ -22,7 +22,6 @@ const addExtensionPlugin = (): Plugin => {
           } else if (glob.sync(`${resolvedPath}/index.ts`).length) {
             return { path: `${args.path}/index.js`, external: true };
           }
-          return { external: true };
         }
         return undefined;
       });
