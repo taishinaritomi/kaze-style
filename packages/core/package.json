@@ -39,7 +39,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts"
+    "build": "tsx ./../../scripts/build.ts --size --sizeEntry src/runtime.ts"
   },
   "dependencies": {
     "csstype": "^3.1.1"

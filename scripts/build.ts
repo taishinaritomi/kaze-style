@@ -6,6 +6,7 @@ import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
 import fs from 'fs-extra';
 import glob from 'glob';
+import { gzipSize } from 'gzip-size';
 
 const exec = util.promisify(childProcess.exec);
 
@@ -29,9 +30,19 @@ const addExtensionPlugin = (): Plugin => {
   };
 };
 
+const formatBytes = (x: number) => {
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
+  if (x === 0) return 'n/a'
+  const i = Math.floor(Math.log(x) / Math.log(1024));
+  if (i === 0) return `${x}${sizes[i]}`
+  return `${(x / (1024 ** i)).toFixed(1)}${sizes[i]}`;
+};
+
 const args = arg({
   '--cjsOnly': Boolean,
   '--watch': Boolean,
+  '--size': Boolean,
+  '--sizeEntry': [String],
 });
 
 const outDir = 'dist';
@@ -39,6 +50,8 @@ const entryDir = 'src';
 
 const isWatch = args['--watch'] || false;
 const isCjsOnly = args['--cjsOnly'] || false;
+const isSize = args['--size'] || false;
+const sizeEntry = args['--sizeEntry'] || [];
 
 const options: BuildOptions = {
   watch: isWatch,
@@ -48,6 +61,29 @@ const options: BuildOptions = {
   logLevel: 'info',
   minify: true,
   platform: 'node',
+};
+
+const bundleSize = async () => {
+  const sizeOutDir = `${outDir}-size`;
+  sizeEntry.push(`${entryDir}/index.ts`);
+  await fs.remove(sizeOutDir);
+  const result = await build({
+    ...options,
+    format: 'esm',
+    entryPoints: sizeEntry,
+    outdir: sizeOutDir,
+    bundle: true,
+    metafile: true,
+  });
+  const report: Record<string, { size: string; gzip: string }> = {};
+  for (const file in result.metafile.outputs) {
+    const code = (await fs.readFile(file)).toString();
+    report[file] = {
+      size: formatBytes(Buffer.byteLength(code, 'utf8')),
+      gzip: formatBytes(await gzipSize(code)),
+    };
+  }
+  await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
 };
 
 const main = async () => {
@@ -64,6 +100,7 @@ const main = async () => {
         bundle: true,
         plugins: [addExtensionPlugin()],
       }),
+    isSize && bundleSize(),
     build({
       ...options,
       format: 'cjs',
