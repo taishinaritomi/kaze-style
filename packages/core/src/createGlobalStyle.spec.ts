@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { createGlobalStyle } from './createGlobalStyle';
 
-describe('createStyle', () => {
+describe('createGlobalStyle', () => {
   it('base', () => {
     const { cssRuleObjects } = createGlobalStyle({
       html: {
