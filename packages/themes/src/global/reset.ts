@@ -164,8 +164,7 @@ export const reset = {
   },
 } as const;
 /**
-* @deprecated
-*/
-
+ * @deprecated
+ */
 export const resetStyle = reset;
 export const __type__: KazeGlobalStyle<string> = reset;
