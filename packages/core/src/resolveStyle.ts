@@ -1,7 +1,7 @@
 import type { ClassName } from './ClassName';
 import type { CssRuleObject } from './styleOrder';
 import type { Selectors } from './types/common';
-import type { SupportStyle, KeyframesCssRules } from './types/style';
+import type { SupportStyle, KeyframesRules } from './types/style';
 import { checkStyleOrder } from './utils/checkStyleOrder';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
@@ -59,7 +59,7 @@ export const resolveStyle = ({
       Object.assign(resolvedStyle.classNameObject, { [selector]: className });
     } else if (isObject(styleValue)) {
       if (property === 'animationName') {
-        const animationNameValue = styleValue as KeyframesCssRules;
+        const animationNameValue = styleValue as KeyframesRules;
         const { keyframesRule, keyframeName } =
           compileKeyFrameCss(animationNameValue);
         resolvedStyle.cssRuleObjects.push({

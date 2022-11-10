@@ -1,10 +1,10 @@
 import type { Pseudos, PropertiesFallback } from 'csstype';
 import type { CssValue, NestedChar } from './common';
-import type { IncludeChar } from './utils';
+import type { IncludeStr } from './utils';
 
-type SupportProperties = Omit<PropertiesFallback<CssValue>, 'animationName'>;
+type SupportRules = Omit<PropertiesFallback<CssValue>, 'animationName'>;
 
-type PredictType =
+type PredictProperties =
   | '@media (max-width: 0)'
   | '@media (min-width: 0)'
   | '@media (prefers-color-scheme: dark)'
@@ -14,32 +14,32 @@ type PredictType =
   | '@supports ()'
   | '@supports not ()';
 
-type PredictTypeRules = {
-  [_ in PredictType]?: SupportStyle;
+type PredictRules = {
+  [_ in PredictProperties]?: SupportStyle;
 };
 
-type PseudosCssRules = {
+type PseudosRules = {
   [_ in Pseudos]?: SupportStyle;
 };
 
-type StringCssRules = {
-  [_ in IncludeChar<NestedChar>]?: SupportStyle;
+type StringRules = {
+  [_ in IncludeStr<NestedChar>]?: SupportStyle;
 };
 
-type CssAnimationNameProperty = {
-  animationName?: KeyframesCssRules | string;
+type AnimationNameRules = {
+  animationName?: KeyframesRules | string;
 };
 
-export type KeyframesCssRules = {
-  [_ in 'from' | 'to']?: SupportProperties;
+export type KeyframesRules = {
+  [_ in 'from' | 'to']?: SupportRules;
 } & {
-  [_ in string]?: SupportProperties;
+  [_ in string]?: SupportRules;
 };
 
-export type SupportStyle = SupportProperties &
-  PseudosCssRules &
-  PredictTypeRules &
-  StringCssRules &
-  CssAnimationNameProperty;
+export type SupportStyle = SupportRules &
+  PseudosRules &
+  PredictRules &
+  StringRules &
+  AnimationNameRules;
 
 export type KazeStyle<T extends string> = Record<T, SupportStyle>;
