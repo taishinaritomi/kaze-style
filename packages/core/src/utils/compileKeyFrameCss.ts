@@ -1,12 +1,12 @@
 import { hash } from '../hash';
-import type { KeyframesCssRules } from '../types/style';
+import type { KeyframesRules } from '../types/style';
 import { compileObjectCss } from './compileObjectCss';
 
-export const compileKeyFrameCss = (keyframeObject: KeyframesCssRules) => {
+export const compileKeyFrameCss = (keyframeObject: KeyframesRules) => {
   const percentageRules: string[] = [];
 
   for (const percentage in keyframeObject) {
-    const value = keyframeObject[percentage as keyof KeyframesCssRules];
+    const value = keyframeObject[percentage as keyof KeyframesRules];
     percentageRules.push(
       `${compileObjectCss({
         selector: percentage,

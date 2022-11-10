@@ -1,6 +1,6 @@
 import type { KazeGlobalStyle } from '@kaze-style/core';
 
-export const resetStyle = {
+export const reset = {
   '*,::before,::after': {
     boxSizing: 'border-box',
     borderWidth: 0,
@@ -163,4 +163,8 @@ export const resetStyle = {
     height: 'auto',
   },
 } as const;
-export const __type__: KazeGlobalStyle<string> = resetStyle;
+/**
+ * @deprecated
+ */
+export const resetStyle = reset;
+export const __type__: KazeGlobalStyle<string> = reset;
