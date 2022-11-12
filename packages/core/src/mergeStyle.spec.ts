@@ -3,7 +3,7 @@ import { ClassName } from './ClassName';
 import { createStyle } from './createStyle';
 import { mergeStyle } from './mergeStyle';
 
-describe('createGlobalStyle', () => {
+describe('mergeStyle', () => {
   it('base', () => {
     const { classes } = createStyle({
       base: {
