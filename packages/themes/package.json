@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/themes",
-  "version": "0.10.1",
+  "version": "0.10.2-canary.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -30,9 +30,9 @@
     "build": "tsx ./../../scripts/build.ts --size"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.10.1"
+    "@kaze-style/core": "^0.10.2-canary.0"
   },
   "peerDependencies": {
-    "@kaze-style/core": "^0.10.1"
+    "@kaze-style/core": "^0.10.2-canary.0"
   }
 }
