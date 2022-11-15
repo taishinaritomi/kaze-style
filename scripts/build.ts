@@ -107,9 +107,7 @@ const main = async () => {
       outdir: isCjsOnly ? outDir : `${outDir}/cjs`,
     }),
     exec(
-      `tsc ${
-        isWatch ? '-w' : ''
-      } --declaration --emitDeclarationOnly --outDir ${outDir}`,
+      `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
     ),
   ]);
 };
