@@ -9,7 +9,6 @@ import type {
 } from 'webpack';
 import { getCompiledSource, isChildCompiler } from './compiler';
 import { parseSourceMap } from './utils/parseSourceMap';
-import { toURIComponent } from './utils/toURIComponent';
 
 export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 export type LoaderContext = _LoaderContext<never> & {
@@ -60,16 +59,17 @@ function loader(
 
         const cssString = cssRuleObjectsToCssString(cssRuleObjects);
 
+        const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify({
+          src: cssString,
+        })}`;
+
         const request = `import ${JSON.stringify(
           this.utils.contextify(
             this.context || this.rootContext,
-            `kaze.css!=!${virtualLoaderPath}!${cssPath}?style=${toURIComponent(
-              cssString,
-            )}`,
+            `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
           ),
         )};`;
-
-        callback(null, `${code}\n\n${request}`);
+        callback(null, `${request}\n\n${code}`);
       })
       .catch((error) => {
         callback(error);
