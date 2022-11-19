@@ -10,14 +10,14 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@kaze-style/react": "^0.10.4",
-    "@kaze-style/themes": "^0.10.4",
+    "@kaze-style/react": "*",
+    "@kaze-style/themes": "*",
     "next": "12.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@kaze-style/next-plugin": "^0.10.4",
+    "@kaze-style/next-plugin": "*",
     "@next/bundle-analyzer": "^12.3.0"
   }
 }

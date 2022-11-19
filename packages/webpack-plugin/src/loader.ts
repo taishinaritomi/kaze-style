@@ -2,7 +2,7 @@ import {
   cssRuleObjectsToCssString,
   extractStyle,
   transform,
-} from '@kaze-style/build-man';
+} from '@kaze-style/build';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,

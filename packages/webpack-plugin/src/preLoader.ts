@@ -1,4 +1,4 @@
-import { preTransform } from '@kaze-style/build-man';
+import { preTransform } from '@kaze-style/build';
 import type { LoaderContext } from 'webpack';
 import type { WebpackLoaderParams } from './loader';
 import { parseSourceMap } from './utils/parseSourceMap';

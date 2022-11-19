@@ -1,4 +1,4 @@
-import { cssRuleObjectsToCssString, sortCss } from '@kaze-style/build-man';
+import { cssRuleObjectsToCssString, sortCss } from '@kaze-style/build';
 import type { CssRuleObject } from '@kaze-style/core';
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';

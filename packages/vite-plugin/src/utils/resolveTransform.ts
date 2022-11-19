@@ -1,4 +1,4 @@
-import { extractStyle, preTransform, transform } from '@kaze-style/build-man';
+import { extractStyle, preTransform, transform } from '@kaze-style/build';
 import type { Loader } from 'esbuild';
 import { build } from 'esbuild';
 
