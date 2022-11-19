@@ -29,7 +29,7 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@kaze-style/build-man": "^0.10.4",
+    "@kaze-style/build": "^0.10.4",
     "esbuild": "^0.15.10"
   },
   "devDependencies": {

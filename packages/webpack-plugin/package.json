@@ -29,7 +29,7 @@
     "build": "tsx ./../../scripts/build.ts --cjsOnly"
   },
   "dependencies": {
-    "@kaze-style/build-man": "^0.10.4"
+    "@kaze-style/build": "^0.10.4"
   },
   "peerDependencies": {
     "@kaze-style/react": "^0.10.4",

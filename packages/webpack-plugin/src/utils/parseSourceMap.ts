@@ -1,4 +1,4 @@
-import type { InputSourceMap } from '@kaze-style/build-man';
+import type { InputSourceMap } from '@kaze-style/build';
 import type { WebpackLoaderParams } from '../loader';
 
 export const parseSourceMap = (
