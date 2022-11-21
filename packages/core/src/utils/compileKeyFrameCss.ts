@@ -6,7 +6,7 @@ export const compileKeyFrameCss = (keyframeObject: KeyframesRules) => {
   const percentageRules: string[] = [];
 
   for (const percentage in keyframeObject) {
-    const value = keyframeObject[percentage as keyof KeyframesRules];
+    const value = keyframeObject[percentage];
     percentageRules.push(
       `${compileObjectCss({
         selector: percentage,
