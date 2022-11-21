@@ -23,14 +23,7 @@ export class Plugin {
     compiler.options.module?.rules.splice(0, 0, {
       test: this.test,
       exclude: /node_modules/,
-      use: [
-        {
-          loader,
-        },
-        {
-          loader: preLoader,
-        },
-      ],
+      use: [loader, preLoader],
     });
 
     compiler.hooks.compilation.tap(pluginName, (compilation) => {

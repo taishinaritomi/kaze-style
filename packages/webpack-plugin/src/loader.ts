@@ -39,12 +39,12 @@ function loader(
       .then((source) => {
         const { styles, cssRuleObjects } = extractStyle({
           code: source,
-          path: this.resourcePath,
+          filename: this.resourcePath,
         });
 
         const { code } = transform({
           code: sourceCode,
-          path: this.resourcePath,
+          filename: this.resourcePath,
           sourceMaps: this.sourceMap,
           inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
           options: {

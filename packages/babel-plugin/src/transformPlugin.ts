@@ -36,80 +36,81 @@ const buildStyleImport = template(`
     .join(',')} , ClassName } from '${options.importSource}';
 `);
 
-export type Options = {
+export type TransformOptions = {
   styles: ForBuildStyle<string>[];
 };
 
-export const transformPlugin = declare<Options, PluginObj<State & PluginPass>>(
-  (_, { styles }) => {
-    return {
-      name: '@kaze-style/babel-plugin-transform',
-      pre() {
-        this.targetPaths = [];
-      },
-      visitor: {
-        Program: {
-          exit(path, state) {
-            if (state.targetPaths && state.targetPaths.length !== 0) {
-              state.targetPaths.forEach(({ callee, definition, transform }) => {
-                const callExpressionPath = definition.findParent((parentPath) =>
-                  parentPath.isCallExpression(),
-                ) as NodePath<t.CallExpression>;
-                const indexArgPath = callExpressionPath.node
-                  .arguments[3] as t.NumericLiteral;
-                if (transform.from === '__preStyle') {
-                  const classesObject = styles.find(
-                    (style) => style.index === indexArgPath.value,
-                  )?.classesObject;
-                  const objectProperties: t.ObjectProperty[] = [];
-                  for (const key in classesObject) {
-                    if (classesObject.hasOwnProperty(key)) {
-                      objectProperties.push(
-                        t.objectProperty(
-                          t.stringLiteral(key),
-                          t.newExpression(t.identifier('ClassName'), [
-                            t.valueToNode(classesObject[key] || {}),
-                          ]),
-                        ),
-                      );
-                    }
+export const transformPlugin = declare<
+  TransformOptions,
+  PluginObj<State & PluginPass>
+>((_, { styles }) => {
+  return {
+    name: '@kaze-style/babel-plugin-transform',
+    pre() {
+      this.targetPaths = [];
+    },
+    visitor: {
+      Program: {
+        exit(path, state) {
+          if (state.targetPaths && state.targetPaths.length !== 0) {
+            state.targetPaths.forEach(({ callee, definition, transform }) => {
+              const callExpressionPath = definition.findParent((parentPath) =>
+                parentPath.isCallExpression(),
+              ) as NodePath<t.CallExpression>;
+              const indexArgPath = callExpressionPath.node
+                .arguments[3] as t.NumericLiteral;
+              if (transform.from === '__preStyle') {
+                const classesObject = styles.find(
+                  (style) => style.index === indexArgPath.value,
+                )?.classesObject;
+                const objectProperties: t.ObjectProperty[] = [];
+                for (const key in classesObject) {
+                  if (classesObject.hasOwnProperty(key)) {
+                    objectProperties.push(
+                      t.objectProperty(
+                        t.stringLiteral(key),
+                        t.newExpression(t.identifier('ClassName'), [
+                          t.valueToNode(classesObject[key] || {}),
+                        ]),
+                      ),
+                    );
                   }
-                  callExpressionPath.node.arguments = [
-                    t.objectExpression(objectProperties),
-                  ];
                 }
-                if (transform.from === '__preGlobalStyle') {
-                  callExpressionPath.node.arguments = [t.valueToNode({})];
-                }
-                callee.replaceWith(t.identifier(transform.to));
-              });
+                callExpressionPath.node.arguments = [
+                  t.objectExpression(objectProperties),
+                ];
+              }
+              if (transform.from === '__preGlobalStyle') {
+                callExpressionPath.node.arguments = [t.valueToNode({})];
+              }
+              callee.replaceWith(t.identifier(transform.to));
+            });
 
-              path.unshiftContainer('body', buildStyleImport());
-              this.file.metadata = { transformed: true };
-            }
-          },
+            path.unshiftContainer('body', buildStyleImport());
+            this.file.metadata = { transformed: true };
+          }
         },
-        CallExpression(path, state) {
-          const calleePath = path.get('callee');
-          options.transforms.forEach((transform) => {
-            if (
-              calleePath.referencesImport(options.importSource, transform.from)
-            ) {
-              const argumentPaths = path.get('arguments') as NodePath<t.Node>[];
-              if (Array.isArray(argumentPaths) && argumentPaths.length === 4) {
-                const definitionsPath = argumentPaths[0];
-                if (definitionsPath !== undefined) {
-                  state.targetPaths?.push({
-                    callee: calleePath as NodePath<t.Identifier>,
-                    definition: definitionsPath,
-                    transform: transform,
-                  });
-                }
+      },
+      CallExpression(path, state) {
+        const calleePath = path.get('callee');
+        options.transforms.forEach((transform) => {
+          if (
+            calleePath.referencesImport(options.importSource, transform.from)
+          ) {
+            const argumentPaths = path.get('arguments') as NodePath<t.Node>[];
+            if (Array.isArray(argumentPaths) && argumentPaths.length === 4) {
+              const definitionsPath = argumentPaths[0];
+              if (definitionsPath !== undefined) {
+                state.targetPaths?.push({
+                  callee: calleePath as NodePath<t.Identifier>,
+                  definition: definitionsPath,
+                  transform: transform,
+                });
               }
             }
-          });
-        },
+          }
+        });
       },
-    };
-  },
-);
+    },
+  };
+});

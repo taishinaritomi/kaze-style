@@ -1,20 +1,20 @@
-import type { ForBuildGlobalStyle, ForBuildStyle } from '@kaze-style/core';
+import type { ForBuild } from '@kaze-style/core';
 import evalCode from 'eval';
+import { forBuildName as _forBuildName } from './utils/constants';
 
 type Args = {
   code: string;
-  path: string;
+  filename: string;
+  forBuildName?: string;
 };
 
-type ForBuild = {
-  fileName: string;
-  styles: ForBuildStyle<string>[];
-  globalStyles: ForBuildGlobalStyle[];
-};
-
-export const extractStyle = ({ code, path }: Args) => {
-  const __forBuildByKazeStyle: ForBuild = {
-    fileName: path,
+export const extractStyle = ({
+  code,
+  filename,
+  forBuildName = _forBuildName,
+}: Args) => {
+  const forBuild: ForBuild = {
+    filename,
     styles: [],
     globalStyles: [],
   };
@@ -22,15 +22,15 @@ export const extractStyle = ({ code, path }: Args) => {
   const window = {};
   evalCode(
     code,
-    path,
+    filename,
     {
-      __forBuildByKazeStyle,
+      [forBuildName]: forBuild,
       window,
     },
     true,
   );
 
-  const { globalStyles, styles } = __forBuildByKazeStyle;
+  const { globalStyles, styles } = forBuild;
 
   const cssRuleObjects = [
     ...styles.flatMap(({ cssRuleObjects }) => cssRuleObjects),

@@ -8,5 +8,6 @@
     "esbuild",
     "outfile",
     "uniquify"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
