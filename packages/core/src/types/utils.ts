@@ -1,8 +1,9 @@
 export type ValueOf<T> = T[keyof T];
 export type AndArray<T> = T | T[];
-export type ObjKey = string | number | symbol;
+
+type Key = string | number | symbol;
 export type NestedObj<T> = {
-  [_ in ObjKey]?: NestedObj<T> | T;
+  [_ in Key]?: NestedObj<T> | T;
 };
 
 type UnionToIntersection<U> = (

@@ -10,7 +10,7 @@ type Args = {
 export const resolveSelectors = ({ property, selectors }: Args) => {
   if (property.substring(0, 1) === '@') {
     return Object.assign({}, selectors, {
-      atRules: ([property] as string[]).concat(selectors.atRules),
+      atRules: [property].concat(selectors.atRules),
     });
   } else if (isNestedSelector(property)) {
     return Object.assign({}, selectors, {

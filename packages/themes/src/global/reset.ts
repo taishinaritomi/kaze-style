@@ -165,6 +165,10 @@ export const reset = {
 } as const;
 /**
  * @deprecated
+ * ```
+ * import { globalTheme } from '@kaze-style/themes'
+ * globalTheme.reset()
+ * ```
  */
 export const resetStyle = reset;
 export const __type__: KazeGlobalStyle<string> = reset;
