@@ -1,34 +1,45 @@
-import type { BabelFileMetadata, TransformOptions } from '@babel/core';
+import type {
+  BabelFileMetadata,
+  TransformOptions as BabelTransformOptions,
+} from '@babel/core';
 import { transformSync } from '@babel/core';
 // @ts-expect-error type
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
+import type { PreTransformOptions } from '@kaze-style/babel-plugin';
 import { preTransformPlugin } from '@kaze-style/babel-plugin';
 import type { InputSourceMap } from './transform';
+import { forBuildName as _forBuildName } from './utils/constants';
 
 type Args = {
   code: string;
-  path: string;
-  sourceMaps: TransformOptions['sourceMaps'];
+  filename: string;
+  sourceMaps: BabelTransformOptions['sourceMaps'];
   inputSourceMap: InputSourceMap;
+  options: Omit<PreTransformOptions, 'forBuildName'> &
+    Partial<Pick<PreTransformOptions, 'forBuildName'>>;
 };
 
 type Metadata = BabelFileMetadata & { transformed?: boolean };
 
 export const preTransform = ({
   code,
-  path,
+  filename,
   inputSourceMap,
   sourceMaps,
+  options: { forBuildName = _forBuildName, ...options },
 }: Args) => {
   const result = transformSync(code, {
     caller: { name: 'kaze' },
     babelrc: false,
     configFile: false,
     compact: false,
-    filename: path,
+    filename,
     sourceMaps: sourceMaps || false,
-    plugins: [preTransformPlugin, typescriptSyntax],
-    sourceFileName: path,
+    plugins: [
+      [preTransformPlugin, { ...options, forBuildName }],
+      typescriptSyntax,
+    ],
+    sourceFileName: filename,
     inputSourceMap: inputSourceMap,
   });
 

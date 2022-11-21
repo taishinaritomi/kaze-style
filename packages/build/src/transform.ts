@@ -1,24 +1,27 @@
-import type { BabelFileMetadata, TransformOptions } from '@babel/core';
+import type {
+  BabelFileMetadata,
+  TransformOptions as BabelTransformOptions,
+} from '@babel/core';
 import { transformSync } from '@babel/core';
 // @ts-expect-error type
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import type { Options } from '@kaze-style/babel-plugin';
+import type { TransformOptions } from '@kaze-style/babel-plugin';
 import { transformPlugin } from '@kaze-style/babel-plugin';
 
 type Args = {
   code: string;
-  path: string;
+  filename: string;
   inputSourceMap: InputSourceMap;
-  sourceMaps: TransformOptions['sourceMaps'];
-  options: Options;
+  sourceMaps: BabelTransformOptions['sourceMaps'];
+  options: TransformOptions;
 };
-export type InputSourceMap = TransformOptions['inputSourceMap'];
+export type InputSourceMap = BabelTransformOptions['inputSourceMap'];
 
 type Metadata = BabelFileMetadata & { transformed?: boolean };
 
 export const transform = ({
   code,
-  path,
+  filename,
   options,
   inputSourceMap,
   sourceMaps,
@@ -28,10 +31,10 @@ export const transform = ({
     babelrc: false,
     configFile: false,
     compact: false,
-    filename: path,
+    filename,
     sourceMaps: sourceMaps || false,
     plugins: [[transformPlugin, options], typescriptSyntax],
-    sourceFileName: path,
+    sourceFileName: filename,
     inputSourceMap: inputSourceMap,
   });
   return {

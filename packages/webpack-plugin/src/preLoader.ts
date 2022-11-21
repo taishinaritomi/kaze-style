@@ -13,9 +13,12 @@ function loader(
 
   const { code, metadata } = preTransform({
     code: sourceCode,
-    path: this.resourcePath,
+    filename: this.resourcePath,
     sourceMaps: this.sourceMap,
     inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
+    options: {
+      filename: this.resourcePath,
+    },
   });
 
   if (!code || metadata?.transformed !== true) {

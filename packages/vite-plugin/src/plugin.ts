@@ -34,7 +34,7 @@ export const plugin = (): Plugin => {
       const { code: transformedCode, cssRuleObjects: _cssRuleObjects } =
         await resolveTransform({
           code,
-          path: validId || '',
+          filename: validId || '',
         });
       let rootRelativeId = '';
       if (_cssRuleObjects.length !== 0) {
