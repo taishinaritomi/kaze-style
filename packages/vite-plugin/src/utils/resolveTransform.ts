@@ -1,4 +1,4 @@
-import { extractStyle, preTransform, transform } from '@kaze-style/build';
+import { extractionStyle, preTransform, transform } from '@kaze-style/build';
 import type { Loader } from 'esbuild';
 import { build } from 'esbuild';
 
@@ -44,7 +44,7 @@ export const resolveTransform = async ({ code, filename }: Args) => {
       ],
     });
 
-    const { styles, cssRuleObjects } = extractStyle({
+    const { styles, cssRuleObjects } = extractionStyle({
       code: result.outputFiles[0]?.text || '',
       filename,
     });

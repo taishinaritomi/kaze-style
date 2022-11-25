@@ -8,7 +8,7 @@ type Args = {
   forBuildName?: string;
 };
 
-export const extractStyle = ({
+export const extractionStyle = ({
   code,
   filename,
   forBuildName = _forBuildName,

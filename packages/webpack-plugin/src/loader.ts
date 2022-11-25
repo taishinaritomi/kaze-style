@@ -1,6 +1,6 @@
 import {
   cssRuleObjectsToCssString,
-  extractStyle,
+  extractionStyle,
   transform,
 } from '@kaze-style/build';
 import type {
@@ -37,7 +37,7 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const { styles, cssRuleObjects } = extractStyle({
+        const { styles, cssRuleObjects } = extractionStyle({
           code: source,
           filename: this.resourcePath,
         });
