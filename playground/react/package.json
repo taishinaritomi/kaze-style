@@ -5,7 +5,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "webpack --watch",
-    "build": "webpack",
+    "build": "rimraf dist && webpack",
     "preview": "webpack serve --open"
   },
   "dependencies": {
