@@ -6,7 +6,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "vite",
-    "build": "vite build",
+    "build": "rimraf dist && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
