@@ -8,6 +8,6 @@
     "dev": {
       "cache": false
     },
-    "type-check": {}
+    "type-check": { }
   }
 }
