@@ -1,68 +1,31 @@
-import type { StyleOrder } from '@kaze-style/core';
-import { styleOrder } from '@kaze-style/core';
+import type { CssRule, StyleOrder } from '@kaze-style/core';
+import { sortCssRules, uniqueCssRules } from '@kaze-style/core';
 import type { Element } from 'stylis';
 import { serialize, stringify, compile } from 'stylis';
-import { layerPrefix } from './utils/constants';
-import { createElementKey } from './utils/createElementKey';
-
-type TargetElement = Element & {
-  bucketName: StyleOrder;
-  key: string;
-};
+import { layerPrefix } from './constants';
 
 export const sortCss = (css: string): string => {
   const otherElements: Element[] = [];
-  const targetElements: TargetElement[] = [];
-  const globalElements: TargetElement[] = [];
+  const cssRules: CssRule[] = [];
 
   compile(css).forEach((element) => {
     if (element.value.startsWith(`@layer ${layerPrefix}`)) {
-      const bucketName = element.value.substring(
+      const order = element.value.substring(
         `@layer ${layerPrefix}`.length,
       ) as StyleOrder;
-      if (bucketName === 'global') {
-        globalElements.push(
-          ...(element.children as Element[]).map((childElement) => {
-            return {
-              ...childElement,
-              bucketName,
-              key: createElementKey(childElement),
-            };
-          }),
-        );
-      } else {
-        targetElements.push(
-          ...(element.children as Element[]).map((childElement) => {
-            return {
-              ...childElement,
-              bucketName,
-              key: createElementKey(childElement),
-            };
-          }),
-        );
-      }
+      cssRules.push({
+        order,
+        value: serialize(element.children as Element[], stringify),
+      });
     } else {
       otherElements.push(element);
     }
   });
 
-  const uniqueTargetElements = targetElements.reduce<
-    Record<string, typeof targetElements[number]>
-  >((acc, element) => {
-    acc[element.key] = element;
-    return acc;
-  }, {});
-
-  const elements = [...Object.values(uniqueTargetElements), ...globalElements];
-
-  const sortedTargetElements = elements.sort((elementA, elementB) => {
-    if (elementA.bucketName === elementB.bucketName) {
-      return 0;
-    }
-    return (
-      styleOrder.indexOf(elementA.bucketName) -
-      styleOrder.indexOf(elementB.bucketName)
-    );
-  });
-  return serialize([...otherElements, ...sortedTargetElements], stringify);
+  const _uniqueCssRules = uniqueCssRules(cssRules);
+  const sortedCssRules = sortCssRules(_uniqueCssRules);
+  return (
+    sortedCssRules.map((cssRule) => cssRule.value).join('') +
+    serialize(otherElements, stringify)
+  );
 };

@@ -11,15 +11,15 @@ type Args = {
   selector: string;
   selectors?: Selectors;
   resolvedStyle?: {
-    cssRules: string[];
+    rules: string[];
   };
 };
 
-export const compileObjectCss = ({
+export const compileNestedCss = ({
   style,
   selector,
   selectors = { atRules: [], nested: '' },
-  resolvedStyle = { cssRules: [] },
+  resolvedStyle = { rules: [] },
 }: Args) => {
   const cssBlock: string[] = [];
   for (const property in style) {
@@ -27,7 +27,7 @@ export const compileObjectCss = ({
     if (isCssValue(value)) {
       cssBlock.push(styleDeclarationStringify({ property, styleValue: value }));
     } else if (isObject(value)) {
-      compileObjectCss({
+      compileNestedCss({
         style: value,
         selector,
         selectors: resolveSelectors({ property, selectors }),
@@ -43,7 +43,7 @@ export const compileObjectCss = ({
       selectors,
     });
 
-    resolvedStyle.cssRules.push(cssRule);
+    resolvedStyle.rules.push(cssRule);
   }
-  return resolvedStyle.cssRules;
+  return resolvedStyle.rules;
 };

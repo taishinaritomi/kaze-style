@@ -1,10 +1,10 @@
 import { createGlobalStyle } from './createGlobalStyle';
-import type { CssRuleObject } from './styleOrder';
+import type { CssRule } from './styleOrder';
 import type { ForBuild } from './types/common';
 import type { KazeGlobalStyle } from './types/globalStyle';
 
 export type ForBuildGlobalStyle = {
-  cssRuleObjects: CssRuleObject[];
+  cssRules: CssRule[];
   index: number;
 };
 
@@ -14,9 +14,9 @@ export const __preGlobalStyle = <T extends string>(
   filename: string,
   index: number,
 ): void => {
-  const { cssRuleObjects } = createGlobalStyle(globalStyles);
+  const { cssRules } = createGlobalStyle(globalStyles);
 
   if (forBuild.filename === filename) {
-    forBuild.globalStyles.push({ cssRuleObjects, index });
+    forBuild.globalStyles.push({ cssRules, index });
   }
 };

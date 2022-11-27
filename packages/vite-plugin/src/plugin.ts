@@ -1,10 +1,10 @@
-import { cssRuleObjectsToCssString, sortCss } from '@kaze-style/build';
-import type { CssRuleObject } from '@kaze-style/core';
+import type { CssRule } from '@kaze-style/core';
+import { sortCssRules, uniqueCssRules } from '@kaze-style/core';
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';
 
 export const plugin = (): Plugin => {
-  const cssRuleObjects: CssRuleObject[] = [];
+  const cssRules: CssRule[] = [];
   return {
     name: 'kaze-transform',
     enforce: 'pre',
@@ -18,9 +18,8 @@ export const plugin = (): Plugin => {
     load(id: string) {
       const [validId] = id.split('?');
       if (/kaze.css$/.test(validId || '')) {
-        const cssString = cssRuleObjectsToCssString(cssRuleObjects);
-        const sortedCssRules = sortCss(cssString);
-        return sortedCssRules;
+        const _cssRules = sortCssRules(uniqueCssRules(cssRules));
+        return _cssRules.map((cssRule) => cssRule.value).join('');
       }
       return;
     },
@@ -31,15 +30,15 @@ export const plugin = (): Plugin => {
         return null;
       }
 
-      const { code: transformedCode, cssRuleObjects: _cssRuleObjects } =
+      const { code: transformedCode, cssRules: _cssRules } =
         await resolveTransform({
           code,
           filename: validId || '',
         });
       let rootRelativeId = '';
-      if (_cssRuleObjects.length !== 0) {
+      if (_cssRules.length !== 0) {
         rootRelativeId = `import "${validId}.kaze.css";`;
-        cssRuleObjects.push(..._cssRuleObjects);
+        cssRules.push(..._cssRules);
       }
 
       return {

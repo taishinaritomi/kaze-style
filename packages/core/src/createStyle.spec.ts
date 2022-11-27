@@ -4,7 +4,7 @@ import { createStyle } from './createStyle';
 
 describe('createStyle', () => {
   it('base', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         color: 'red',
       },
@@ -12,13 +12,13 @@ describe('createStyle', () => {
 
     expect(classes).toEqual({ base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
     expect(classesObject).toEqual({ base: { _1ylxx6h: '_18ffsfk' } });
-    expect(cssRuleObjects).toEqual([
-      { order: 'normal', rule: '._18ffsfk{color:red;}' },
+    expect(cssRules).toEqual([
+      { order: 'normal', value: '._18ffsfk{color:red;}' },
     ]);
   });
 
   it('pseudo', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         ':hover': {
           color: 'red',
@@ -35,14 +35,14 @@ describe('createStyle', () => {
     expect(classesObject).toEqual({
       base: { _1qpompn: '_5d93c1', _1hal8q2: '_1ujbck9' },
     });
-    expect(cssRuleObjects).toEqual([
-      { order: 'hover', rule: '._5d93c1:hover{color:red;}' },
-      { order: 'normal', rule: '._1ujbck9::after{color:green;}' },
+    expect(cssRules).toEqual([
+      { order: 'hover', value: '._5d93c1:hover{color:red;}' },
+      { order: 'normal', value: '._1ujbck9::after{color:green;}' },
     ]);
   });
 
   it('nested pseudo', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         ':hover': {
           '::after': {
@@ -59,14 +59,14 @@ describe('createStyle', () => {
     expect(classesObject).toEqual({
       base: { _6cx5yh: '_l244st', _1qpompn: '_5d93c1' },
     });
-    expect(cssRuleObjects).toEqual([
-      { order: 'hover', rule: '._l244st:hover::after{color:green;}' },
-      { order: 'hover', rule: '._5d93c1:hover{color:red;}' },
+    expect(cssRules).toEqual([
+      { order: 'hover', value: '._l244st:hover::after{color:green;}' },
+      { order: 'hover', value: '._5d93c1:hover{color:red;}' },
     ]);
   });
 
   it('atRules', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         '@media (max-width: 512px)': {
           color: 'red',
@@ -76,16 +76,16 @@ describe('createStyle', () => {
 
     expect(classes).toEqual({ base: new ClassName({ _16lwaja: '_1usel6w' }) });
     expect(classesObject).toEqual({ base: { _16lwaja: '_1usel6w' } });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'media',
-        rule: '@media (max-width: 512px){._1usel6w{color:red;}}',
+        value: '@media (max-width: 512px){._1usel6w{color:red;}}',
       },
     ]);
   });
 
   it('nested atRules', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         '@media (max-width: 512px)': {
           color: 'red',
@@ -102,20 +102,21 @@ describe('createStyle', () => {
     expect(classesObject).toEqual({
       base: { _16lwaja: '_1usel6w', _1b0ehn0: '_16aqfzc' },
     });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'media',
-        rule: '@media (max-width: 512px){._1usel6w{color:red;}}',
+        value: '@media (max-width: 512px){._1usel6w{color:red;}}',
       },
       {
         order: 'media',
-        rule: '@media (max-width: 512px){@supports not (display: grid){._16aqfzc{display:flex;}}}',
+        value:
+          '@media (max-width: 512px){@supports not (display: grid){._16aqfzc{display:flex;}}}',
       },
     ]);
   });
 
   it('keyframes', () => {
-    const { classes, classesObject, cssRuleObjects } = createStyle({
+    const { classes, classesObject, cssRules } = createStyle({
       base: {
         animationName: {
           from: {
@@ -134,14 +135,14 @@ describe('createStyle', () => {
     expect(classesObject).toEqual({
       base: { _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' },
     });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'keyframes',
-        rule: '@keyframes _6qto8h{from{color:green;}to{color:red;}}',
+        value: '@keyframes _6qto8h{from{color:green;}to{color:red;}}',
       },
       {
         order: 'normal',
-        rule: '._ep4wyi{animation-name:_6qto8h;}',
+        value: '._ep4wyi{animation-name:_6qto8h;}',
       },
     ]);
   });

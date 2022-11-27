@@ -1,5 +1,5 @@
 import {
-  cssRuleObjectsToCssString,
+  cssRulesToString,
   extractionStyle,
   transform,
 } from '@kaze-style/build';
@@ -37,7 +37,7 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const { styles, cssRuleObjects } = extractionStyle({
+        const { styles, cssRules } = extractionStyle({
           code: source,
           filename: this.resourcePath,
         });
@@ -57,7 +57,7 @@ function loader(
           return;
         }
 
-        const cssString = cssRuleObjectsToCssString(cssRuleObjects);
+        const cssString = cssRulesToString(cssRules);
 
         const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify({
           src: cssString,

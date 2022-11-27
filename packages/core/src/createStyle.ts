@@ -1,12 +1,12 @@
 import { ClassName } from './ClassName';
 import { resolveStyle } from './resolveStyle';
-import type { CssRuleObject } from './styleOrder';
+import type { CssRule } from './styleOrder';
 import type { Classes, ClassesObject } from './types/common';
 import type { KazeStyle } from './types/style';
-import { cssRuleObjectsUniquify } from './utils/cssRuleObjectsUniquify';
+import { uniqueCssRules } from './uniqueCssRules';
 
 type Result<K extends string> = {
-  cssRuleObjects: CssRuleObject[];
+  cssRules: CssRule[];
   classes: Classes<K>;
   classesObject: ClassesObject<K>;
 };
@@ -16,13 +16,13 @@ export const createStyle = <K extends string>(
 ): Result<K> => {
   const classes = {} as Classes<K>;
   const classesObject = {} as ClassesObject<K>;
-  const allCssRuleObjects: CssRuleObject[] = [];
+  const allCssRules: CssRule[] = [];
 
   for (const key in styles) {
-    const { classNameObject, cssRuleObjects } = resolveStyle({
+    const { classNameObject, cssRules } = resolveStyle({
       style: styles[key],
     });
-    allCssRuleObjects.push(...cssRuleObjects);
+    allCssRules.push(...cssRules);
     classes[key] = new ClassName(classNameObject) as unknown as string;
     classesObject[key] = classNameObject;
   }
@@ -30,6 +30,6 @@ export const createStyle = <K extends string>(
   return {
     classes,
     classesObject,
-    cssRuleObjects: cssRuleObjectsUniquify(allCssRuleObjects),
+    cssRules: uniqueCssRules(allCssRules),
   };
 };
