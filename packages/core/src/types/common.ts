@@ -1,5 +1,5 @@
 import type { ClassName } from '../ClassName';
-import type { CssRuleObject } from '../styleOrder';
+import type { CssRule } from '../styleOrder';
 
 export type CssValue = string | number | undefined;
 
@@ -27,12 +27,12 @@ export type Selectors = {
 export type ForBuild = {
   filename: string;
   globalStyles: {
-    cssRuleObjects: CssRuleObject[];
+    cssRules: CssRule[];
     index: number;
   }[];
   styles: {
     classesObject: ClassesObject<string>;
-    cssRuleObjects: CssRuleObject[];
+    cssRules: CssRule[];
     index: number;
   }[];
 };

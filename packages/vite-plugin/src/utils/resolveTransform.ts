@@ -44,7 +44,7 @@ export const resolveTransform = async ({ code, filename }: Args) => {
       ],
     });
 
-    const { styles, cssRuleObjects } = extractionStyle({
+    const { styles, cssRules } = extractionStyle({
       code: result.outputFiles[0]?.text || '',
       filename,
     });
@@ -59,12 +59,12 @@ export const resolveTransform = async ({ code, filename }: Args) => {
 
     return {
       code,
-      cssRuleObjects: cssRuleObjects,
+      cssRules,
     };
   } else {
     return {
       code,
-      cssRuleObjects: [],
+      cssRules: [],
     };
   }
 };

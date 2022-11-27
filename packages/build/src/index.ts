@@ -1,5 +1,5 @@
 export * from './sortCss';
-export * from './cssRuleObjectsToCssString';
+export * from './cssRulesToCssString';
 export * from './extractionStyle';
 export * from './preTransform';
 export * from './transform';

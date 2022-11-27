@@ -3,7 +3,7 @@ import { createGlobalStyle } from './createGlobalStyle';
 
 describe('createGlobalStyle', () => {
   it('base', () => {
-    const { cssRuleObjects } = createGlobalStyle({
+    const { cssRules } = createGlobalStyle({
       html: {
         color: 'red',
         '@media (max-width:1024px)': {
@@ -14,36 +14,37 @@ describe('createGlobalStyle', () => {
         },
       },
     });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'global',
-        rule: '@media (max-width:1024px){html{color:green;}}',
+        value: '@media (max-width:1024px){html{color:green;}}',
       },
       {
         order: 'global',
-        rule: '@media (max-width:512px){html{color:blue;}}',
+        value: '@media (max-width:512px){html{color:blue;}}',
       },
-      { order: 'global', rule: 'html{color:red;}' },
+      { order: 'global', value: 'html{color:red;}' },
     ]);
   });
 
   it('font-face', () => {
-    const { cssRuleObjects } = createGlobalStyle({
+    const { cssRules } = createGlobalStyle({
       '@font-face': {
         fontFamily: 'Open Sans',
         src: 'url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2")',
       },
     });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'global',
-        rule: '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
+        value:
+          '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
       },
     ]);
   });
 
   it('mix', () => {
-    const { cssRuleObjects } = createGlobalStyle({
+    const { cssRules } = createGlobalStyle({
       '@font-face': {
         fontFamily: 'Open Sans',
         src: 'url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2")',
@@ -58,20 +59,21 @@ describe('createGlobalStyle', () => {
         },
       },
     });
-    expect(cssRuleObjects).toEqual([
+    expect(cssRules).toEqual([
       {
         order: 'global',
-        rule: '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
+        value:
+          '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
       },
       {
         order: 'global',
-        rule: '@media (max-width:1024px){html{color:green;}}',
+        value: '@media (max-width:1024px){html{color:green;}}',
       },
       {
         order: 'global',
-        rule: '@media (max-width:512px){html{color:blue;}}',
+        value: '@media (max-width:512px){html{color:blue;}}',
       },
-      { order: 'global', rule: 'html{color:red;}' },
+      { order: 'global', value: 'html{color:red;}' },
     ]);
   });
 });

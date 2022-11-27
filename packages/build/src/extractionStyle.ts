@@ -1,6 +1,6 @@
 import type { ForBuild } from '@kaze-style/core';
 import evalCode from 'eval';
-import { forBuildName as _forBuildName } from './utils/constants';
+import { forBuildName as _forBuildName } from './constants';
 
 type Args = {
   code: string;
@@ -32,14 +32,14 @@ export const extractionStyle = ({
 
   const { globalStyles, styles } = forBuild;
 
-  const cssRuleObjects = [
-    ...styles.flatMap(({ cssRuleObjects }) => cssRuleObjects),
-    ...globalStyles.flatMap(({ cssRuleObjects }) => cssRuleObjects),
+  const cssRules = [
+    ...styles.flatMap(({ cssRules }) => cssRules),
+    ...globalStyles.flatMap(({ cssRules }) => cssRules),
   ];
 
   return {
     globalStyles,
     styles,
-    cssRuleObjects,
+    cssRules,
   };
 };

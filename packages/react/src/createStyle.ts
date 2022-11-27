@@ -1,14 +1,14 @@
 import { createStyle as createStyleCore } from '@kaze-style/core';
 import type { KazeStyle, Classes } from '@kaze-style/core';
-import { setCssRuleObjects } from '@kaze-style/core/runtime';
+import { setCssRules } from '@kaze-style/core/runtime';
 
 export const createStyle = <K extends string>(
   stylesByKey: KazeStyle<K>,
 ): Classes<K> => {
-  const { classes, cssRuleObjects } = createStyleCore(stylesByKey);
+  const { classes, cssRules } = createStyleCore(stylesByKey);
 
   if (typeof document !== 'undefined') {
-    setCssRuleObjects(cssRuleObjects);
+    setCssRules(cssRules);
   }
   return classes;
 };

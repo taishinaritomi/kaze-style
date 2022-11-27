@@ -35,10 +35,10 @@ export class Plugin {
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {
             if (pathname.includes('.css')) {
-              const sortedCssRules = sortCss(getSource(source));
+              const sortedCss = sortCss(getSource(source));
               compilation.updateAsset(
                 pathname,
-                new compiler.webpack.sources.RawSource(sortedCssRules),
+                new compiler.webpack.sources.RawSource(sortedCss),
               );
             }
           });

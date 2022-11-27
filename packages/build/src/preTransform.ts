@@ -7,8 +7,8 @@ import { transformSync } from '@babel/core';
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
 import type { PreTransformOptions } from '@kaze-style/babel-plugin';
 import { preTransformPlugin } from '@kaze-style/babel-plugin';
+import { forBuildName as _forBuildName } from './constants';
 import type { InputSourceMap } from './transform';
-import { forBuildName as _forBuildName } from './utils/constants';
 
 type Args = {
   code: string;

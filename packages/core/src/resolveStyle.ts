@@ -1,5 +1,5 @@
 import type { ClassName } from './ClassName';
-import type { CssRuleObject } from './styleOrder';
+import type { CssRule } from './styleOrder';
 import type { Selectors } from './types/common';
 import type { SupportStyle, KeyframesRules } from './types/style';
 import { checkStyleOrder } from './utils/checkStyleOrder';
@@ -14,7 +14,7 @@ import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
 type ResolvedStyle = {
   classNameObject: ClassName['object'];
-  cssRuleObjects: CssRuleObject[];
+  cssRules: CssRule[];
 };
 
 type Args = {
@@ -28,7 +28,7 @@ export const resolveStyle = ({
   selectors = { nested: '', atRules: [] },
   resolvedStyle = {
     classNameObject: {},
-    cssRuleObjects: [],
+    cssRules: [],
   },
 }: Args): ResolvedStyle => {
   for (const _property in style) {
@@ -55,15 +55,15 @@ export const resolveStyle = ({
 
       const order = checkStyleOrder({ selectors });
 
-      resolvedStyle.cssRuleObjects.push({ rule, order });
+      resolvedStyle.cssRules.push({ value: rule, order });
       Object.assign(resolvedStyle.classNameObject, { [selector]: className });
     } else if (isObject(styleValue)) {
       if (property === 'animationName') {
         const animationNameValue = styleValue as KeyframesRules;
         const { keyframesRule, keyframeName } =
           compileKeyFrameCss(animationNameValue);
-        resolvedStyle.cssRuleObjects.push({
-          rule: keyframesRule,
+        resolvedStyle.cssRules.push({
+          value: keyframesRule,
           order: 'keyframes',
         });
         Object.assign(resolvedStyle.classNameObject, {
