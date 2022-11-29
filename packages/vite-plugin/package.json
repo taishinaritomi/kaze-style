@@ -31,13 +31,13 @@
   },
   "dependencies": {
     "@kaze-style/build": "^0.11.2",
-    "esbuild": "^0.15.10"
+    "esbuild": "^0.15.16"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.11.2"
   },
   "peerDependencies": {
     "@kaze-style/core": "^0.11.2",
-    "vite": "^3.0.0"
+    "vite": "^3"
   }
 }
