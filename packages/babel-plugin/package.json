@@ -30,7 +30,7 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@babel/helper-plugin-utils": "^7.19.0"
+    "@babel/helper-plugin-utils": "^7.20.2"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.11.2"
