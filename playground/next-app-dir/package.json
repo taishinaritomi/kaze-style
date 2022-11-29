@@ -1,11 +1,11 @@
 {
-  "name": "@kaze-style/playground-next",
+  "name": "@kaze-style/playground-next-app-dir",
   "version": "0.0.0",
   "private": true,
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "next dev",
-    "build": "rimraf .next && next build",
+    "build": "rimraf dist && next build",
     "start": "next start",
     "analyze": "ANALYZE=true next build"
   },
