@@ -12,12 +12,12 @@
   "dependencies": {
     "@kaze-style/react": "*",
     "@kaze-style/themes": "*",
-    "next": "12.3.0",
+    "next": "13.0.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@kaze-style/next-plugin": "*",
-    "@next/bundle-analyzer": "^12.3.0"
+    "@next/bundle-analyzer": "^13.0.5"
   }
 }
