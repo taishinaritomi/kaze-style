@@ -1,0 +1,23 @@
+{
+  "name": "@kaze-style/playground-next-app-dir",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "dev": "next dev",
+    "build": "rimraf dist && next build",
+    "start": "next start",
+    "analyze": "ANALYZE=true next build"
+  },
+  "dependencies": {
+    "@kaze-style/react": "*",
+    "@kaze-style/themes": "*",
+    "next": "13.0.5",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@kaze-style/next-plugin": "*",
+    "@next/bundle-analyzer": "^13.0.5"
+  }
+}

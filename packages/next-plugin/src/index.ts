@@ -41,8 +41,15 @@ const kazeStyleConfig = (
           ) as RuleSetRule
         )?.oneOf;
 
+        const appDirOptions = nextConfig.experimental?.appDir
+          ? {
+              hasAppDir: true,
+              experimental: { appDir: true },
+            }
+          : {};
+
         cssRules?.unshift({
-          test: /kaze\.css$/i,
+          test: /.css$/i,
           sideEffects: true,
           use: getGlobalCssLoader(
             {
@@ -50,8 +57,8 @@ const kazeStyleConfig = (
               isClient: !isServer,
               isServer,
               isDevelopment: dev,
-              future: {},
               experimental: {},
+              ...appDirOptions,
             } as ConfigurationContext,
             () => lazyPostCSS(dir, getSupportedBrowsers(dir, dev), undefined),
             [],
