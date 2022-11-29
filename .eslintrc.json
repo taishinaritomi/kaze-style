@@ -12,8 +12,7 @@
     {
       "files": [
         "./packages/webpack-plugin/src/{preLoader,loader,virtualLoader}.ts",
-        "./playground/next*/src/{pages,app}/**",
-        "./playground/next*/{pages,app}/**",
+        "./playground/next*/{src,/}/{pages,app}/**",
         "./playground/next*/next.config.*",
         "./playground/react-vite/vite.config.*"
       ],
