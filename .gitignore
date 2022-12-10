@@ -7,3 +7,6 @@ dist*
 *.log
 .turbo
 coverage
+target
+.swc
+benchmark

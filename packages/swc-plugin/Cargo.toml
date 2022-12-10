@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "packages/*",
+]
+
+[profile.release]
+lto = true

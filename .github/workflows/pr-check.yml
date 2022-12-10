@@ -15,6 +15,11 @@ jobs:
         with:
           node-version: '16.x'
           cache: npm
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Install wasm target
+        run: rustup target add wasm32-wasi
       - name: install dependencies
         run: yarn install --frozen-lockfile
       - name: build packages
