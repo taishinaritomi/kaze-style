@@ -11,10 +11,12 @@ const exec = async (cmd: string) => {
   const _spawn = childProcess.spawn(cmd, { shell: true });
   await new Promise<void>((resolve, reject) => {
     _spawn.stdout.on('data', (data) => {
-      console.log(data.toString());
+      const log = data.toString();
+      log && console.log(log);
     });
     _spawn.stderr.on('data', (data) => {
-      console.log(data.toString());
+      const log = data.toString();
+      log && console.log(log);
     });
     _spawn.on('close', (code) => {
       console.log(cmd, 'exit', code);
