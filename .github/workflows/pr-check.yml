@@ -15,7 +15,8 @@ jobs:
         with:
           node-version: '16.x'
           cache: npm
-      - uses: actions-rs/toolchain@v1
+      - name: setup Rust
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
       - name: Install wasm target

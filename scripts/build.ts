@@ -1,6 +1,5 @@
 import childProcess from 'child_process';
 import path from 'path';
-import util from 'util';
 import arg from 'arg';
 import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
@@ -8,7 +7,24 @@ import fs from 'fs-extra';
 import glob from 'glob';
 import { gzipSize } from 'gzip-size';
 
-const exec = util.promisify(childProcess.exec);
+const exec = async (cmd: string) => {
+  const _spawn = childProcess.spawn(cmd, { shell: true });
+  await new Promise<void>((resolve, reject) => {
+    _spawn.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+    _spawn.stderr.on('data', (data) => {
+      console.log(data.toString());
+    });
+    _spawn.on('close', (code) => {
+      console.log(cmd, 'exit', code);
+      if (code === 0) {
+        return resolve();
+      }
+      reject();
+    });
+  });
+};
 
 const addExtensionPlugin = (): Plugin => {
   return {
@@ -43,6 +59,7 @@ const args = arg({
   '--watch': Boolean,
   '--size': Boolean,
   '--sizeEntry': [String],
+  '--exec': String,
 });
 
 const outDir = 'dist';
@@ -52,6 +69,7 @@ const isWatch = args['--watch'] || false;
 const isCjsOnly = args['--cjsOnly'] || false;
 const isSize = args['--size'] || false;
 const sizeEntry = args['--sizeEntry'] || [];
+const execCommand = args['--exec'];
 
 const options: BuildOptions = {
   watch: isWatch,
@@ -87,7 +105,7 @@ const bundleSize = async () => {
 };
 
 const main = async () => {
-  await fs.remove(outDir);
+  !isWatch && (await fs.remove(outDir));
   !isCjsOnly &&
     (await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' }));
 
@@ -109,6 +127,7 @@ const main = async () => {
     exec(
       `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
     ),
+    execCommand && exec(execCommand),
   ]);
 };
 

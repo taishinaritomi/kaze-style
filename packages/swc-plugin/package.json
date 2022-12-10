@@ -35,8 +35,8 @@
     "type-check": "tsc --noEmit",
     "code-fix": "cargo fmt",
     "code-check": "cargo fmt --check",
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "cargo build-wasi --release && tsx ./../../scripts/build.ts"
+    "dev": "tsx ./../../scripts/build.ts --watch  --exec='cargo watch -x \"build-wasi --release\"'",
+    "build": "tsx ./../../scripts/build.ts --exec='cargo build-wasi --release'"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.11.3"
