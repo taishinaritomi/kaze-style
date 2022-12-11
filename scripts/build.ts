@@ -56,33 +56,6 @@ const formatBytes = (x: number) => {
   return `${(x / 1024 ** i).toFixed(1)}${sizes[i]}`;
 };
 
-const args = arg({
-  '--cjsOnly': Boolean,
-  '--watch': Boolean,
-  '--size': Boolean,
-  '--sizeEntry': [String],
-  '--exec': String,
-});
-
-const outDir = 'dist';
-const entryDir = 'src';
-
-const isWatch = args['--watch'] || false;
-const isCjsOnly = args['--cjsOnly'] || false;
-const isSize = args['--size'] || false;
-const sizeEntry = args['--sizeEntry'] || [];
-const execCommand = args['--exec'];
-
-const options: BuildOptions = {
-  watch: isWatch,
-  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
-    ignore: ['./**/*.spec.ts'],
-  }),
-  logLevel: 'info',
-  minify: true,
-  platform: 'node',
-};
-
 const bundleSize = async () => {
   const sizeOutDir = `${outDir}-size`;
   sizeEntry.push(`${entryDir}/index.ts`);
@@ -106,10 +79,36 @@ const bundleSize = async () => {
   await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
 };
 
+const args = arg({
+  '--cjsOnly': Boolean,
+  '--watch': Boolean,
+  '--size': Boolean,
+  '--sizeEntry': [String],
+  '--exec': String,
+});
+
+const isWatch = args['--watch'] || false;
+const isCjsOnly = args['--cjsOnly'] || false;
+const isSize = args['--size'] || false;
+const sizeEntry = args['--sizeEntry'] || [];
+const execCommand = args['--exec'];
+
+const outDir = 'dist';
+const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
+const entryDir = 'src';
+
+const options: BuildOptions = {
+  watch: isWatch,
+  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
+    ignore: ['./**/*.spec.ts'],
+  }),
+  logLevel: 'info',
+  minify: true,
+  platform: 'node',
+};
+
 const main = async () => {
   !isWatch && (await fs.remove(outDir));
-  !isCjsOnly &&
-    (await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' }));
 
   await Promise.all([
     !isCjsOnly &&
@@ -120,12 +119,14 @@ const main = async () => {
         bundle: true,
         plugins: [addExtensionPlugin()],
       }),
-    isSize && bundleSize(),
+    !isCjsOnly &&
+      fs.outputJson(`${cjsOutDir}/package.json`, { type: 'commonjs' }),
     build({
       ...options,
       format: 'cjs',
-      outdir: isCjsOnly ? outDir : `${outDir}/cjs`,
+      outdir: cjsOutDir,
     }),
+    isSize && bundleSize(),
     exec(
       `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
     ),
