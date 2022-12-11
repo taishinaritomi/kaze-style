@@ -16,7 +16,7 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
-          cache: npm
+          cache: 'yarn'
       - name: install
         run: yarn install
       - name: build packages
