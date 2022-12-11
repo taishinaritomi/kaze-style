@@ -7,6 +7,34 @@ import fs from 'fs-extra';
 import glob from 'glob';
 import { gzipSize } from 'gzip-size';
 
+const args = arg({
+  '--cjsOnly': Boolean,
+  '--watch': Boolean,
+  '--size': Boolean,
+  '--sizeEntry': [String],
+  '--exec': String,
+});
+
+const isWatch = args['--watch'] || false;
+const isCjsOnly = args['--cjsOnly'] || false;
+const isSize = args['--size'] || false;
+const sizeEntry = args['--sizeEntry'] || [];
+const execCommand = args['--exec'];
+
+const outDir = 'dist';
+const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
+const entryDir = 'src';
+
+const options: BuildOptions = {
+  watch: isWatch,
+  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
+    ignore: ['./**/*.spec.ts'],
+  }),
+  // logLevel: 'info',
+  minify: true,
+  platform: 'node',
+};
+
 const exec = async (cmd: string) => {
   const _spawn = childProcess.spawn(cmd, { shell: true });
   await new Promise<void>((resolve, reject) => {
@@ -63,6 +91,7 @@ const bundleSize = async () => {
   const result = await build({
     ...options,
     format: 'esm',
+    logLevel: 'info',
     entryPoints: sizeEntry,
     outdir: sizeOutDir,
     bundle: true,
@@ -77,34 +106,6 @@ const bundleSize = async () => {
     };
   }
   await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
-};
-
-const args = arg({
-  '--cjsOnly': Boolean,
-  '--watch': Boolean,
-  '--size': Boolean,
-  '--sizeEntry': [String],
-  '--exec': String,
-});
-
-const isWatch = args['--watch'] || false;
-const isCjsOnly = args['--cjsOnly'] || false;
-const isSize = args['--size'] || false;
-const sizeEntry = args['--sizeEntry'] || [];
-const execCommand = args['--exec'];
-
-const outDir = 'dist';
-const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
-const entryDir = 'src';
-
-const options: BuildOptions = {
-  watch: isWatch,
-  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
-    ignore: ['./**/*.spec.ts'],
-  }),
-  logLevel: 'info',
-  minify: true,
-  platform: 'node',
 };
 
 const main = async () => {
