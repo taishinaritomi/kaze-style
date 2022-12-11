@@ -84,7 +84,6 @@ const formatBytes = (x: number) => {
   return `${(x / 1024 ** i).toFixed(1)}${sizes[i]}`;
 };
 
-
 const bundleSize = async () => {
   const sizeOutDir = `${outDir}-size`;
   sizeEntry.push(`${entryDir}/index.ts`);
