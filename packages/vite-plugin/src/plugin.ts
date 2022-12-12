@@ -5,6 +5,7 @@ import { resolveTransform } from './utils/resolveTransform';
 
 export const plugin = (): Plugin => {
   const cssRules: CssRule[] = [];
+  let mode = '';
   return {
     name: 'kaze-transform',
     enforce: 'pre',
@@ -14,6 +15,9 @@ export const plugin = (): Plugin => {
         return validId;
       }
       return;
+    },
+    configResolved(config) {
+      mode = config.mode;
     },
     load(id: string) {
       const [validId] = id.split('?');
@@ -25,6 +29,11 @@ export const plugin = (): Plugin => {
     },
 
     async transform(code, id) {
+      console.log(mode);
+      if (mode === 'development') {
+        return null;
+      }
+
       const [validId] = id.split('?');
       if (!/.(tsx|ts|js|jsx)$/.test(validId || '')) {
         return null;

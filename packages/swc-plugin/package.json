@@ -32,7 +32,7 @@
   ],
   "scripts": {
     "test": "cargo test",
-    "type-check": "tsc --noEmit & cargo check-wasi",
+    "type-check": "tsc --noEmit",
     "code-fix": "cargo fmt",
     "code-check": "cargo fmt --check",
     "dev": "tsx ./../../scripts/build.ts --watch --exec='cargo watch -x \"build-wasi --release\"'",

@@ -1,7 +1,7 @@
 import { createGlobalStyle, createStyle } from '@kaze-style/react';
-import { resetStyle } from '@kaze-style/themes';
+import { globalTheme } from '@kaze-style/themes';
 
-createGlobalStyle(resetStyle);
+createGlobalStyle(globalTheme.reset());
 
 const classes = createStyle({
   button: {
