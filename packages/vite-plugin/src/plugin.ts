@@ -29,7 +29,6 @@ export const plugin = (): Plugin => {
     },
 
     async transform(code, id) {
-      console.log(mode);
       if (mode === 'development') {
         return null;
       }

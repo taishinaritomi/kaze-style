@@ -33,7 +33,10 @@ export const transform = ({
     compact: false,
     filename,
     sourceMaps: sourceMaps || false,
-    plugins: [[transformPlugin, options], typescriptSyntax],
+    plugins: [
+      [transformPlugin, options],
+      [typescriptSyntax, { isTSX: true }],
+    ],
     sourceFileName: filename,
     inputSourceMap: inputSourceMap,
   });

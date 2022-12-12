@@ -37,7 +37,7 @@ export const preTransform = ({
     sourceMaps: sourceMaps || false,
     plugins: [
       [preTransformPlugin, { ...options, forBuildName }],
-      typescriptSyntax,
+      [typescriptSyntax, { isTSX: true }],
     ],
     sourceFileName: filename,
     inputSourceMap: inputSourceMap,
