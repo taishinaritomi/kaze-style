@@ -1,15 +1,20 @@
 use swc_core::{
-  common::DUMMY_SP,
+  common::{
+    comments::{Comment, CommentKind, Comments},
+    DUMMY_SP,
+  },
   ecma::{
-    // atoms::{JsWord},
     ast::{
-      CallExpr, Callee, Expr, ExprOrSpread, Id, Ident, ImportDecl, ImportSpecifier, Lit, Number,
-      Program, Str,
+      CallExpr, Callee, Expr, ExprOrSpread, Id, Ident, ImportDecl, ImportSpecifier, Lit, Module,
+      Number, Program, Str,
     },
     transforms::testing::test,
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
   },
-  plugin::{plugin_transform, proxies::TransformPluginProgramMetadata},
+  plugin::{
+    plugin_transform,
+    proxies::{PluginCommentsProxy, TransformPluginProgramMetadata},
+  },
 };
 
 #[derive(serde::Deserialize)]
@@ -40,17 +45,23 @@ pub struct Transform {
 
 pub struct TransformVisitor {
   config: Config,
+  comments: PluginCommentsProxy,
   index: u8,
   import_source: String,
+  transformed_comment: String,
+  is_transformed: bool,
   transforms: Vec<Transform>,
 }
 
 impl TransformVisitor {
-  fn new(config: Config) -> Self {
+  fn new(config: Config, comments: PluginCommentsProxy) -> Self {
     Self {
       config: config,
+      comments: comments,
       index: 0,
       import_source: "@kaze-style/react".to_string(),
+      transformed_comment: "__kaze-style-pre-transformed".to_string(),
+      is_transformed: false,
       transforms: vec![
         Transform {
           from: "createStyle".to_string(),
@@ -73,9 +84,9 @@ impl TransformVisitor {
           ImportSpecifier::Named(named_specifier) => {
             for transform in self.transforms.iter_mut() {
               if &transform.from == &*named_specifier.local.sym {
-                let to: &str = &transform.to;
+                let transform_to: &str = &transform.to;
                 transform.import_id = Some(named_specifier.local.to_id());
-                named_specifier.local.sym = to.into();
+                named_specifier.local.sym = transform_to.into();
               }
             }
           }
@@ -94,7 +105,7 @@ impl TransformVisitor {
               && *imported_id == ident.to_id()
               && call_expr.args.len() == 1
             {
-              let to: &str = &transform.to;
+              let transform_to: &str = &transform.to;
               let filename: &str = &self.config.filename;
               let index: f64 = self.index.into();
               let for_build_name: &str = &self.config.for_build_name;
@@ -103,7 +114,7 @@ impl TransformVisitor {
                 optional: false,
                 sym: for_build_name.into(),
               };
-              ident.sym = to.into();
+              ident.sym = transform_to.into();
               call_expr.args.push(ExprOrSpread {
                 expr: Box::new(Expr::Ident(for_build_name)),
                 spread: None,
@@ -117,10 +128,27 @@ impl TransformVisitor {
                 spread: None,
               });
               self.index += 1;
+              if self.is_transformed == false {
+                self.is_transformed = true;
+              }
             }
           }
         }
       }
+    }
+  }
+
+  fn add_comment(&mut self, module: &mut Module) {
+    if self.is_transformed {
+      let transformed_comment: &str = &self.transformed_comment;
+      self.comments.add_leading(
+        module.span.lo,
+        Comment {
+          kind: CommentKind::Block,
+          span: DUMMY_SP,
+          text: transformed_comment.into(),
+        },
+      );
     }
   }
 }
@@ -135,20 +163,30 @@ impl VisitMut for TransformVisitor {
     self.transform_target_call_ident(call_expr);
     call_expr.visit_mut_children_with(self);
   }
+  fn visit_mut_module(&mut self, module: &mut Module) {
+    module.visit_mut_children_with(self);
+    self.add_comment(module);
+  }
 }
 
 #[plugin_transform]
 pub fn process_transform(program: Program, metadata: TransformPluginProgramMetadata) -> Program {
   let config = json_to_config(metadata.get_transform_plugin_config());
-  program.fold_with(&mut as_folder(TransformVisitor::new(config)))
+  program.fold_with(&mut as_folder(TransformVisitor::new(
+    config,
+    PluginCommentsProxy,
+  )))
 }
 
 test!(
   Default::default(),
-  |_| as_folder(TransformVisitor::new(Config {
-    filename: "filename.ts".to_string(),
-    for_build_name: "for_build_name".to_string()
-  })),
+  |_| as_folder(TransformVisitor::new(
+    Config {
+      filename: "filename.ts".to_string(),
+      for_build_name: "for_build_name".to_string()
+    },
+    PluginCommentsProxy
+  )),
   test,
   // Input codes
   r#"
