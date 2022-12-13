@@ -59,30 +59,25 @@ export const transformPlugin = declare<
               ) as NodePath<t.CallExpression>;
               const indexArgPath = callExpressionPath.node
                 .arguments[3] as t.NumericLiteral;
-              if (transform.from === '__preStyle') {
-                const classesObject = styles.find(
-                  (style) => style.index === indexArgPath.value,
-                )?.classesObject;
-                const objectProperties: t.ObjectProperty[] = [];
-                for (const key in classesObject) {
-                  if (classesObject.hasOwnProperty(key)) {
-                    objectProperties.push(
-                      t.objectProperty(
-                        t.stringLiteral(key),
-                        t.newExpression(t.identifier('ClassName'), [
-                          t.valueToNode(classesObject[key] || {}),
-                        ]),
-                      ),
-                    );
-                  }
+              const classesObject = styles.find(
+                (style) => style.index === indexArgPath.value,
+              )?.classesObject;
+              const objectProperties: t.ObjectProperty[] = [];
+              for (const key in classesObject) {
+                if (classesObject.hasOwnProperty(key)) {
+                  objectProperties.push(
+                    t.objectProperty(
+                      t.stringLiteral(key),
+                      t.newExpression(t.identifier('ClassName'), [
+                        t.valueToNode(classesObject[key] || {}),
+                      ]),
+                    ),
+                  );
                 }
-                callExpressionPath.node.arguments = [
-                  t.objectExpression(objectProperties),
-                ];
               }
-              if (transform.from === '__preGlobalStyle') {
-                callExpressionPath.node.arguments = [t.valueToNode({})];
-              }
+              callExpressionPath.node.arguments = [
+                t.objectExpression(objectProperties),
+              ];
               callee.replaceWith(t.identifier(transform.to));
             });
 
