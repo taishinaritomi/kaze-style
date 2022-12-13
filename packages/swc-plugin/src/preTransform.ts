@@ -15,7 +15,7 @@ type Options = {
 type Metadata = { isTransformed: boolean };
 type Result = [string, Metadata];
 
-const transformed_comment = "__kaze-style-pre-transformed";
+const transformed_comment = '__kaze-style-pre-transformed';
 
 export const preTransform = async (
   code: string,
@@ -35,10 +35,13 @@ export const preTransform = async (
         ...swcOptions.jsc?.experimental,
         plugins: [
           ['@kaze-style/swc-plugin/_pre-transform', preTransformOptions],
-          ...swcOptions.jsc?.experimental?.plugins || [],
+          ...(swcOptions.jsc?.experimental?.plugins || []),
         ],
       },
     },
   });
-  return [result.code, { isTransformed: result.code.includes(transformed_comment) }];
+  return [
+    result.code,
+    { isTransformed: result.code.includes(transformed_comment) },
+  ];
 };

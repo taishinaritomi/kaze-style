@@ -21,7 +21,7 @@ function loader(
     },
   });
 
-  if (!code || metadata?.transformed !== true) {
+  if (!code || metadata?.isTransformed !== true) {
     this.callback(null, sourceCode, inputSourceMap);
     return;
   }

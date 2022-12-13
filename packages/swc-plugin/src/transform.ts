@@ -33,7 +33,7 @@ export const transform = async (
         ...swcOptions.jsc?.experimental,
         plugins: [
           ['@kaze-style/swc-plugin/_transform', transformOptions],
-          ...swcOptions.jsc?.experimental?.plugins || [],
+          ...(swcOptions.jsc?.experimental?.plugins || []),
         ],
       },
     },

@@ -70,7 +70,7 @@ export const preTransformPlugin = declare<
               },
             );
             path.unshiftContainer('body', buildPreStyleImport());
-            this.file.metadata = { transformed: true };
+            this.file.metadata = { isTransformed: true };
           }
         },
       },

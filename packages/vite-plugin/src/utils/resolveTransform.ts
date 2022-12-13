@@ -18,7 +18,7 @@ export const resolveTransform = async ({ code, filename }: Args) => {
     },
   });
 
-  if (preTransformedCode && metadata?.transformed) {
+  if (preTransformedCode && metadata?.isTransformed) {
     const result = await build({
       entryPoints: [filename],
       bundle: true,

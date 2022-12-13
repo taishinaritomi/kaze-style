@@ -1,2 +1,2 @@
-export * from './transform'
-export * from './preTransform'
+export * from './transform';
+export * from './preTransform';

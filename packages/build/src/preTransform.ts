@@ -19,7 +19,7 @@ type Args = {
     Partial<Pick<PreTransformOptions, 'forBuildName'>>;
 };
 
-type Metadata = BabelFileMetadata & { transformed?: boolean };
+type Metadata = BabelFileMetadata & { isTransformed?: boolean };
 
 export const preTransform = ({
   code,
