@@ -1,4 +1,4 @@
-import { transform as SwcTransform } from '@swc/core';
+import { transform as swcTransform } from '@swc/core';
 import type { Options as SwcOptions } from '@swc/core';
 
 export type PreTransformOptions = {
@@ -21,7 +21,7 @@ export const preTransform = async (
   code: string,
   { filename, preTransformOptions, swcOptions = {} }: Options,
 ): Promise<Result> => {
-  const result = await SwcTransform(code, {
+  const result = await swcTransform(code, {
     filename,
     swcrc: false,
     ...swcOptions,

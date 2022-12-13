@@ -1,5 +1,5 @@
 import type { ForBuildStyle } from '@kaze-style/core';
-import { transform as SwcTransform } from '@swc/core';
+import { transform as swcTransform } from '@swc/core';
 import type { Options as SwcOptions } from '@swc/core';
 
 type TransformOptions = {
@@ -19,7 +19,7 @@ export const transform = async (
   code: string,
   { filename, transformOptions, swcOptions = {} }: Options,
 ): Promise<Result> => {
-  const result = await SwcTransform(code, {
+  const result = await swcTransform(code, {
     filename,
     swcrc: false,
     ...swcOptions,
