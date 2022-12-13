@@ -17,10 +17,18 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
           cache: 'yarn'
+      - name: setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
       - name: install
         run: yarn install
       - name: build packages
         run: yarn build:packages
+      - name: code check
+        run: yarn code:check
+      - name: test
+        run: yarn test
       - name: release
         run: yarn release
         env:
