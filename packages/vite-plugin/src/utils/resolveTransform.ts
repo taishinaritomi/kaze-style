@@ -5,18 +5,20 @@ import { build } from 'esbuild';
 type Args = {
   filename: string;
   code: string;
+  compiler: 'swc' | 'babel';
 };
 
-export const resolveTransform = async ({ code, filename }: Args) => {
-  const { code: preTransformedCode, metadata } = preTransform({
+export const resolveTransform = async ({ code, filename, compiler }: Args) => {
+  const [preTransformedCode, metadata] = await preTransform(
     code,
-    filename,
-    inputSourceMap: undefined,
-    sourceMaps: false,
-    options: {
+    {
       filename,
+      preTransformOptions: {
+        filename,
+      },
     },
-  });
+    compiler,
+  );
 
   if (preTransformedCode && metadata?.isTransformed) {
     const result = await build({
@@ -49,16 +51,17 @@ export const resolveTransform = async ({ code, filename }: Args) => {
       filename,
     });
 
-    const { code } = transform({
-      code: preTransformedCode,
-      filename,
-      options: { styles },
-      inputSourceMap: undefined,
-      sourceMaps: false,
-    });
+    const [transformedCode] = await transform(
+      preTransformedCode,
+      {
+        filename,
+        transformOptions: { styles },
+      },
+      compiler,
+    );
 
     return {
-      code,
+      code: transformedCode,
       cssRules,
     };
   } else {

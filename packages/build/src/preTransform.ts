@@ -1,50 +1,46 @@
 import type {
-  BabelFileMetadata,
-  TransformOptions as BabelTransformOptions,
-} from '@babel/core';
-import { transformSync } from '@babel/core';
-// @ts-expect-error type
-import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import type { PreTransformOptions } from '@kaze-style/babel-plugin';
-import { preTransformPlugin } from '@kaze-style/babel-plugin';
+  PreTransformOptions,
+  BabelOptions,
+} from '@kaze-style/babel-plugin';
+import { preTransform as babelPreTransform } from '@kaze-style/babel-plugin';
+import type { SwcOptions } from '@kaze-style/swc-plugin';
+import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
 import { forBuildName as _forBuildName } from './constants';
-import type { InputSourceMap } from './transform';
 
-type Args = {
-  code: string;
+type Options = {
   filename: string;
-  sourceMaps: BabelTransformOptions['sourceMaps'];
-  inputSourceMap: InputSourceMap;
-  options: Omit<PreTransformOptions, 'forBuildName'> &
+  swcOptions?: SwcOptions;
+  babelOptions?: BabelOptions;
+  preTransformOptions: Omit<PreTransformOptions, 'forBuildName'> &
     Partial<Pick<PreTransformOptions, 'forBuildName'>>;
 };
 
-type Metadata = BabelFileMetadata & { isTransformed?: boolean };
-
-export const preTransform = ({
-  code,
-  filename,
-  inputSourceMap,
-  sourceMaps,
-  options: { forBuildName = _forBuildName, ...options },
-}: Args) => {
-  const result = transformSync(code, {
-    caller: { name: 'kaze' },
-    babelrc: false,
-    configFile: false,
-    compact: false,
+export const preTransform = async (
+  code: string,
+  {
     filename,
-    sourceMaps: sourceMaps || false,
-    plugins: [
-      [preTransformPlugin, { ...options, forBuildName }],
-      [typescriptSyntax, { isTSX: true }],
-    ],
-    sourceFileName: filename,
-    inputSourceMap: inputSourceMap,
-  });
-
-  return {
-    code: result?.code,
-    metadata: result?.metadata as Metadata | undefined,
-  };
+    babelOptions = {},
+    swcOptions = {},
+    preTransformOptions: {
+      forBuildName = _forBuildName,
+      ...preTransformOptions
+    },
+  }: Options,
+  compiler: 'swc' | 'babel' = 'babel',
+) => {
+  if (compiler === 'swc') {
+    const [transformedCode, metadata] = await swcPreTransform(code, {
+      filename,
+      swcOptions,
+      preTransformOptions: { forBuildName, ...preTransformOptions },
+    });
+    return [transformedCode, metadata] as const;
+  } else {
+    const [transformedCode, metadata] = await babelPreTransform(code, {
+      filename,
+      babelOptions,
+      preTransformOptions: { forBuildName, ...preTransformOptions },
+    });
+    return [transformedCode, metadata] as const;
+  }
 };

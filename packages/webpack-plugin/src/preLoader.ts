@@ -1,37 +1,38 @@
 import { preTransform } from '@kaze-style/build';
 import type { LoaderContext } from 'webpack';
 import type { WebpackLoaderParams } from './loader';
-import { parseSourceMap } from './utils/parseSourceMap';
 
 function loader(
-  this: LoaderContext<never>,
+  this: LoaderContext<{ compiler: 'swc' | 'babel' }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
   additionalData: WebpackLoaderParams[2],
 ) {
   this.cacheable(true);
-
-  const { code, metadata } = preTransform({
-    code: sourceCode,
-    filename: this.resourcePath,
-    sourceMaps: this.sourceMap,
-    inputSourceMap: parseSourceMap(inputSourceMap) || undefined,
-    options: {
+  const options = this.getOptions();
+  const callback = this.async();
+  preTransform(
+    sourceCode,
+    {
       filename: this.resourcePath,
+      preTransformOptions: {
+        filename: this.resourcePath,
+      },
     },
+    options.compiler,
+  ).then(([transformedCode, metadata]) => {
+    if (!transformedCode || metadata?.isTransformed !== true) {
+      callback(null, sourceCode, inputSourceMap);
+      return;
+    } else {
+      callback(
+        null,
+        transformedCode,
+        undefined,
+        Object.assign({}, additionalData, { kazeTransformed: true }),
+      );
+    }
   });
-
-  if (!code || metadata?.isTransformed !== true) {
-    this.callback(null, sourceCode, inputSourceMap);
-    return;
-  }
-
-  this.callback(
-    null,
-    code,
-    undefined,
-    Object.assign({}, additionalData, { kazeTransformed: true }),
-  );
 }
 
 export default loader;

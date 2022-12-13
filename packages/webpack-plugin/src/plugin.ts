@@ -3,7 +3,8 @@ import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 
 type PluginOptions = {
-  test: RuleSetRule['test'];
+  test?: RuleSetRule['test'];
+  swc?: boolean;
 };
 
 const pluginName = 'KazePlugin';
@@ -13,17 +14,26 @@ const preLoader = require.resolve('./preLoader');
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
+  swc: boolean;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
+    swc = false,
   }: Partial<PluginOptions> = {}) {
     this.test = test;
+    this.swc = swc;
   }
 
   apply(compiler: Compiler) {
     compiler.options.module?.rules.splice(0, 0, {
       test: this.test,
       exclude: /node_modules/,
-      use: [loader, preLoader],
+      use: [
+        { loader, options: { compiler: this.swc ? 'swc' : 'babel' } },
+        {
+          loader: preLoader,
+          options: { compiler: this.swc ? 'swc' : 'babel' },
+        },
+      ],
     });
 
     compiler.hooks.compilation.tap(pluginName, (compilation) => {

@@ -19,6 +19,10 @@ export const transform = async (
   code: string,
   { filename, transformOptions, swcOptions = {} }: Options,
 ): Promise<Result> => {
+  const _styles = transformOptions.styles.map(({ classesObject, index }) => ({
+    classesObject,
+    index,
+  }));
   const result = await swcTransform(code, {
     filename,
     swcrc: false,
@@ -32,7 +36,10 @@ export const transform = async (
       experimental: {
         ...swcOptions.jsc?.experimental,
         plugins: [
-          ['@kaze-style/swc-plugin/_transform', transformOptions],
+          [
+            '@kaze-style/swc-plugin/_transform',
+            { ...transformOptions, styles: _styles },
+          ],
           ...(swcOptions.jsc?.experimental?.plugins || []),
         ],
       },
