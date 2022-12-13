@@ -3,8 +3,13 @@ import { sortCssRules, uniqueCssRules } from '@kaze-style/core';
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';
 
-export const plugin = (): Plugin => {
+type KazeConfig = {
+  swc?: boolean;
+};
+
+export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
   const cssRules: CssRule[] = [];
+  let mode = '';
   return {
     name: 'kaze-transform',
     enforce: 'pre',
@@ -14,6 +19,9 @@ export const plugin = (): Plugin => {
         return validId;
       }
       return;
+    },
+    configResolved(config) {
+      mode = config.mode;
     },
     load(id: string) {
       const [validId] = id.split('?');
@@ -25,6 +33,10 @@ export const plugin = (): Plugin => {
     },
 
     async transform(code, id) {
+      if (mode === 'development') {
+        return null;
+      }
+
       const [validId] = id.split('?');
       if (!/.(tsx|ts|js|jsx)$/.test(validId || '')) {
         return null;
@@ -34,6 +46,7 @@ export const plugin = (): Plugin => {
         await resolveTransform({
           code,
           filename: validId || '',
+          compiler: kazeConfig.swc ? 'swc' : 'babel',
         });
       let rootRelativeId = '';
       if (_cssRules.length !== 0) {

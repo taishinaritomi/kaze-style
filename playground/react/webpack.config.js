@@ -43,6 +43,8 @@ module.exports = {
   },
   plugins: [
     new KazePlugin(),
+    //use swc compiler
+    // new KazePlugin({ swc: true }),
     new HtmlWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],

@@ -14,7 +14,23 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-          cache: npm
+          cache: 'yarn'
+      - name: setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: cargo cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            packages/swc-plugin/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('packages/swc-plugin/Cargo.lock') }}
+      - name: install wasm target
+        run: rustup target add wasm32-wasi
       - name: install dependencies
         run: yarn install --frozen-lockfile
       - name: build packages

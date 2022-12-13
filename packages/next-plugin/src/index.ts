@@ -6,7 +6,7 @@ import { getGlobalCssLoader } from 'next/dist/build/webpack/config/blocks/css/lo
 import type { ConfigurationContext } from 'next/dist/build/webpack/config/utils';
 import type { Configuration, RuleSetRule } from 'webpack';
 
-type KazeConfig = Record<string, string>;
+type KazeConfig = ConstructorParameters<typeof KazePlugin>[0];
 
 const getSupportedBrowsers = (dir: string, isDevelopment: boolean) => {
   try {

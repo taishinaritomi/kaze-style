@@ -1,6 +1,5 @@
 import childProcess from 'child_process';
 import path from 'path';
-import util from 'util';
 import arg from 'arg';
 import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
@@ -8,7 +7,54 @@ import fs from 'fs-extra';
 import glob from 'glob';
 import { gzipSize } from 'gzip-size';
 
-const exec = util.promisify(childProcess.exec);
+const args = arg({
+  '--cjsOnly': Boolean,
+  '--watch': Boolean,
+  '--size': Boolean,
+  '--sizeEntry': [String],
+  '--exec': String,
+});
+
+const isWatch = args['--watch'] || false;
+const isCjsOnly = args['--cjsOnly'] || false;
+const isSize = args['--size'] || false;
+const sizeEntry = args['--sizeEntry'] || [];
+const execCommand = args['--exec'];
+
+const outDir = 'dist';
+const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
+const entryDir = 'src';
+
+const options: BuildOptions = {
+  watch: isWatch,
+  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
+    ignore: ['./**/*.spec.ts'],
+  }),
+  // logLevel: 'info',
+  minify: true,
+  platform: 'node',
+};
+
+const exec = async (cmd: string) => {
+  const _spawn = childProcess.spawn(cmd, { shell: true });
+  await new Promise<void>((resolve, reject) => {
+    _spawn.stdout.on('data', (data) => {
+      const log = data.toString();
+      log && console.log(log);
+    });
+    _spawn.stderr.on('data', (data) => {
+      const log = data.toString();
+      log && console.log(log);
+    });
+    _spawn.on('close', (code) => {
+      console.log(cmd, 'exit', code);
+      if (code === 0) {
+        return resolve();
+      }
+      reject();
+    });
+  });
+};
 
 const addExtensionPlugin = (): Plugin => {
   return {
@@ -38,31 +84,6 @@ const formatBytes = (x: number) => {
   return `${(x / 1024 ** i).toFixed(1)}${sizes[i]}`;
 };
 
-const args = arg({
-  '--cjsOnly': Boolean,
-  '--watch': Boolean,
-  '--size': Boolean,
-  '--sizeEntry': [String],
-});
-
-const outDir = 'dist';
-const entryDir = 'src';
-
-const isWatch = args['--watch'] || false;
-const isCjsOnly = args['--cjsOnly'] || false;
-const isSize = args['--size'] || false;
-const sizeEntry = args['--sizeEntry'] || [];
-
-const options: BuildOptions = {
-  watch: isWatch,
-  entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
-    ignore: ['./**/*.spec.ts'],
-  }),
-  logLevel: 'info',
-  minify: true,
-  platform: 'node',
-};
-
 const bundleSize = async () => {
   const sizeOutDir = `${outDir}-size`;
   sizeEntry.push(`${entryDir}/index.ts`);
@@ -70,6 +91,7 @@ const bundleSize = async () => {
   const result = await build({
     ...options,
     format: 'esm',
+    logLevel: 'info',
     entryPoints: sizeEntry,
     outdir: sizeOutDir,
     bundle: true,
@@ -87,9 +109,7 @@ const bundleSize = async () => {
 };
 
 const main = async () => {
-  await fs.remove(outDir);
-  !isCjsOnly &&
-    (await fs.outputJson(`${outDir}/cjs/package.json`, { type: 'commonjs' }));
+  !isWatch && (await fs.remove(outDir));
 
   await Promise.all([
     !isCjsOnly &&
@@ -100,15 +120,18 @@ const main = async () => {
         bundle: true,
         plugins: [addExtensionPlugin()],
       }),
-    isSize && bundleSize(),
+    !isCjsOnly &&
+      fs.outputJson(`${cjsOutDir}/package.json`, { type: 'commonjs' }),
     build({
       ...options,
       format: 'cjs',
-      outdir: isCjsOnly ? outDir : `${outDir}/cjs`,
+      outdir: cjsOutDir,
     }),
+    isSize && bundleSize(),
     exec(
       `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
     ),
+    execCommand && exec(execCommand),
   ]);
 };
 

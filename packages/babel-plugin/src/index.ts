@@ -1,4 +1,7 @@
-export type { TransformOptions } from './transformPlugin';
+export * from './preTransform';
+export * from './transform';
+export * from './preTransformPlugin';
+export * from './transformPlugin';
 export type { PreTransformOptions } from './preTransformPlugin';
-export { preTransformPlugin } from './preTransformPlugin';
-export { transformPlugin } from './transformPlugin';
+export type { TransformOptions } from './transformPlugin';
+export type { TransformOptions as BabelOptions } from '@babel/core';

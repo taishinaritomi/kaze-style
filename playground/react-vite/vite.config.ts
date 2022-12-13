@@ -5,3 +5,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [react(), kazePlugin()],
 });
+
+// use swc compiler
+// export default defineConfig({
+//   plugins: [react(), kazePlugin({ swc: true })],
+// });

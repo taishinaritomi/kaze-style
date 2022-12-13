@@ -1,44 +1,33 @@
-import type {
-  BabelFileMetadata,
-  TransformOptions as BabelTransformOptions,
-} from '@babel/core';
-import { transformSync } from '@babel/core';
-// @ts-expect-error type
-import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import type { TransformOptions } from '@kaze-style/babel-plugin';
-import { transformPlugin } from '@kaze-style/babel-plugin';
+import type { TransformOptions, BabelOptions } from '@kaze-style/babel-plugin';
+import { transform as babelTransform } from '@kaze-style/babel-plugin';
+import type { SwcOptions } from '@kaze-style/swc-plugin';
+import { transform as swcTransform } from '@kaze-style/swc-plugin';
 
-type Args = {
-  code: string;
+type Options = {
   filename: string;
-  inputSourceMap: InputSourceMap;
-  sourceMaps: BabelTransformOptions['sourceMaps'];
-  options: TransformOptions;
+  swcOptions?: SwcOptions;
+  babelOptions?: BabelOptions;
+  transformOptions: TransformOptions;
 };
-export type InputSourceMap = BabelTransformOptions['inputSourceMap'];
 
-type Metadata = BabelFileMetadata & { transformed?: boolean };
-
-export const transform = ({
-  code,
-  filename,
-  options,
-  inputSourceMap,
-  sourceMaps,
-}: Args) => {
-  const result = transformSync(code, {
-    caller: { name: 'kaze' },
-    babelrc: false,
-    configFile: false,
-    compact: false,
-    filename,
-    sourceMaps: sourceMaps || false,
-    plugins: [[transformPlugin, options], typescriptSyntax],
-    sourceFileName: filename,
-    inputSourceMap: inputSourceMap,
-  });
-  return {
-    code: result?.code,
-    metadata: result?.metadata as Metadata | undefined,
-  };
+export const transform = async (
+  code: string,
+  { filename, babelOptions = {}, swcOptions = {}, transformOptions }: Options,
+  compiler: 'swc' | 'babel' = 'babel',
+) => {
+  if (compiler === 'swc') {
+    const [transformedCode, metadata] = await swcTransform(code, {
+      filename,
+      swcOptions,
+      transformOptions,
+    });
+    return [transformedCode, metadata] as const;
+  } else {
+    const [transformedCode, metadata] = await babelTransform(code, {
+      filename,
+      babelOptions,
+      transformOptions,
+    });
+    return [transformedCode, metadata] as const;
+  }
 };
