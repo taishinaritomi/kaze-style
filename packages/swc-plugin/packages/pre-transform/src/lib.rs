@@ -20,6 +20,7 @@ use swc_core::{
 #[derive(serde::Deserialize)]
 pub struct Config {
   filename: String,
+  #[serde(rename = "forBuildName")]
   for_build_name: String,
 }
 

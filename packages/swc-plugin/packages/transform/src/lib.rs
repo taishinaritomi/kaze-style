@@ -16,6 +16,7 @@ use swc_core::{
 #[derive(serde::Deserialize)]
 pub struct Style {
   index: u8,
+  #[serde(rename = "classesObject")]
   classes_object: Option<BTreeMap<String, BTreeMap<String, String>>>,
 }
 
