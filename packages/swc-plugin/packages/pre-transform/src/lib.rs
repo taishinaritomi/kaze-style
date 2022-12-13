@@ -66,7 +66,7 @@ impl TransformVisitor {
     }
   }
 
-  fn transform_target_import_specifier(&mut self, import_decl: &mut ImportDecl) {
+  fn transform_target_import(&mut self, import_decl: &mut ImportDecl) {
     if &*import_decl.src.value == self.import_source {
       for specifier in import_decl.specifiers.iter_mut() {
         match specifier {
@@ -127,7 +127,7 @@ impl TransformVisitor {
 
 impl VisitMut for TransformVisitor {
   fn visit_mut_import_decl(&mut self, import_decl: &mut ImportDecl) {
-    self.transform_target_import_specifier(import_decl);
+    self.transform_target_import(import_decl);
     import_decl.visit_mut_children_with(self);
   }
 
