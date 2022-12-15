@@ -11,7 +11,7 @@ type Args = {
 export const resolveTransform = async (
   code: string,
   { filename, compiler }: Args,
-):Promise<[code: string,cssRules:CssRule[]]> => {
+): Promise<[code: string, cssRules: CssRule[]]> => {
   const [preTransformedCode, metadata] = await preTransform(
     code,
     {
