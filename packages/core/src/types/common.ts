@@ -16,23 +16,13 @@ export type NestedChar =
   | '.'
   | '#';
 
-export type Classes<K extends string> = Record<K, string>;
-export type ClassesObject<K extends string> = Record<K, ClassName['object']>;
+export type Classes<K extends string> = Record<K, ClassName>;
+export type PureClasses<K extends string> = Record<K, ClassName['o']>;
 
-export type Selectors = {
-  nested: string;
-  atRules: string[];
-};
+export type Selectors = [atRules: string[], nested: string];
 
-export type ForBuild = {
-  filename: string;
-  globalStyles: {
-    cssRules: CssRule[];
-    index: number;
-  }[];
-  styles: {
-    classesObject: ClassesObject<string>;
-    cssRules: CssRule[];
-    index: number;
-  }[];
-};
+export type ForBuild = [
+  filename: string,
+  cssRules: CssRule[],
+  styles: [classes: PureClasses<string>, index: number][],
+];

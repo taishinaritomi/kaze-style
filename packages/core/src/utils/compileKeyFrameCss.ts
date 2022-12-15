@@ -1,22 +1,21 @@
 import { hash } from '../hash';
 import type { KeyframesRules } from '../types/style';
-import { compileNestedCss } from './compileNestedCss';
+import { compileObjectCss } from './compileObjectCss';
 
-export const compileKeyFrameCss = (keyframeObject: KeyframesRules) => {
+export const compileKeyFrameCss = (
+  keyframeObject: KeyframesRules,
+): [keyframeName: string, keyframesRule: string] => {
   const percentageRules: string[] = [];
 
   for (const percentage in keyframeObject) {
     const value = keyframeObject[percentage];
     percentageRules.push(
-      `${compileNestedCss({
-        selector: percentage,
-        style: value || {},
-      }).join('')}`,
+      `${compileObjectCss(value || {}, percentage).join('')}`,
     );
   }
   const css = percentageRules.join('');
-  const keyframeName = `_${hash(css)}`;
-  const keyframesRule = `@keyframes ${keyframeName}{${css}}`;
+  const keyframesName = `_${hash(css)}`;
+  const keyframesRule = `@keyframes ${keyframesName}{${css}}`;
 
-  return { keyframesRule, keyframeName };
+  return [keyframesName, keyframesRule];
 };

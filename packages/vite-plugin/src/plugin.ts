@@ -27,7 +27,7 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
       const [validId] = id.split('?');
       if (/kaze.css$/.test(validId || '')) {
         const _cssRules = sortCssRules(uniqueCssRules(cssRules));
-        return _cssRules.map((cssRule) => cssRule.value).join('');
+        return _cssRules.map((cssRule) => cssRule[0]).join('');
       }
       return;
     },

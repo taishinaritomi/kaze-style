@@ -1,9 +1,7 @@
-type Args = {
-  nested: string;
-  current: string;
-};
-
-export const normalizeNestedSelector = ({ nested, current }: Args): string => {
+export const normalizeNestedSelector = (
+  current: string,
+  nested: string,
+): string => {
   let selector = current;
   if (current) {
     selector += nested.charAt(0) === '&' ? nested.slice(1) : nested;

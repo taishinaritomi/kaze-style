@@ -5,7 +5,7 @@ import { mergeStyle } from './mergeStyle';
 
 describe('mergeStyle', () => {
   it('base', () => {
-    const { classes } = createStyle({
+    const [, classes] = createStyle({
       base: {
         color: 'red',
         '@media (max-width:1024px)': {
@@ -20,7 +20,7 @@ describe('mergeStyle', () => {
     });
 
     expect(mergeStyle(classes.base, classes.action)).toEqual(
-      new ClassName({ _1ylxx6h: '_18ffsfk', _agnw3v: '_1jtasax' }),
+      new ClassName({ _1ylxx6h: '_18ffsfk', _1l79nxf: '_1rl8wha' }),
     );
   });
 });

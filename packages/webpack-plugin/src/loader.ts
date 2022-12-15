@@ -37,8 +37,7 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const { styles, cssRules } = extractionStyle({
-          code: source,
+        const [cssRules, styles] = extractionStyle(source, {
           filename: this.resourcePath,
         });
         transform(

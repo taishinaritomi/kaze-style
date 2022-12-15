@@ -6,7 +6,7 @@ export const cssRulesToString = (cssRules: CssRule[]) => {
   return `
     @layer ${styleOrder.map((order) => `${layerPrefix}${order}`).join(',')};
     ${cssRules
-      .map(({ order, value }) => {
+      .map(([value, order]) => {
         return `@layer ${layerPrefix}${order}{${value}}`;
       })
       .join('')}

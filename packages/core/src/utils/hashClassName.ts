@@ -3,18 +3,12 @@ import type { CssValue, Selectors } from '../types/common';
 import type { AndArray } from '../types/utils';
 import { styleValueStringify } from './styleValueStringify';
 
-type Args = {
-  selectors: Selectors;
-  property: string;
-  styleValue: AndArray<CssValue>;
-};
-
-export const hashClassName = ({
-  selectors: { nested, atRules },
-  property,
-  styleValue,
-}: Args): string => {
+export const hashClassName = (
+  [atRules, nested]: Selectors,
+  property: string,
+  styleValue: AndArray<CssValue>,
+): string => {
   return `_${hash(
-    `${property}${nested}${atRules.join('')}${styleValueStringify(styleValue)}`,
+    `${atRules.join('')}${nested}${property}${styleValueStringify(styleValue)}`,
   )}`;
 };

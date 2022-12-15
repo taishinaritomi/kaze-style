@@ -3,7 +3,9 @@ import { styleOrder } from './styleOrder';
 
 export const sortCssRules = (cssRules: CssRule[]) => {
   return cssRules.sort((ruleA, ruleB) => {
-    if (ruleA.order === ruleB.order) return 0;
-    return styleOrder.indexOf(ruleA.order) - styleOrder.indexOf(ruleB.order);
+    const orderA = ruleA[1];
+    const orderB = ruleB[1];
+    if (orderA === orderB) return 0;
+    return styleOrder.indexOf(orderA) - styleOrder.indexOf(orderB);
   });
 };

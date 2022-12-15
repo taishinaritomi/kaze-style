@@ -46,10 +46,12 @@ export const resolveTransform = async ({ code, filename, compiler }: Args) => {
       ],
     });
 
-    const { styles, cssRules } = extractionStyle({
-      code: result.outputFiles[0]?.text || '',
-      filename,
-    });
+    const [cssRules, styles] = extractionStyle(
+      result.outputFiles[0]?.text || '',
+      {
+        filename,
+      },
+    );
 
     const [transformedCode] = await transform(
       preTransformedCode,

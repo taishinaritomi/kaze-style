@@ -1,16 +1,10 @@
 import type { Selectors } from '../types/common';
 
-type Args = {
-  selector: string;
-  selectors: Selectors;
-  declaration: string;
-};
-
-export const compileCss = ({
-  selector,
-  selectors: { nested, atRules },
-  declaration,
-}: Args): string => {
+export const compileCss = (
+  selector: string,
+  [atRules, nested]: Selectors,
+  declaration: string,
+): string => {
   let resolvedSelector = '';
   let rule = '';
 
