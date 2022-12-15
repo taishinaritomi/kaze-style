@@ -1,14 +1,17 @@
 import { extractionStyle, preTransform, transform } from '@kaze-style/build';
+import type { CssRule } from '@kaze-style/core';
 import type { Loader } from 'esbuild';
 import { build } from 'esbuild';
 
 type Args = {
   filename: string;
-  code: string;
   compiler: 'swc' | 'babel';
 };
 
-export const resolveTransform = async ({ code, filename, compiler }: Args) => {
+export const resolveTransform = async (
+  code: string,
+  { filename, compiler }: Args,
+):Promise<[code: string,cssRules:CssRule[]]> => {
   const [preTransformedCode, metadata] = await preTransform(
     code,
     {
@@ -62,14 +65,8 @@ export const resolveTransform = async ({ code, filename, compiler }: Args) => {
       compiler,
     );
 
-    return {
-      code: transformedCode,
-      cssRules,
-    };
+    return [transformedCode, cssRules];
   } else {
-    return {
-      code,
-      cssRules: [],
-    };
+    return [code, []];
   }
 };

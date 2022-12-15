@@ -42,12 +42,10 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
         return null;
       }
 
-      const { code: transformedCode, cssRules: _cssRules } =
-        await resolveTransform({
-          code,
-          filename: validId || '',
-          compiler: kazeConfig.swc ? 'swc' : 'babel',
-        });
+      const [transformedCode, _cssRules] = await resolveTransform(code, {
+        filename: validId || '',
+        compiler: kazeConfig.swc ? 'swc' : 'babel',
+      });
       let rootRelativeId = '';
       if (_cssRules.length !== 0) {
         rootRelativeId = `import "${validId}.kaze.css";`;
