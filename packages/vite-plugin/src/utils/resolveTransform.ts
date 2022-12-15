@@ -3,14 +3,14 @@ import type { CssRule } from '@kaze-style/core';
 import type { Loader } from 'esbuild';
 import { build } from 'esbuild';
 
-type Args = {
+type Options = {
   filename: string;
   compiler: 'swc' | 'babel';
 };
 
 export const resolveTransform = async (
   code: string,
-  { filename, compiler }: Args,
+  { filename, compiler }: Options,
 ): Promise<[code: string, cssRules: CssRule[]]> => {
   const [preTransformedCode, metadata] = await preTransform(
     code,
