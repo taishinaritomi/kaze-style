@@ -27,7 +27,7 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
       const [validId] = id.split('?');
       if (/kaze.css$/.test(validId || '')) {
         const _cssRules = sortCssRules(uniqueCssRules(cssRules));
-        return _cssRules.map((cssRule) => cssRule.value).join('');
+        return _cssRules.map((cssRule) => cssRule[0]).join('');
       }
       return;
     },
@@ -42,12 +42,10 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
         return null;
       }
 
-      const { code: transformedCode, cssRules: _cssRules } =
-        await resolveTransform({
-          code,
-          filename: validId || '',
-          compiler: kazeConfig.swc ? 'swc' : 'babel',
-        });
+      const [transformedCode, _cssRules] = await resolveTransform(code, {
+        filename: validId || '',
+        compiler: kazeConfig.swc ? 'swc' : 'babel',
+      });
       let rootRelativeId = '';
       if (_cssRules.length !== 0) {
         rootRelativeId = `import "${validId}.kaze.css";`;

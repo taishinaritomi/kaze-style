@@ -1,9 +1,9 @@
-import type { ForBuildStyle } from '@kaze-style/core';
+import type { ForBuild } from '@kaze-style/core';
 import { transform as swcTransform } from '@swc/core';
 import type { Options as SwcOptions } from '@swc/core';
 
 type TransformOptions = {
-  styles: ForBuildStyle<string>[];
+  styles: ForBuild[2];
 };
 
 type Options = {
@@ -19,8 +19,8 @@ export const transform = async (
   code: string,
   { filename, transformOptions, swcOptions = {} }: Options,
 ): Promise<Result> => {
-  const _styles = transformOptions.styles.map(({ classesObject, index }) => ({
-    classesObject,
+  const _styles = transformOptions.styles.map(([classes, index]) => ({
+    classes,
     index,
   }));
   const result = await swcTransform(code, {

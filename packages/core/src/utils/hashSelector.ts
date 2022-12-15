@@ -1,14 +1,9 @@
 import { hash } from '../hash';
 import type { Selectors } from '../types/common';
 
-type Args = {
-  selectors: Selectors;
-  property: string;
-};
-
-export const hashSelector = ({
-  selectors: { nested, atRules },
-  property,
-}: Args): string => {
-  return `_${hash(`${property}${nested}${atRules.join('')}`)}`;
+export const hashSelector = (
+  [atRules, nested]: Selectors,
+  property: string,
+): string => {
+  return `_${hash(`${atRules.join('')}${nested}${property}`)}`;
 };

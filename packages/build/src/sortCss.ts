@@ -13,10 +13,10 @@ export const sortCss = (css: string): string => {
       const order = element.value.substring(
         `@layer ${layerPrefix}`.length,
       ) as StyleOrder;
-      cssRules.push({
+      cssRules.push([
+        serialize(element.children as Element[], stringify),
         order,
-        value: serialize(element.children as Element[], stringify),
-      });
+      ]);
     } else {
       otherElements.push(element);
     }
@@ -25,7 +25,7 @@ export const sortCss = (css: string): string => {
   const _uniqueCssRules = uniqueCssRules(cssRules);
   const sortedCssRules = sortCssRules(_uniqueCssRules);
   return (
-    sortedCssRules.map((cssRule) => cssRule.value).join('') +
+    sortedCssRules.map((cssRule) => cssRule[0]).join('') +
     serialize(otherElements, stringify)
   );
 };

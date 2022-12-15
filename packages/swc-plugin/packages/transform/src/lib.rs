@@ -16,8 +16,7 @@ use swc_core::{
 #[derive(serde::Deserialize)]
 pub struct Style {
   index: u8,
-  #[serde(rename = "classesObject")]
-  classes_object: Option<BTreeMap<String, BTreeMap<String, String>>>,
+  classes: Option<BTreeMap<String, BTreeMap<String, String>>>,
 }
 
 #[derive(serde::Deserialize)]
@@ -129,9 +128,9 @@ impl TransformVisitor {
                 for style in self.config.styles.iter() {
                   let style_index: f64 = style.index.into();
                   if index.value == style_index {
-                    match &style.classes_object {
-                      Some(classes_object) => {
-                        for (classes_key, classes_value) in classes_object {
+                    match &style.classes {
+                      Some(classes) => {
+                        for (classes_key, classes_value) in classes {
                           let classes_key: &str = classes_key;
                           let classes_arg = classes_value
                             .iter()
@@ -211,7 +210,7 @@ test!(
   |_| {
     as_folder(TransformVisitor::new(Config {
       styles: vec![Style {
-        classes_object: Some(BTreeMap::from([
+        classes: Some(BTreeMap::from([
           (
             "base".to_string(),
             BTreeMap::from([("color".to_string(), "red".to_string())]),

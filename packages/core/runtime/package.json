@@ -1,6 +1,0 @@
-{
-  "main": "../dist/cjs/runtime.js",
-  "module": "../dist/runtime.js",
-  "typings": "../dist/runtime.d.ts",
-  "sideEffects": false
-}

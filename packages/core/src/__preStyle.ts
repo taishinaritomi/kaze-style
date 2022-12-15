@@ -1,13 +1,6 @@
 import { createStyle } from './createStyle';
-import type { CssRule } from './styleOrder';
-import type { ClassesObject, Classes, ForBuild } from './types/common';
+import type { Classes, ForBuild } from './types/common';
 import type { KazeStyle } from './types/style';
-
-export type ForBuildStyle<K extends string> = {
-  classesObject: ClassesObject<K>;
-  cssRules: CssRule[];
-  index: number;
-};
 
 export const __preStyle = <K extends string>(
   styles: KazeStyle<K>,
@@ -15,10 +8,10 @@ export const __preStyle = <K extends string>(
   filename: string,
   index: number,
 ): Classes<K> => {
-  const { classes, classesObject, cssRules } = createStyle(styles);
-
-  if (forBuild.filename === filename) {
-    forBuild.styles.push({ classesObject, cssRules, index });
+  const [cssRules, classes, pureClasses] = createStyle(styles);
+  if (forBuild[0] === filename) {
+    forBuild[1].push(...cssRules);
+    forBuild[2].push([pureClasses, index]);
   }
 
   return classes;

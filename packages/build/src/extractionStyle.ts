@@ -2,22 +2,16 @@ import type { ForBuild } from '@kaze-style/core';
 import evalCode from 'eval';
 import { forBuildName as _forBuildName } from './constants';
 
-type Args = {
-  code: string;
+type Options = {
   filename: string;
   forBuildName?: string;
 };
 
-export const extractionStyle = ({
-  code,
-  filename,
-  forBuildName = _forBuildName,
-}: Args) => {
-  const forBuild: ForBuild = {
-    filename,
-    styles: [],
-    globalStyles: [],
-  };
+export const extractionStyle = (
+  code: string,
+  { filename, forBuildName = _forBuildName }: Options,
+) => {
+  const forBuild: ForBuild = [filename, [], []];
 
   const window = {};
   evalCode(
@@ -30,16 +24,6 @@ export const extractionStyle = ({
     true,
   );
 
-  const { globalStyles, styles } = forBuild;
-
-  const cssRules = [
-    ...styles.flatMap(({ cssRules }) => cssRules),
-    ...globalStyles.flatMap(({ cssRules }) => cssRules),
-  ];
-
-  return {
-    globalStyles,
-    styles,
-    cssRules,
-  };
+  const [, cssRules, styles] = forBuild;
+  return [cssRules, styles] as const;
 };

@@ -1,8 +1,8 @@
 import type { ClassName } from './ClassName';
 import type { CssRule } from './styleOrder';
+import { checkStyleOrder } from './styleOrder';
 import type { Selectors } from './types/common';
 import type { SupportStyle, KeyframesRules } from './types/style';
-import { checkStyleOrder } from './utils/checkStyleOrder';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
 import { hashClassName } from './utils/hashClassName';
@@ -12,74 +12,49 @@ import { isObject } from './utils/isObject';
 import { resolveSelectors } from './utils/resolveSelectors';
 import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type ResolvedStyle = {
-  classNameObject: ClassName['object'];
-  cssRules: CssRule[];
-};
+type ResolvedStyle = [object: ClassName['o'], cssRules: CssRule[]];
 
-type Args = {
-  style: SupportStyle;
-  selectors?: Selectors;
-  resolvedStyle?: ResolvedStyle;
-};
-
-export const resolveStyle = ({
-  style,
-  selectors = { nested: '', atRules: [] },
-  resolvedStyle = {
-    classNameObject: {},
-    cssRules: [],
-  },
-}: Args): ResolvedStyle => {
+export const resolveStyle = (
+  style: SupportStyle,
+  selectors: Selectors = [[], ''],
+  resolvedStyle: ResolvedStyle = [{}, []],
+): ResolvedStyle => {
+  const object = resolvedStyle[0];
+  const cssRules = resolvedStyle[1];
   for (const _property in style) {
     const property = _property as keyof SupportStyle;
     const styleValue = style[property];
+    const animationName = 'animationName';
     if (isCssValue(styleValue)) {
-      const className = hashClassName({
-        selectors,
-        property,
-        styleValue,
-      });
-      const selector = hashSelector({
-        selectors,
-        property,
-      });
-      const rule = compileCss({
-        selector: `.${className}`,
-        selectors,
-        declaration: styleDeclarationStringify({
-          property,
-          styleValue,
-        }),
-      });
-
-      const order = checkStyleOrder({ selectors });
-
-      resolvedStyle.cssRules.push({ value: rule, order });
-      Object.assign(resolvedStyle.classNameObject, { [selector]: className });
+      const className = hashClassName(selectors, property, styleValue);
+      const selector = hashSelector(selectors, property);
+      cssRules.push([
+        compileCss(
+          `.${className}`,
+          selectors,
+          styleDeclarationStringify(property, styleValue),
+        ),
+        checkStyleOrder(selectors),
+      ]);
+      Object.assign(object, { [selector]: className });
     } else if (isObject(styleValue)) {
-      if (property === 'animationName') {
+      if (property === animationName) {
         const animationNameValue = styleValue as KeyframesRules;
-        const { keyframesRule, keyframeName } =
+        const [keyframesName, keyframesRule] =
           compileKeyFrameCss(animationNameValue);
-        resolvedStyle.cssRules.push({
-          value: keyframesRule,
-          order: 'keyframes',
-        });
-        Object.assign(resolvedStyle.classNameObject, {
-          [keyframeName]: keyframeName,
-        });
-        resolveStyle({
-          style: { animationName: keyframeName },
+        cssRules.push([keyframesRule, 'k']);
+        Object.assign(object, { [keyframesName]: keyframesName });
+        resolveStyle(
+          { [animationName]: keyframesName },
           selectors,
           resolvedStyle,
-        });
+        );
       } else {
-        resolveStyle({
-          style: styleValue,
-          selectors: resolveSelectors({ property, selectors }),
+        resolveStyle(
+          styleValue,
+          resolveSelectors(selectors, property),
           resolvedStyle,
-        });
+        );
       }
     }
   }

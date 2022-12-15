@@ -19,29 +19,16 @@
       "import": "./dist/index.js",
       "require": "./dist/cjs/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./runtime": {
-      "import": "./dist/runtime.js",
-      "require": "./dist/cjs/runtime.js",
-      "types": "./dist/runtime.d.ts"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "runtime": [
-        "./dist/runtime"
-      ]
     }
   },
   "files": [
     "dist",
-    "runtime",
     "LICENSE"
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts --size --sizeEntry src/runtime.ts"
+    "build": "tsx ./../../scripts/build.ts --size"
   },
   "dependencies": {
     "csstype": "^3.1.1"
