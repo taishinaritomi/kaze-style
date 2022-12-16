@@ -3,7 +3,7 @@ import type { CssRule } from '../styleOrder';
 
 export type CssValue = string | number | undefined;
 
-export type NestedChar =
+export type NestChar =
   | ':'
   | '&'
   | ' '
@@ -19,7 +19,7 @@ export type NestedChar =
 export type Classes<K extends string> = Record<K, ClassName>;
 export type PureClasses<K extends string> = Record<K, ClassName['o']>;
 
-export type Selectors = [atRules: string[], nested: string];
+export type Selectors = [atRules: string[], nest: string];
 
 export type ForBuild = [
   filename: string,
