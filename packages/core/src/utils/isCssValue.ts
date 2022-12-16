@@ -1,8 +1,8 @@
 import type { CssValue } from '../types/common';
-import type { AndArray, NestedObj } from '../types/utils';
+import type { AndArray, NestObj } from '../types/utils';
 
 export const isCssValue = (
-  styleValue: NestedObj<AndArray<CssValue>> | AndArray<CssValue>,
+  styleValue: NestObj<AndArray<CssValue>> | AndArray<CssValue>,
 ): styleValue is AndArray<CssValue> => {
   return (
     typeof styleValue === 'string' ||

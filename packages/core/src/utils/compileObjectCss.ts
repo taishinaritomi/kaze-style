@@ -1,5 +1,5 @@
 import type { CssValue, Selectors } from '../types/common';
-import type { AndArray, NestedObj } from '../types/utils';
+import type { AndArray, NestObj } from '../types/utils';
 import { compileCss } from './compileCss';
 import { isCssValue } from './isCssValue';
 import { isObject } from './isObject';
@@ -9,7 +9,7 @@ import { styleDeclarationStringify } from './styleDeclarationStringify';
 type ResolvedStyle = [rules: string[]];
 
 export const compileObjectCss = (
-  style: NestedObj<AndArray<CssValue>>,
+  style: NestObj<AndArray<CssValue>>,
   selector: string,
   selectors: Selectors = [[], ''],
   resolvedStyle: ResolvedStyle = [[]],

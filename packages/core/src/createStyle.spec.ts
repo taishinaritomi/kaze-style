@@ -35,7 +35,7 @@ describe('createStyle', () => {
     ]);
   });
 
-  it('nested pseudo', () => {
+  it('nest pseudo', () => {
     const [cssRules, classes] = createStyle({
       base: {
         ':hover': {
@@ -71,7 +71,7 @@ describe('createStyle', () => {
     ]);
   });
 
-  it('nested atRules', () => {
+  it('nest atRules', () => {
     const [cssRules, classes] = createStyle({
       base: {
         '@media (max-width: 512px)': {

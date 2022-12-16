@@ -1,6 +1,6 @@
 import type { ClassName } from './ClassName';
 import type { CssRule } from './styleOrder';
-import { checkStyleOrder } from './styleOrder';
+import { getStyleOrder } from './styleOrder';
 import type { Selectors } from './types/common';
 import type { SupportStyle, KeyframesRules } from './types/style';
 import { compileCss } from './utils/compileCss';
@@ -34,7 +34,7 @@ export const resolveStyle = (
           selectors,
           styleDeclarationStringify(property, styleValue),
         ),
-        checkStyleOrder(selectors),
+        getStyleOrder(selectors),
       ]);
       Object.assign(object, { [selector]: className });
     } else if (isObject(styleValue)) {

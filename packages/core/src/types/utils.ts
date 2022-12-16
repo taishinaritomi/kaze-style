@@ -2,8 +2,8 @@ export type ValueOf<T> = T[keyof T];
 export type AndArray<T> = T | T[];
 
 type Key = string | number | symbol;
-export type NestedObj<T> = {
-  [_ in Key]?: NestedObj<T> | T;
+export type NestObj<T> = {
+  [_ in Key]?: NestObj<T> | T;
 };
 
 type UnionToIntersection<U> = (

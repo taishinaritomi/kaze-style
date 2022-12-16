@@ -4,11 +4,11 @@ import type { AndArray } from '../types/utils';
 import { styleValueStringify } from './styleValueStringify';
 
 export const hashClassName = (
-  [atRules, nested]: Selectors,
+  [atRules, nest]: Selectors,
   property: string,
   styleValue: AndArray<CssValue>,
 ): string => {
   return `_${hash(
-    `${atRules.join('')}${nested}${property}${styleValueStringify(styleValue)}`,
+    `${atRules.join('')}${nest}${property}${styleValueStringify(styleValue)}`,
   )}`;
 };

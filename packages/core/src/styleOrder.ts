@@ -27,31 +27,30 @@ export const styleOrder = [
   'm',
 ] as const;
 
-export const checkStyleOrder = ([atRules, nested]: Selectors) => {
-  let order: StyleOrder = 'n';
-
+export const getStyleOrder = ([atRules, nest]: Selectors): StyleOrder => {
   if (atRules.length !== 0) {
-    if (atRules.some((atRule) => atRule.includes('media'))) {
-      order = 'm';
+    if (atRules.some((atRule) => atRule.includes('@media'))) {
+      return 'm';
     } else {
-      order = 'a';
+      return 'a';
     }
-  } else if (nested.includes(':active')) {
-    order = 'c';
-  } else if (nested.includes(':hover')) {
-    order = 'h';
-  } else if (nested.includes(':focus-visible')) {
-    order = 'o';
-  } else if (nested.includes(':focus')) {
-    order = 'f';
-  } else if (nested.includes(':focus-within')) {
-    order = 'w';
-  } else if (nested.includes(':visited')) {
-    order = 'v';
-  } else if (nested.includes(':link')) {
-    order = 'l';
+  } else if (nest.includes(':active')) {
+    return 'c';
+  } else if (nest.includes(':hover')) {
+    return 'h';
+  } else if (nest.includes(':focus-visible')) {
+    return 'o';
+  } else if (nest.includes(':focus')) {
+    return 'f';
+  } else if (nest.includes(':focus-within')) {
+    return 'w';
+  } else if (nest.includes(':visited')) {
+    return 'v';
+  } else if (nest.includes(':link')) {
+    return 'l';
+  } else {
+    return 'n';
   }
-  return order;
 };
 
 export type StyleOrder = typeof styleOrder[number];
