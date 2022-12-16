@@ -91,20 +91,26 @@ const bundleSize = async () => {
   const result = await build({
     ...options,
     format: 'esm',
-    logLevel: 'info',
     entryPoints: sizeEntry,
     outdir: sizeOutDir,
     bundle: true,
     metafile: true,
   });
-  const report: Record<string, { size: string; gzip: string }> = {};
+  const report: Record<
+    string,
+    { size: string; size_byte: number; gzip: string; gzip_byte: number }
+  > = {};
   for (const file in result.metafile.outputs) {
     const code = (await fs.readFile(file)).toString();
+    const sizeByte = Buffer.byteLength(code, 'utf8');
     report[file] = {
-      size: formatBytes(Buffer.byteLength(code, 'utf8')),
+      size: formatBytes(sizeByte),
+      size_byte: sizeByte,
       gzip: formatBytes(await gzipSize(code)),
+      gzip_byte: await gzipSize(code),
     };
   }
+  console.log(JSON.stringify(report, null, 2));
   await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
 };
 
