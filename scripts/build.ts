@@ -37,16 +37,19 @@ const esBuildOptions: BuildOptions = {
 
 const successLog = (operation: string, time: number, outDir?: string) =>
   pc.bold(
-    ` 🦄 ${pc.green(operation)} ${pc.yellow(`${time}ms`)} ${
-      outDir ? pc.magenta(outDir) : ''
-    }`,
+    `🦄 ${pc.green('Success')} ${pc.blue(operation)} ${pc.yellow(
+      `${time}ms`,
+    )} ${outDir ? pc.magenta(outDir) : ''}`,
   );
-const errorLog = (msg: string) => pc.bold(pc.red(` 🐴 ${msg} `));
+const errorLog = (operation: string) =>
+  pc.bold(`🐴 ${pc.red('Error')} ${pc.blue(operation)} `);
 const startLog = (operation: string, name: string, version: string) =>
-  pc.bold(` ✋ ${pc.blue(operation)} ${pc.cyan(name)} ${pc.gray(version)}`);
+  pc.bold(`${pc.blue(operation)} ${pc.cyan(name)} ${pc.gray(version)}`);
 const endLog = (operation: string, name: string, time: number) =>
   pc.bold(
-    ` 👌 ${pc.blue(operation)} ${pc.cyan(name)} ${pc.yellow(`${time}ms`)}`,
+    `👌 ${pc.green('Success')} ${pc.blue(operation)} ${pc.cyan(
+      name,
+    )} ${pc.yellow(`${time}ms`)}`,
   );
 
 const exec = async (cmd: string) => {
@@ -167,7 +170,7 @@ const esmBuild = async () => {
     const time = Date.now() - now;
     console.log(successLog('ESModule', time, outDir));
   } catch (_) {
-    console.log(errorLog('Error ESModule'));
+    console.log(errorLog('ESModule'));
     process.exit(1);
   }
 };
@@ -187,7 +190,7 @@ const cjsBuild = async () => {
     const time = Date.now() - now;
     console.log(successLog('CommonJS', time, cjsOutDir));
   } catch (_) {
-    console.log(errorLog('Error CommonJS'));
+    console.log(errorLog('CommonJS'));
     process.exit(1);
   }
 };
@@ -202,7 +205,7 @@ const tsBuild = async () => {
     console.log(successLog('TypeScript', time, outDir));
     stdout && console.log(stdout);
   } catch (error) {
-    console.log(errorLog('Error TypeScript'));
+    console.log(errorLog('TypeScript'));
     if (error instanceof Error) console.log(error.message);
     process.exit(1);
   }
@@ -216,7 +219,7 @@ const execRun = async (execCommand: string) => {
     console.log(successLog(`${execCommand}`, time));
     stdout && console.log(stdout);
   } catch (error) {
-    console.log(errorLog(`Error ${execCommand}`));
+    console.log(errorLog(`${execCommand}`));
     if (error instanceof Error) console.log(error.message);
     process.exit(1);
   }
@@ -235,7 +238,7 @@ const main = async () => {
   ]);
   isSize && (await bundleSize());
   const time = Date.now() - now;
-  console.log(endLog(`Success`, name, time));
+  console.log(endLog('ALL', name, time));
 };
 
 main();
