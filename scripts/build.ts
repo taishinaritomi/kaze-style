@@ -152,7 +152,7 @@ const bundleSize = async () => {
     console.log(successLog('BundleSize', time, sizeOutDir));
     console.table(report);
   } catch (_) {
-    console.log(errorLog('Error BundleSize'));
+    console.log(errorLog('BundleSize'));
     process.exit(1);
   }
 };
