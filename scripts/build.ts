@@ -150,7 +150,7 @@ const bundleSize = async () => {
     await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
     const time = Date.now() - now;
     console.log(successLog('BundleSize', time, sizeOutDir));
-    console.table(report);
+    return report;
   } catch (_) {
     console.log(errorLog('BundleSize'));
     process.exit(1);
@@ -230,13 +230,14 @@ const main = async () => {
   const { name, version } = await getPackageInfo();
   console.log(startLog('Build', name, version));
   !isWatch && (await fs.remove(outDir));
-  await Promise.all([
+  const [report] = await Promise.all([
+    isSize && bundleSize(),
     !isCjsOnly && esmBuild(),
     cjsBuild(),
     tsBuild(),
     execCommand && execRun(execCommand),
   ]);
-  isSize && (await bundleSize());
+  if (report) console.table(report);
   const time = Date.now() - now;
   console.log(endLog('ALL', name, time));
 };
