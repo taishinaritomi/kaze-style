@@ -43,7 +43,11 @@ const successLog = (operation: string, time: number, outDir?: string) =>
   );
 const errorLog = (msg: string) => pc.bold(pc.red(` 🐴 ${msg} `));
 const startLog = (operation: string, name: string, version: string) =>
-  pc.bold(` 👏 ${pc.blue(operation)} ${pc.cyan(name)} ${pc.gray(version)}`);
+  pc.bold(` ✋ ${pc.blue(operation)} ${pc.cyan(name)} ${pc.gray(version)}`);
+const endLog = (operation: string, name: string, time: number) =>
+  pc.bold(
+    ` 👌 ${pc.blue(operation)} ${pc.cyan(name)} ${pc.yellow(`${time}ms`)}`,
+  );
 
 const exec = async (cmd: string) => {
   const spawnStream = childProcess.spawn(cmd, { shell: true });
@@ -209,7 +213,7 @@ const execRun = async (execCommand: string) => {
   try {
     const stdout = await exec(execCommand);
     const time = Date.now() - now;
-    console.log(successLog(`${execCommand} (${time}ms)`, time));
+    console.log(successLog(`${execCommand}`, time));
     stdout && console.log(stdout);
   } catch (error) {
     console.log(errorLog(`Error ${execCommand}`));
@@ -219,6 +223,7 @@ const execRun = async (execCommand: string) => {
 };
 
 const main = async () => {
+  const now = Date.now();
   const { name, version } = await getPackageInfo();
   console.log(startLog('Build', name, version));
   !isWatch && (await fs.remove(outDir));
@@ -229,6 +234,8 @@ const main = async () => {
     execCommand && execRun(execCommand),
   ]);
   isSize && (await bundleSize());
+  const time = Date.now() - now;
+  console.log(endLog(`Success`, name, time));
 };
 
 main();
