@@ -1,11 +1,12 @@
 import childProcess from 'child_process';
 import path from 'path';
 import arg from 'arg';
-import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
+import type { BuildOptions, Metafile, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
 import fs from 'fs-extra';
 import glob from 'glob';
 import { gzipSize } from 'gzip-size';
+import pc from 'picocolors';
 
 const args = arg({
   '--cjsOnly': Boolean,
@@ -25,38 +26,51 @@ const outDir = 'dist';
 const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
 const entryDir = 'src';
 
-const options: BuildOptions = {
+const esBuildOptions: BuildOptions = {
   watch: isWatch,
   entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
     ignore: ['./**/*.spec.ts'],
   }),
-  // logLevel: 'info',
   minify: true,
   platform: 'node',
 };
 
+const successLog = (operation: string, time: number, outDir?: string) =>
+  pc.bold(
+    ` 🦄 ${pc.green(operation)} ${pc.yellow(`${time}ms`)} ${
+      outDir ? pc.magenta(outDir) : ''
+    }`,
+  );
+const errorLog = (msg: string) => pc.bold(pc.red(` 🐴 ${msg} `));
+const startLog = (operation: string, name: string, version: string) =>
+  pc.bold(` 👏 ${pc.blue(operation)} ${pc.cyan(name)} ${pc.gray(version)}`);
+
 const exec = async (cmd: string) => {
-  const _spawn = childProcess.spawn(cmd, { shell: true });
-  await new Promise<void>((resolve, reject) => {
-    _spawn.stdout.on('data', (data) => {
-      const log = data.toString();
-      log && console.log(log);
+  const spawnStream = childProcess.spawn(cmd, { shell: true });
+  const stdout: string[] = [];
+  const stderr: string[] = [];
+  return await new Promise<string>((resolve, reject) => {
+    spawnStream.stdout.on('data', (data) => {
+      stdout.push(data.toString());
     });
-    _spawn.stderr.on('data', (data) => {
-      const log = data.toString();
-      log && console.log(log);
+    spawnStream.stderr.on('data', (data) => {
+      stderr.push(data.toString());
     });
-    _spawn.on('close', (code) => {
-      console.log(cmd, 'exit', code);
-      if (code === 0) {
-        return resolve();
-      }
-      reject();
+    spawnStream.on('close', (code) => {
+      if (code === 0) resolve(stdout.join('').trim());
+      else reject(new Error([...stdout, ...stderr].join('').trim()));
     });
   });
 };
 
-const addExtensionPlugin = (): Plugin => {
+const getPackageInfo = async () => {
+  const packageJson = await fs.readJSON(
+    path.join(process.cwd(), 'package.json'),
+  );
+  return packageJson;
+};
+
+const addExtensionEsBuildPlugin = (): Plugin => {
   return {
     name: 'add-extension',
     setup(build: PluginBuild) {
@@ -84,61 +98,137 @@ const formatBytes = (x: number) => {
   return `${(x / 1024 ** i).toFixed(1)}${sizes[i]}`;
 };
 
-const bundleSize = async () => {
-  const sizeOutDir = `${outDir}-size`;
-  sizeEntry.push(`${entryDir}/index.ts`);
-  await fs.remove(sizeOutDir);
-  const result = await build({
-    ...options,
-    format: 'esm',
-    entryPoints: sizeEntry,
-    outdir: sizeOutDir,
-    bundle: true,
-    metafile: true,
-  });
-  const report: Record<
-    string,
-    { size: string; size_byte: number; gzip: string; gzip_byte: number }
-  > = {};
-  for (const file in result.metafile.outputs) {
-    const code = (await fs.readFile(file)).toString();
+type Report = Record<
+  string,
+  {
+    size: string;
+    size_byte: number;
+    gzip: string;
+    gzip_byte: number;
+  }
+>;
+
+const bundleSizeReport = async (outputs: Metafile['outputs']) => {
+  const report: Report = {};
+  for (const file in outputs) {
+    const output = outputs[file];
+    const buffer = await fs.readFile(file);
+    const code = buffer.toString();
     const sizeByte = Buffer.byteLength(code, 'utf8');
-    report[file] = {
+    report[output?.entryPoint || ''] = {
       size: formatBytes(sizeByte),
       size_byte: sizeByte,
       gzip: formatBytes(await gzipSize(code)),
       gzip_byte: await gzipSize(code),
     };
   }
-  console.log(JSON.stringify(report, null, 2));
-  await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
+  return report;
+};
+
+const bundleSize = async () => {
+  const now = Date.now();
+  const sizeOutDir = `${outDir}-size`;
+  sizeEntry.push(`${entryDir}/index.ts`);
+  try {
+    await fs.remove(sizeOutDir);
+    const { metafile } = await build({
+      ...esBuildOptions,
+      format: 'esm',
+      entryPoints: sizeEntry,
+      outdir: sizeOutDir,
+      bundle: true,
+      metafile: true,
+    });
+    const report = await bundleSizeReport(metafile.outputs);
+    await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
+    const time = Date.now() - now;
+    console.log(successLog('BundleSize', time, sizeOutDir));
+    console.table(report);
+  } catch (_) {
+    console.log(errorLog('Error BundleSize'));
+    process.exit(1);
+  }
+};
+
+const esmBuild = async () => {
+  const now = Date.now();
+  try {
+    await build({
+      ...esBuildOptions,
+      format: 'esm',
+      outdir: outDir,
+      bundle: true,
+      plugins: [addExtensionEsBuildPlugin()],
+    });
+    const time = Date.now() - now;
+    console.log(successLog('ESModule', time, outDir));
+  } catch (_) {
+    console.log(errorLog('Error ESModule'));
+    process.exit(1);
+  }
+};
+
+const cjsBuild = async () => {
+  const now = Date.now();
+  try {
+    const packageJson = { type: 'commonjs' };
+    await Promise.all([
+      build({
+        ...esBuildOptions,
+        format: 'cjs',
+        outdir: cjsOutDir,
+      }),
+      !isCjsOnly && fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
+    ]);
+    const time = Date.now() - now;
+    console.log(successLog('CommonJS', time, cjsOutDir));
+  } catch (_) {
+    console.log(errorLog('Error CommonJS'));
+    process.exit(1);
+  }
+};
+
+const tsBuild = async () => {
+  const now = Date.now();
+  try {
+    const stdout = await exec(
+      `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
+    );
+    const time = Date.now() - now;
+    console.log(successLog('TypeScript', time, outDir));
+    stdout && console.log(stdout);
+  } catch (error) {
+    console.log(errorLog('Error TypeScript'));
+    if (error instanceof Error) console.log(error.message);
+    process.exit(1);
+  }
+};
+
+const execRun = async (execCommand: string) => {
+  const now = Date.now();
+  try {
+    const stdout = await exec(execCommand);
+    const time = Date.now() - now;
+    console.log(successLog(`${execCommand} (${time}ms)`, time));
+    stdout && console.log(stdout);
+  } catch (error) {
+    console.log(errorLog(`Error ${execCommand}`));
+    if (error instanceof Error) console.log(error.message);
+    process.exit(1);
+  }
 };
 
 const main = async () => {
+  const { name, version } = await getPackageInfo();
+  console.log(startLog('Build', name, version));
   !isWatch && (await fs.remove(outDir));
-
   await Promise.all([
-    !isCjsOnly &&
-      build({
-        ...options,
-        format: 'esm',
-        outdir: outDir,
-        bundle: true,
-        plugins: [addExtensionPlugin()],
-      }),
-    !isCjsOnly &&
-      fs.outputJson(`${cjsOutDir}/package.json`, { type: 'commonjs' }),
-    build({
-      ...options,
-      format: 'cjs',
-      outdir: cjsOutDir,
-    }),
-    isSize && bundleSize(),
-    exec(
-      `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
-    ),
-    execCommand && exec(execCommand),
+    !isCjsOnly && esmBuild(),
+    cjsBuild(),
+    tsBuild(),
+    execCommand && execRun(execCommand),
   ]);
+  isSize && (await bundleSize());
 };
 
 main();

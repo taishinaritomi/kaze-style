@@ -35,8 +35,8 @@
     "type-check": "tsc --noEmit",
     "code-fix": "cargo fmt",
     "code-check": "cargo fmt --check",
-    "dev": "tsx ./../../scripts/build.ts --watch --exec='cargo watch -x \"build-wasi --release\"'",
-    "build": "tsx ./../../scripts/build.ts --exec='cargo build-wasi --release'"
+    "dev": "tsx ./../../scripts/build.ts --watch --exec='cargo watch -x \"build-wasi --release --quiet\"'",
+    "build": "tsx ./../../scripts/build.ts --exec='cargo build-wasi --release --quiet'"
   },
   "dependencies": {
     "@swc/core": "^1.3.22"
