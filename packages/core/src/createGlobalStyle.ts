@@ -15,7 +15,7 @@ export const createGlobalStyle = <T extends string>(
   for (const selector in styles) {
     const style = styles[selector];
     const rules = compileObjectCss(style, selector);
-    cssRules.push(...rules.map((rule): CssRule => [rule, 'g']));
+    cssRules.push(...rules.map((rule): CssRule => [rule, 'global']));
   }
   return [uniqueCssRules(cssRules)];
 };

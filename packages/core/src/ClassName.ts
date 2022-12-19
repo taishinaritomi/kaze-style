@@ -1,15 +1,9 @@
 export class ClassName extends String {
-  /**
-   * object
-   */
-  o: Record<string, string>;
-  /**
-   * etc
-   */
-  e: string[];
-  constructor(object: ClassName['o'], etc: ClassName['e'] = []) {
-    super([...Object.values(object), ...etc].join(' '));
-    this.o = object;
-    this.e = etc;
+  object: Record<string, string>;
+  other: string[];
+  constructor(object: ClassName['object'], other: ClassName['other'] = []) {
+    super([...Object.values(object), ...other].join(' '));
+    this.object = object;
+    this.other = other;
   }
 }

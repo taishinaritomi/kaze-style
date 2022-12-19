@@ -3,16 +3,16 @@ import { ClassName } from './ClassName';
 type ClassNamesArgs = (string | false | undefined | null | ClassName)[];
 
 export const mergeStyle = (..._classNames: ClassNamesArgs): string => {
-  const styles: ClassName['o'] = {};
-  const etc: string[] = [];
+  const styles: ClassName['object'] = {};
+  const other: string[] = [];
 
   _classNames.forEach((className) => {
     if (typeof className === 'string') {
-      etc.push(className);
+      other.push(className);
     } else if (className instanceof ClassName) {
-      etc.push(...className.e);
-      Object.assign(styles, className.o);
+      other.push(...className.other);
+      Object.assign(styles, className.object);
     }
   });
-  return new ClassName(styles, etc) as unknown as string;
+  return new ClassName(styles, other) as unknown as string;
 };

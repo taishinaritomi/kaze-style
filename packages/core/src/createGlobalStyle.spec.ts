@@ -15,9 +15,9 @@ describe('createGlobalStyle', () => {
       },
     });
     expect(cssRules).toEqual([
-      ['@media (max-width:1024px){html{color:green;}}', 'g'],
-      ['@media (max-width:512px){html{color:blue;}}', 'g'],
-      ['html{color:red;}', 'g'],
+      ['@media (max-width:1024px){html{color:green;}}', 'global'],
+      ['@media (max-width:512px){html{color:blue;}}', 'global'],
+      ['html{color:red;}', 'global'],
     ]);
   });
 
@@ -31,7 +31,7 @@ describe('createGlobalStyle', () => {
     expect(cssRules).toEqual([
       [
         '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
-        'g',
+        'global',
       ],
     ]);
   });
@@ -55,11 +55,11 @@ describe('createGlobalStyle', () => {
     expect(cssRules).toEqual([
       [
         '@font-face{font-family:Open Sans;src:url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2");}',
-        'g',
+        'global',
       ],
-      ['@media (max-width:1024px){html{color:green;}}', 'g'],
-      ['@media (max-width:512px){html{color:blue;}}', 'g'],
-      ['html{color:red;}', 'g'],
+      ['@media (max-width:1024px){html{color:green;}}', 'global'],
+      ['@media (max-width:512px){html{color:blue;}}', 'global'],
+      ['html{color:red;}', 'global'],
     ]);
   });
 });
