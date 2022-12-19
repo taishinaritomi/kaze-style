@@ -11,7 +11,7 @@ describe('createStyle', () => {
     });
 
     expect(classes).toEqual({ base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
-    expect(cssRules).toEqual([['._18ffsfk{color:red;}', 'n']]);
+    expect(cssRules).toEqual([['._18ffsfk{color:red;}', 'normal']]);
   });
 
   it('pseudo', () => {
@@ -30,8 +30,8 @@ describe('createStyle', () => {
       base: new ClassName({ _1ez8kfk: '_1qka0wa', _as4l2f: '_5p99rv' }),
     });
     expect(cssRules).toEqual([
-      ['._1qka0wa:hover{color:red;}', 'h'],
-      ['._5p99rv::after{color:green;}', 'n'],
+      ['._1qka0wa:hover{color:red;}', 'hover'],
+      ['._5p99rv::after{color:green;}', 'normal'],
     ]);
   });
 
@@ -51,8 +51,8 @@ describe('createStyle', () => {
       base: new ClassName({ _143egyq: '_1em4tpo', _1ez8kfk: '_1qka0wa' }),
     });
     expect(cssRules).toEqual([
-      ['._1em4tpo:hover::after{color:green;}', 'h'],
-      ['._1qka0wa:hover{color:red;}', 'h'],
+      ['._1em4tpo:hover::after{color:green;}', 'hover'],
+      ['._1qka0wa:hover{color:red;}', 'hover'],
     ]);
   });
 
@@ -67,7 +67,7 @@ describe('createStyle', () => {
 
     expect(classes).toEqual({ base: new ClassName({ _8147ym: '_15v7uk7' }) });
     expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'm'],
+      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'media'],
     ]);
   });
 
@@ -84,10 +84,10 @@ describe('createStyle', () => {
     });
 
     expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'm'],
+      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'media'],
       [
         '@media (max-width: 512px){@supports not (display: grid){._syblt6{display:flex;}}}',
-        'm',
+        'media',
       ],
     ]);
     expect(classes).toEqual({
@@ -113,8 +113,8 @@ describe('createStyle', () => {
       base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
     });
     expect(cssRules).toEqual([
-      ['@keyframes _6qto8h{from{color:green;}to{color:red;}}', 'k'],
-      ['._ep4wyi{animation-name:_6qto8h;}', 'n'],
+      ['@keyframes _6qto8h{from{color:green;}to{color:red;}}', 'keyframes'],
+      ['._ep4wyi{animation-name:_6qto8h;}', 'normal'],
     ]);
   });
 });

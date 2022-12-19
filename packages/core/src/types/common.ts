@@ -17,7 +17,7 @@ export type NestChar =
   | '#';
 
 export type Classes<K extends string> = Record<K, ClassName>;
-export type PureClasses<K extends string> = Record<K, ClassName['o']>;
+export type PureClasses<K extends string> = Record<K, ClassName['object']>;
 
 export type Selectors = [atRules: string[], nest: string];
 

@@ -12,7 +12,7 @@ import { isObject } from './utils/isObject';
 import { resolveSelectors } from './utils/resolveSelectors';
 import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type ResolvedStyle = [object: ClassName['o'], cssRules: CssRule[]];
+type ResolvedStyle = [object: ClassName['object'], cssRules: CssRule[]];
 
 export const resolveStyle = (
   style: SupportStyle,
@@ -24,7 +24,6 @@ export const resolveStyle = (
   for (const _property in style) {
     const property = _property as keyof SupportStyle;
     const styleValue = style[property];
-    const animationName = 'animationName';
     if (isCssValue(styleValue)) {
       const className = hashClassName(selectors, property, styleValue);
       const selector = hashSelector(selectors, property);
@@ -38,14 +37,14 @@ export const resolveStyle = (
       ]);
       Object.assign(object, { [selector]: className });
     } else if (isObject(styleValue)) {
-      if (property === animationName) {
+      if (property === 'animationName') {
         const animationNameValue = styleValue as KeyframesRules;
         const [keyframesName, keyframesRule] =
           compileKeyFrameCss(animationNameValue);
-        cssRules.push([keyframesRule, 'k']);
+        cssRules.push([keyframesRule, 'keyframes']);
         Object.assign(object, { [keyframesName]: keyframesName });
         resolveStyle(
-          { [animationName]: keyframesName },
+          { animationName: keyframesName },
           selectors,
           resolvedStyle,
         );

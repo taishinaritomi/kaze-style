@@ -1,55 +1,43 @@
 import type { Selectors } from './types/common';
 
 export const styleOrder = [
-  /** global */
-  'g',
-  /** normal */
-  'n',
-  /** link */
-  'l',
-  /** visited */
-  'v',
-  /** focusWithin */
-  'w',
-  /** focus */
-  'f',
-  /** focusVisible */
-  'o',
-  /** hover */
-  'h',
-  /** active */
-  'c',
-  /** keyframes */
-  'k',
-  /** atRules */
-  'a',
-  /** media */
-  'm',
+  'global',
+  'normal',
+  'link',
+  'visited',
+  'focusWithin',
+  'focus',
+  'focusVisible',
+  'hover',
+  'active',
+  'keyframes',
+  'atRules',
+  'media',
 ] as const;
 
 export const getStyleOrder = ([atRules, nest]: Selectors): StyleOrder => {
   if (atRules.length !== 0) {
     if (atRules.some((atRule) => atRule.includes('@media'))) {
-      return 'm';
+      return 'media';
     } else {
-      return 'a';
+      return 'atRules';
     }
   } else if (nest.includes(':active')) {
-    return 'c';
+    return 'active';
   } else if (nest.includes(':hover')) {
-    return 'h';
+    return 'hover';
   } else if (nest.includes(':focus-visible')) {
-    return 'o';
+    return 'focusVisible';
   } else if (nest.includes(':focus')) {
-    return 'f';
+    return 'focus';
   } else if (nest.includes(':focus-within')) {
-    return 'w';
+    return 'focusWithin';
   } else if (nest.includes(':visited')) {
-    return 'v';
+    return 'visited';
   } else if (nest.includes(':link')) {
-    return 'l';
+    return 'link';
   } else {
-    return 'n';
+    return 'normal';
   }
 };
 
