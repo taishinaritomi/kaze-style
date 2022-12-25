@@ -1,3 +1,6 @@
+import { createHash } from 'crypto';
+import fs from 'fs';
+import path from 'path';
 import {
   cssRulesToString,
   extractionStyle,
@@ -19,7 +22,11 @@ const virtualLoaderPath = require.resolve('./virtualLoader');
 const cssPath = require.resolve('../assets/kaze.css');
 
 function loader(
-  this: LoaderContext<{ compiler: 'swc' | 'babel' }>,
+  this: LoaderContext<{
+    compiler: 'swc' | 'babel';
+    virtualLoader: boolean;
+    preCssOutputPath: string;
+  }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
   additionalData: WebpackLoaderParams[2],
@@ -53,20 +60,32 @@ function loader(
             return;
           } else {
             const cssString = cssRulesToString(cssRules);
+            if (options.virtualLoader) {
+              const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify(
+                {
+                  src: cssString,
+                },
+              )}`;
 
-            const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify(
-              {
-                src: cssString,
-              },
-            )}`;
-
-            const request = `import ${JSON.stringify(
-              this.utils.contextify(
-                this.context || this.rootContext,
-                `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
-              ),
-            )};`;
-            callback(null, `${request}\n\n${transformedCode}`);
+              const request = `import ${JSON.stringify(
+                this.utils.contextify(
+                  this.context || this.rootContext,
+                  `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
+                ),
+              )};`;
+              callback(null, `${request}\n\n${transformedCode}`);
+            } else {
+              if (!fs.existsSync(options.preCssOutputPath))
+                fs.mkdirSync(options.preCssOutputPath);
+              const hash = createHash('md5').update(cssString).digest('hex');
+              const cssPath = path.join(
+                options.preCssOutputPath,
+                `${hash}.css`,
+              );
+              fs.writeFileSync(cssPath, cssString);
+              const request = `import "${cssPath}";`;
+              callback(null, `${request}\n\n${transformedCode}`);
+            }
           }
         });
       })

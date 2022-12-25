@@ -1,5 +1,3 @@
-'use client';
-
 import { createStyle, mergeStyle } from '@kaze-style/react';
 import type { NextPage } from 'next';
 import { Button } from '@/components/Button';

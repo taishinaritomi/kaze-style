@@ -1,5 +1,3 @@
-'use client';
-
 import { createGlobalStyle } from '@kaze-style/react';
 import { globalTheme } from '@kaze-style/themes';
 import type { FC, ReactNode } from 'react';

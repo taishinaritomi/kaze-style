@@ -1,3 +1,4 @@
+import path from 'path';
 import { sortCss } from '@kaze-style/build';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
@@ -5,6 +6,8 @@ import { getSource } from './utils/getSource';
 type PluginOptions = {
   test?: RuleSetRule['test'];
   swc?: boolean;
+  virtualLoader?: boolean;
+  preCssOutputPath?: string;
 };
 
 const pluginName = 'KazePlugin';
@@ -15,12 +18,18 @@ const preLoader = require.resolve('./preLoader');
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
   swc: boolean;
+  virtualLoader: boolean;
+  preCssOutputPath: string;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
     swc = false,
+    virtualLoader = true,
+    preCssOutputPath = path.join(__dirname, 'assets'),
   }: Partial<PluginOptions> = {}) {
     this.test = test;
     this.swc = swc;
+    this.virtualLoader = virtualLoader;
+    this.preCssOutputPath = preCssOutputPath;
   }
 
   apply(compiler: Compiler) {
@@ -28,7 +37,14 @@ export class Plugin {
       test: this.test,
       exclude: /node_modules/,
       use: [
-        { loader, options: { compiler: this.swc ? 'swc' : 'babel' } },
+        {
+          loader,
+          options: {
+            compiler: this.swc ? 'swc' : 'babel',
+            virtualLoader: this.virtualLoader,
+            preCssOutputPath: this.preCssOutputPath,
+          },
+        },
         {
           loader: preLoader,
           options: { compiler: this.swc ? 'swc' : 'babel' },
