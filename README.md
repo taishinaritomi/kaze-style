@@ -1,6 +1,6 @@
 <div>
   <br />
-  <hr />
+  <br />
   <br />
   <div align="center">
     <picture>
@@ -8,6 +8,8 @@
     <img width="250" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-dark.svg">
   </picture>
   </div>
+  <br />
+  <br />
   <br />
   <hr />
   <br />
