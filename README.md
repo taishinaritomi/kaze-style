@@ -3,8 +3,8 @@
   <br />
   <div align="center">
     <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-light.svg">
-    <img width="300" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-dark.svg">
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/taishinaritomi/kaze-style/main/assets/kaze-light.svg">
+    <img width="300" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/main/assets/kaze-dark.svg">
   </picture>
   </div>
   <br />
