@@ -5,7 +5,7 @@
   <div align="center">
     <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-light.svg">
-    <img width="250" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-dark.svg">
+    <img width="300" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-dark.svg">
   </picture>
   </div>
   <br />
@@ -13,7 +13,7 @@
   <br />
   <hr />
   <br />
-  <p align="center">Kaze [風] zero-runtime CSS in JS for React. ✌️<p>
+  <p align="center">Kaze [風] zero-runtime CSS in JS for React ✌️<p>
   <p align="center"><b>🚧 under development 🚧</b></p>
   <div align="center">
     <a href='https://www.npmjs.com/package/@kaze-style/react'>
