@@ -1,5 +1,7 @@
 <div>
-  <br>
+  <br />
+  <hr />
+  <br />
   <div align="center">
     <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/taishinaritomi/kaze-style/update-logo/assets/kaze-light.svg">
