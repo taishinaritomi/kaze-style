@@ -39,7 +39,7 @@
     "build": "tsx ./../../scripts/build.ts --exec='cargo build-wasi --release --quiet'"
   },
   "dependencies": {
-    "@swc/core": "^1.3.22"
+    "@swc/core": "^1.3.24"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.13.0"

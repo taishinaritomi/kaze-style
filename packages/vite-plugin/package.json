@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@kaze-style/build": "^0.13.0",
-    "esbuild": "^0.15.16"
+    "esbuild": "^0.16.10"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.13.0"
