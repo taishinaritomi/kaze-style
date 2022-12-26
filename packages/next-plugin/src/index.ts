@@ -26,7 +26,8 @@ const kazeStyleConfig = (
     webpack(config: Configuration & ConfigurationContext, options) {
       kazeConfig;
       const { dir, dev, isServer } = options;
-      if (!dev) {
+      const appDir = nextConfig.experimental?.appDir === true;
+      if (appDir || !dev) {
         const cssRules = (
           config.module?.rules?.find(
             (rule) =>
@@ -41,7 +42,7 @@ const kazeStyleConfig = (
           ) as RuleSetRule
         )?.oneOf;
 
-        const appDirOptions = nextConfig.experimental?.appDir
+        const appDirOptions = appDir
           ? {
               hasAppDir: true,
               experimental: { appDir: true },
@@ -65,7 +66,9 @@ const kazeStyleConfig = (
           ),
         });
 
-        config.plugins?.push(new KazePlugin());
+        config.plugins?.push(
+          new KazePlugin(Object.assign({ virtualLoader: !appDir }, kazeConfig)),
+        );
 
         if (typeof nextConfig.webpack === 'function') {
           return nextConfig.webpack(config, options);

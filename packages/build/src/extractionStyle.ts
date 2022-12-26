@@ -12,17 +12,30 @@ export const extractionStyle = (
   { filename, forBuildName = _forBuildName }: Options,
 ) => {
   const forBuild: ForBuild = [filename, [], []];
-
   const window = {};
-  evalCode(
-    code,
-    filename,
-    {
-      [forBuildName]: forBuild,
-      window,
-    },
-    true,
-  );
+  const cjsGlobal = {};
+
+  if (typeof __dirname !== 'undefined') {
+    Object.assign(cjsGlobal, { __dirname });
+  }
+  if (typeof __filename !== 'undefined') {
+    Object.assign(cjsGlobal, { __filename });
+  }
+  try {
+    evalCode(
+      code,
+      filename,
+      {
+        [forBuildName]: forBuild,
+        window,
+        $RefreshReg$: () => undefined,
+        ...cjsGlobal,
+      },
+      true,
+    );
+  } catch (error) {
+    throw error;
+  }
 
   const [, cssRules, styles] = forBuild;
   return [cssRules, styles] as const;
