@@ -1,10 +1,15 @@
 <div>
   <br>
   <div align="center">
-    <img src='https://raw.githubusercontent.com/taishinaritomi/kaze-style/main/assets/logo.svg' width="250" height="auto" alt="Kaze">
+    <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/taishinaritomi/kaze-style/main/assets/kaze-light.svg">
+    <img width="250" height="auto" alt="Kaze" src="https://raw.githubusercontent.com/taishinaritomi/kaze-style/main/assets/kaze-dark.svg">
+  </picture>
   </div>
+  <br />
   <hr />
-  <p align="center">Kaze [風] zero-runtime CSS in JS for React.<p>
+  <br />
+  <p align="center">Kaze [風] zero-runtime CSS in JS for React. ✌️<p>
   <p align="center"><b>🚧 under development 🚧</b></p>
   <div align="center">
     <a href='https://www.npmjs.com/package/@kaze-style/react'>
@@ -20,7 +25,7 @@
       <img src='https://img.shields.io/npm/types/@kaze-style/react?style=for-the-badge'>
     </a>
   </div>
-  <br>
+  <br />
 </div>
 
 # Features
