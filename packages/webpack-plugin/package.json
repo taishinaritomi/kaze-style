@@ -9,13 +9,13 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/webpack-plugin"
   },
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/types/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./virtualLoader": "./dist/virtualLoader.js",
-    "./preLoader": "./dist/preLoader.js",
-    "./loader": "./dist/loader.js",
+    ".": "./dist/cjs/index.js",
+    "./virtualLoader": "./dist/cjs/virtualLoader.js",
+    "./preLoader": "./dist/cjs/preLoader.js",
+    "./loader": "./dist/cjs/loader.js",
     "./assets/*": "./assets/*"
   },
   "files": [

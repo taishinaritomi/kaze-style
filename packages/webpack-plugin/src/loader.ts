@@ -19,7 +19,7 @@ export type LoaderContext<T = unknown> = _LoaderContext<T> & {
 };
 
 const virtualLoaderPath = require.resolve('./virtualLoader');
-const cssPath = require.resolve('../assets/kaze.css');
+const cssPath = require.resolve('../../assets/kaze.css');
 
 function loader(
   this: LoaderContext<{

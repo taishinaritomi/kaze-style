@@ -9,8 +9,8 @@
     "url": "https://github.com/taishinaritomi/kaze-style.git",
     "directory": "packages/next-plugin"
   },
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "typings": "dist/types/index.d.ts",
   "files": [
     "dist",
     "LICENSE"

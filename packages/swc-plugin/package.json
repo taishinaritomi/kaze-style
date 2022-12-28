@@ -10,22 +10,20 @@
     "directory": "packages/swc-plugin"
   },
   "type": "module",
-  "sideEffects": false,
   "main": "dist/cjs/index.js",
-  "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "module": "dist/esm/index.js",
+  "typings": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
       "require": "./dist/cjs/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/esm/index.js",
+      "types": "./dist/types/index.d.ts"
     }
   },
   "files": [
     "dist",
     "_transform",
     "_pre-transform",
-    "dist",
     "target/wasm32-wasi/release/kaze_style_swc_plugin_pre_transform.wasm",
     "target/wasm32-wasi/release/kaze_style_swc_plugin_transform.wasm",
     "LICENSE"
