@@ -23,7 +23,11 @@ const sizeEntry = args['--sizeEntry'] || [];
 const execCommand = args['--exec'];
 
 const outDir = 'dist';
-const cjsOutDir = isCjsOnly ? outDir : `${outDir}/cjs`;
+const cjsOutDir = `${outDir}/cjs`;
+const esmOutDir = `${outDir}/esm`;
+const typesOutDir = `${outDir}/types`;
+const sizeOutDir = `${outDir}-size`;
+
 const entryDir = 'src';
 
 const esBuildOptions: BuildOptions = {
@@ -97,6 +101,11 @@ const addExtensionEsBuildPlugin = (): Plugin => {
   };
 };
 
+const timer = () => {
+  const now = Date.now();
+  return () => Date.now() - now;
+};
+
 const formatBytes = (x: number) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
   if (x === 0) return 'n/a';
@@ -133,8 +142,7 @@ const bundleSizeReport = async (outputs: Metafile['outputs']) => {
 };
 
 const bundleSize = async () => {
-  const now = Date.now();
-  const sizeOutDir = `${outDir}-size`;
+  const stop = timer();
   sizeEntry.push(`${entryDir}/index.ts`);
   try {
     await fs.remove(sizeOutDir);
@@ -148,8 +156,7 @@ const bundleSize = async () => {
     });
     const report = await bundleSizeReport(metafile.outputs);
     await fs.outputJson(`${sizeOutDir}/report.json`, report, { spaces: 2 });
-    const time = Date.now() - now;
-    console.log(successLog('BundleSize', time, sizeOutDir));
+    console.log(successLog('BundleSize', stop(), sizeOutDir));
     return report;
   } catch (_) {
     console.log(errorLog('BundleSize'));
@@ -158,17 +165,20 @@ const bundleSize = async () => {
 };
 
 const esmBuild = async () => {
-  const now = Date.now();
+  const stop = timer();
   try {
-    await build({
-      ...esBuildOptions,
-      format: 'esm',
-      outdir: outDir,
-      bundle: true,
-      plugins: [addExtensionEsBuildPlugin()],
-    });
-    const time = Date.now() - now;
-    console.log(successLog('ESModule', time, outDir));
+    const packageJson = { type: 'module' };
+    await Promise.all([
+      build({
+        ...esBuildOptions,
+        format: 'esm',
+        outdir: esmOutDir,
+        bundle: true,
+        plugins: [addExtensionEsBuildPlugin()],
+      }),
+      fs.outputJson(`${esmOutDir}/package.json`, packageJson),
+    ]);
+    console.log(successLog('ESModule', stop(), esmOutDir));
   } catch (_) {
     console.log(errorLog('ESModule'));
     process.exit(1);
@@ -176,7 +186,7 @@ const esmBuild = async () => {
 };
 
 const cjsBuild = async () => {
-  const now = Date.now();
+  const stop = timer();
   try {
     const packageJson = { type: 'commonjs' };
     await Promise.all([
@@ -185,10 +195,9 @@ const cjsBuild = async () => {
         format: 'cjs',
         outdir: cjsOutDir,
       }),
-      !isCjsOnly && fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
+      fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
     ]);
-    const time = Date.now() - now;
-    console.log(successLog('CommonJS', time, cjsOutDir));
+    console.log(successLog('CommonJS', stop(), cjsOutDir));
   } catch (_) {
     console.log(errorLog('CommonJS'));
     process.exit(1);
@@ -196,13 +205,18 @@ const cjsBuild = async () => {
 };
 
 const tsBuild = async () => {
-  const now = Date.now();
+  const stop = timer();
   try {
-    const stdout = await exec(
-      `tsc ${isWatch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`,
-    );
-    const time = Date.now() - now;
-    console.log(successLog('TypeScript', time, outDir));
+    const packageJson = { type: 'commonjs' };
+    const [stdout] = await Promise.all([
+      exec(
+        `tsc ${
+          isWatch ? '-w' : ''
+        } --declaration --emitDeclarationOnly --outDir ${typesOutDir} -p tsconfig.build.json`,
+      ),
+      fs.outputJson(`${typesOutDir}/package.json`, packageJson),
+    ]);
+    console.log(successLog('TypeScript', stop(), typesOutDir));
     stdout && console.log(stdout);
   } catch (error) {
     console.log(errorLog('TypeScript'));
@@ -212,11 +226,10 @@ const tsBuild = async () => {
 };
 
 const execRun = async (execCommand: string) => {
-  const now = Date.now();
+  const stop = timer();
   try {
     const stdout = await exec(execCommand);
-    const time = Date.now() - now;
-    console.log(successLog(`${execCommand}`, time));
+    console.log(successLog(`${execCommand}`, stop()));
     stdout && console.log(stdout);
   } catch (error) {
     console.log(errorLog(`${execCommand}`));
@@ -226,7 +239,7 @@ const execRun = async (execCommand: string) => {
 };
 
 const main = async () => {
-  const now = Date.now();
+  const stop = timer();
   const { name, version } = await getPackageInfo();
   console.log(startLog('Build', name, version));
   !isWatch && (await fs.remove(outDir));
@@ -238,8 +251,7 @@ const main = async () => {
     execCommand && execRun(execCommand),
   ]);
   if (report) console.table(report);
-  const time = Date.now() - now;
-  console.log(endLog('ALL', name, time));
+  console.log(endLog('ALL', name, stop()));
 };
 
 main();

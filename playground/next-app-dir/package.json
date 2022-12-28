@@ -5,7 +5,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "dev": "next dev",
-    "build": "rimraf dist && next build",
+    "build": "rimraf .next && next build",
     "start": "next start",
     "analyze": "ANALYZE=true next build"
   },
