@@ -22,6 +22,7 @@
     "code:check:type": "turbo run type-check --parallel",
     "code:check:lint": "eslint . --ignore-path .gitignore",
     "code:check:format": "prettier . --check --ignore-path .gitignore",
+    "code:check:exports": "turbo run exports-check --filter=./packages/* --parallel",
     "readme:copy": "tsx scripts/readme.ts copy README.md",
     "readme:check": "tsx scripts/readme.ts check README.md",
     "release": "changeset publish"
@@ -53,6 +54,7 @@
     "picocolors": "^1.0.0",
     "prettier": "^2.8.1",
     "process": "^0.11.10",
+    "publint": "^0.1.5",
     "rimraf": "^3.0.2",
     "tsx": "^3.12.1",
     "turbo": "^1.6.3",

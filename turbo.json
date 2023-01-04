@@ -10,6 +10,7 @@
     },
     "test": {},
     "type-check": {},
+    "exports-check": {},
     "code-fix": {},
     "code-check": {}
   }
