@@ -10,13 +10,14 @@
     "directory": "packages/next-plugin"
   },
   "main": "dist/cjs/index.js",
-  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist",
     "LICENSE"
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
+    "exports-check": "publint",
     "dev": "tsx ./../../scripts/build.ts --watch --cjsOnly",
     "build": "tsx ./../../scripts/build.ts --cjsOnly"
   },

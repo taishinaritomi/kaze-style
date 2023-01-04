@@ -10,7 +10,7 @@
     "directory": "packages/webpack-plugin"
   },
   "main": "dist/cjs/index.js",
-  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "exports": {
     ".": "./dist/cjs/index.js",
     "./virtualLoader": "./dist/cjs/virtualLoader.js",
@@ -25,6 +25,7 @@
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
+    "exports-check": "publint",
     "dev": "tsx ./../../scripts/build.ts --watch --cjsOnly",
     "build": "tsx ./../../scripts/build.ts --cjsOnly"
   },

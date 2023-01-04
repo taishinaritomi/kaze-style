@@ -12,12 +12,12 @@
   "type": "module",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "typings": "dist/types/index.d.ts",
+  "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
-      "types": "./dist/types/index.d.ts"
+      "require": "./dist/cjs/index.js"
     }
   },
   "files": [
@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "type-check": "tsc --noEmit",
+    "exports-check": "publint",
     "dev": "tsx ./../../scripts/build.ts --watch",
     "build": "tsx ./../../scripts/build.ts"
   },
