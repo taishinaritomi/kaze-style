@@ -41,7 +41,8 @@
 # Example
 
 ```ts
-import { createStyle, createGlobalStyle, mergeStyle } from '@kaze-style/react';
+// App.style.ts
+import { createStyle, createGlobalStyle } from '@kaze-style/react';
 
 createGlobalStyle({
   html: {
@@ -49,7 +50,7 @@ createGlobalStyle({
   },
 });
 
-const classes = createStyle({
+export const style = createStyle({
   container: {
     margin: '20px',
   },
@@ -61,11 +62,17 @@ const classes = createStyle({
     color: 'blue',
   },
 });
+```
+
+```ts
+// App.tsx
+import { mergeStyle } from '@kaze-style/react';
+import { style } from './App.style';
 
 export const App = ({ action }) => {
   return (
-    <div className={classes.container}>
-      <p className={mergeStyle(classes.base, action && classes.action)}></p>
+    <div className={style.container}>
+      <p className={mergeStyle(style.base, action && style.action)}></p>
     </div>
   );
 };

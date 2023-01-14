@@ -12,6 +12,7 @@ export const extractionStyle = (
   { filename, forBuildName = _forBuildName }: Options,
 ) => {
   const forBuild: ForBuild = [filename, [], []];
+  // remove start
   const window = {};
   const cjsGlobal = {};
 
@@ -21,15 +22,18 @@ export const extractionStyle = (
   if (typeof __filename !== 'undefined') {
     Object.assign(cjsGlobal, { __filename });
   }
+  // remove end
   try {
     evalCode(
       code,
       filename,
       {
         [forBuildName]: forBuild,
+        // remove start
         window,
         $RefreshReg$: () => undefined,
         ...cjsGlobal,
+        // remove end
       },
       true,
     );

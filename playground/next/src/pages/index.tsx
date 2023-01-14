@@ -1,35 +1,20 @@
-import { createStyle, mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/react';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/Button';
+import { style } from '@/styles/index.style';
 const LazyButton = dynamic(() =>
   import('@/components/Button').then((module) => module.Button),
 );
 
-const classes = createStyle({
-  container: {
-    display: 'flex',
-    gap: '5px',
-  },
-  button: {
-    padding: ['10px', '20px'],
-  },
-  blueButton: {
-    background: 'blue',
-    ':hover': {
-      background: 'skyblue',
-    },
-  },
-});
-
 const Home: NextPage = () => {
   return (
-    <div className={classes.container}>
-      <Button className={classes.button}>Button</Button>
-      <Button className={mergeStyle(classes.button, classes.blueButton)}>
+    <div className={style.container}>
+      <Button className={style.button}>Button</Button>
+      <Button className={mergeStyle(style.button, style.blueButton)}>
         Button
       </Button>
-      <LazyButton className={classes.button}>Button</LazyButton>
+      <LazyButton className={style.button}>Button</LazyButton>
     </div>
   );
 };

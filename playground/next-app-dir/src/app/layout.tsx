@@ -1,12 +1,9 @@
-import { createGlobalStyle } from '@kaze-style/react';
-import { globalTheme } from '@kaze-style/themes';
 import type { FC, ReactNode } from 'react';
+import './layout.style';
 
 type Props = {
   children?: ReactNode;
 };
-
-createGlobalStyle(globalTheme.reset());
 
 const Layout: FC<Props> = ({ children }) => {
   return (

@@ -39,6 +39,7 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
 
       const [validId] = id.split('?');
       if (!/.(tsx|ts|js|jsx)$/.test(validId || '')) {
+        // if (!/style\.(js|ts)$/.test(validId || '')) {
         return null;
       }
 

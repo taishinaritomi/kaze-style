@@ -24,6 +24,7 @@ export class Plugin {
   exclude: NonNullable<RuleSetRule['exclude']>;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
+    // test = /style\.(js|ts)$/,
     swc = false,
     virtualLoader = true,
     preCssOutputPath = path.join(__dirname, 'assets'),
