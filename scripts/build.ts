@@ -74,7 +74,7 @@ const exec = async (cmd: string) => {
   });
 };
 
-const getPackageInfo = async () => {
+const getPackageJson = async () => {
   const packageJson = await fs.readJSON(
     path.join(process.cwd(), 'package.json'),
   );
@@ -164,10 +164,10 @@ const bundleSize = async () => {
   }
 };
 
-const esmBuild = async () => {
+const esmBuild = async (_packageJson: Record<string, unknown>) => {
   const stop = timer();
   try {
-    const packageJson = { type: 'module' };
+    const packageJson = Object.assign({}, _packageJson, { type: 'module' });
     await Promise.all([
       build({
         ...esBuildOptions,
@@ -185,10 +185,10 @@ const esmBuild = async () => {
   }
 };
 
-const cjsBuild = async () => {
+const cjsBuild = async (_packageJson: Record<string, unknown>) => {
   const stop = timer();
   try {
-    const packageJson = { type: 'commonjs' };
+    const packageJson = Object.assign({}, _packageJson, { type: 'commonjs' });
     await Promise.all([
       build({
         ...esBuildOptions,
@@ -238,15 +238,25 @@ const execRun = async (execCommand: string) => {
   }
 };
 
+type PackageJson = {
+  name?: string;
+  version?: string;
+  sideEffects?: boolean;
+};
+
 const main = async () => {
   const stop = timer();
-  const { name, version } = await getPackageInfo();
+  const {
+    name = '@unknown',
+    version = '0.0.0',
+    sideEffects,
+  }: PackageJson = await getPackageJson();
   console.log(startLog('Build', name, version));
   !isWatch && (await fs.remove(outDir));
   const [report] = await Promise.all([
     isSize && bundleSize(),
-    !isCjsOnly && esmBuild(),
-    cjsBuild(),
+    !isCjsOnly && esmBuild({ sideEffects }),
+    cjsBuild({ sideEffects }),
     tsBuild(),
     execCommand && execRun(execCommand),
   ]);
