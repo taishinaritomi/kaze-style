@@ -8,6 +8,7 @@ type PluginOptions = {
   swc?: boolean;
   virtualLoader?: boolean;
   preCssOutputPath?: string;
+  exclude?: RuleSetRule['exclude'];
 };
 
 const pluginName = 'KazePlugin';
@@ -20,22 +21,25 @@ export class Plugin {
   swc: boolean;
   virtualLoader: boolean;
   preCssOutputPath: string;
+  exclude: NonNullable<RuleSetRule['exclude']>;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
     swc = false,
     virtualLoader = true,
     preCssOutputPath = path.join(__dirname, 'assets'),
+    exclude = /node_modules/,
   }: Partial<PluginOptions> = {}) {
     this.test = test;
     this.swc = swc;
     this.virtualLoader = virtualLoader;
     this.preCssOutputPath = preCssOutputPath;
+    this.exclude = exclude;
   }
 
   apply(compiler: Compiler) {
     compiler.options.module?.rules.splice(0, 0, {
       test: this.test,
-      exclude: /node_modules/,
+      exclude: this.exclude,
       use: [
         {
           loader,
