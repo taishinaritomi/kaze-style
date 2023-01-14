@@ -1,19 +1,5 @@
-import { createStyle, createGlobalStyle } from '@kaze-style/react';
-import { resetStyle } from '@kaze-style/themes';
-
-createGlobalStyle(resetStyle);
-
-const classes = createStyle({
-  button: {
-    background: 'red',
-    borderRadius: '6px',
-    padding: ['10px', '20px'],
-    ':hover': {
-      background: 'orange',
-    },
-  },
-});
+import { style } from "./App.style";
 
 export const App = () => {
-  return <button className={classes.button}>button</button>;
+  return <button className={style.button}>button</button>;
 };

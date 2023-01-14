@@ -1,21 +1,13 @@
-import { createStyle, mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/react';
 import type { ComponentProps, FC } from 'react';
+import { style } from './Button.style';
 
-const classes = createStyle({
-  button: {
-    background: 'red',
-    borderRadius: '6px',
-    ':hover': {
-      background: 'orange',
-    },
-  },
-});
 
 export const Button: FC<ComponentProps<'button'>> = (props) => {
   return (
     <button
       {...props}
-      className={mergeStyle(classes.button, props.className)}
+      className={mergeStyle(style.button, props.className)}
     />
   );
 };
