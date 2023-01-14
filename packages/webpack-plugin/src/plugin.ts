@@ -27,7 +27,7 @@ export class Plugin {
     swc = false,
     virtualLoader = true,
     preCssOutputPath = path.join(__dirname, 'assets'),
-    exclude = /node_modules/
+    exclude = /node_modules/,
   }: Partial<PluginOptions> = {}) {
     this.test = test;
     this.swc = swc;
