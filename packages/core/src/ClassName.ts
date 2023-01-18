@@ -1,9 +1,15 @@
 export class ClassName extends String {
-  object: Record<string, string>;
+  obj: Record<string, string>;
+  str: string;
   other: string[];
-  constructor(object: ClassName['object'], other: ClassName['other'] = []) {
-    super([...Object.values(object), ...other].join(' '));
-    this.object = object;
+  constructor(obj: ClassName['obj'], other: ClassName['other'] = []) {
+    const str = [...Object.values(obj), ...other].join(' ');
+    super(str);
+    this.str = str;
+    this.obj = obj;
     this.other = other;
   }
 }
+
+export type ClassNameType = ClassName & string;
+export type ClassNameObject = ClassName['obj'];

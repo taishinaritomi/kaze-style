@@ -5,8 +5,8 @@ import { Button } from '@/components/Button';
 const Server = () => {
   return (
     <div>
-      <h1 className={style.title}>Server Component</h1>
-      <div className={style.buttonContainer}>
+      <h1 className={style.title.str}>Server Component</h1>
+      <div className={style.buttonContainer.str}>
         <Button className={style.button}>Button</Button>
         <Button className={mergeStyle(style.button, style.blueButton)}>
           Button

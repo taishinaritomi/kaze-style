@@ -10,6 +10,7 @@ export * from './styleOrder';
 export * from './sortCssRules';
 export * from './uniqueCssRules';
 export * from './setCssRuleObjects';
-export type { Classes, PureClasses, ForBuild } from './types/common';
+export type { ClassNameObject, ClassNameType } from './ClassName';
+export type { Classes, ClassNameOverride, ForBuild } from './types/common';
 export type { KazeStyle, SupportStyle } from './types/style';
 export type { KazeGlobalStyle, SupportGlobalStyle } from './types/globalStyle';

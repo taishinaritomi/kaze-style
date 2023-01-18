@@ -1,4 +1,4 @@
-import type { ClassName } from './ClassName';
+import type { ClassNameObject } from './ClassName';
 import type { CssRule } from './styleOrder';
 import { getStyleOrder } from './styleOrder';
 import type { Selectors } from './types/common';
@@ -12,7 +12,7 @@ import { isObject } from './utils/isObject';
 import { resolveSelectors } from './utils/resolveSelectors';
 import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type ResolvedStyle = [object: ClassName['object'], cssRules: CssRule[]];
+type ResolvedStyle = [object: ClassNameObject, cssRules: CssRule[]];
 
 export const resolveStyle = (
   style: SupportStyle,
