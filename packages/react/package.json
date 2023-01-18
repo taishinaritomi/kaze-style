@@ -1,6 +1,6 @@
 {
   "name": "@kaze-style/react",
-  "version": "0.14.3",
+  "version": "0.15.0",
   "license": "MIT",
   "author": "Taishi Naritomi",
   "description": "Kaze [風] zero-runtime CSS in JS",
@@ -32,7 +32,7 @@
     "build": "tsx ./../../scripts/build.ts --size"
   },
   "dependencies": {
-    "@kaze-style/core": "^0.14.3"
+    "@kaze-style/core": "^0.15.0"
   },
   "peerDependencies": {
     "react": ">=16"
