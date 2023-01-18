@@ -8,3 +8,10 @@ export {
   __preGlobalStyle,
   ClassName,
 } from '@kaze-style/core';
+export type {
+  KazeStyle,
+  KazeGlobalStyle,
+  ClassNameType,
+  ClassNameObject,
+  ClassNameOverride,
+} from '@kaze-style/core';
