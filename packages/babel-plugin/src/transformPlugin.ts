@@ -63,17 +63,17 @@ export const transformPlugin = declare<
               ) as NodePath<t.CallExpression>;
               const indexArgPath = callExpressionPath.node
                 .arguments[3] as t.NumericLiteral;
-              const classesObject = _styles.find(
+              const classes = _styles.find(
                 (style) => style.index === indexArgPath.value,
               )?.classes;
               const objectProperties: t.ObjectProperty[] = [];
-              for (const key in classesObject) {
-                if (classesObject.hasOwnProperty(key)) {
+              for (const key in classes) {
+                if (classes.hasOwnProperty(key)) {
                   objectProperties.push(
                     t.objectProperty(
                       t.stringLiteral(key),
                       t.newExpression(t.identifier('ClassName'), [
-                        t.valueToNode(classesObject[key] || {}),
+                        t.valueToNode(classes[key] || {}),
                       ]),
                     ),
                   );

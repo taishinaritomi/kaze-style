@@ -9,7 +9,7 @@ export const Button: FC<ClassNameOverride<ComponentProps<'button'>>> = (
   return (
     <button
       {...props}
-      className={mergeStyle(style.button, props.className).str}
+      className={mergeStyle(style.button, props.className).string()}
     />
   );
 };

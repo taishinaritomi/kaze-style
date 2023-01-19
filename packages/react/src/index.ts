@@ -12,6 +12,6 @@ export type {
   KazeStyle,
   KazeGlobalStyle,
   ClassNameType,
-  ClassNameObject,
+  ClassNameRecord,
   ClassNameOverride,
 } from '@kaze-style/core';
