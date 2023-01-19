@@ -1,4 +1,4 @@
-import type { ClassNameObject, ClassNameType } from './ClassName';
+import type { ClassNameRecord, ClassNameType } from './ClassName';
 import { ClassName } from './ClassName';
 import { isObject } from './utils/isObject';
 
@@ -8,22 +8,22 @@ type ClassNamesArgs = (
   | undefined
   | null
   | ClassName
-  | ClassNameObject
+  | ClassNameRecord
 )[];
 
 export const mergeStyle = (..._classNames: ClassNamesArgs) => {
-  const styles: ClassNameObject = {};
+  const classNameRecord: ClassNameRecord = {};
   const other: string[] = [];
 
   _classNames.forEach((className) => {
     if (typeof className === 'string') {
       other.push(className);
     } else if (className instanceof ClassName) {
-      other.push(...className.other);
-      Object.assign(styles, className.obj);
+      other.push(...className.other());
+      Object.assign(classNameRecord, className.static());
     } else if (isObject(className)) {
-      Object.assign(styles, className);
+      Object.assign(classNameRecord, className);
     }
   });
-  return new ClassName(styles, other) as ClassNameType;
+  return new ClassName(classNameRecord, other) as ClassNameType;
 };

@@ -1,15 +1,20 @@
 export class ClassName extends String {
-  obj: Record<string, string>;
-  str: string;
-  other: string[];
-  constructor(obj: ClassName['obj'], other: ClassName['other'] = []) {
-    const str = [...Object.values(obj), ...other].join(' ');
-    super(str);
-    this.str = str;
-    this.obj = obj;
-    this.other = other;
+  // Record
+  private r: Record<string, string>;
+  // Value
+  private v: string;
+  // Other
+  private o: string[];
+  constructor(record: ClassName['r'], other: ClassName['o'] = []) {
+    const string = [...Object.values(record), ...other].join(' ');
+    super(string);
+    this.v = string;
+    this.r = record;
+    this.o = other;
   }
+  string = () => this.v;
+  static = () => this.r;
+  other = () => this.o;
 }
-
 export type ClassNameType = ClassName & string;
-export type ClassNameObject = ClassName['obj'];
+export type ClassNameRecord = ClassName['r'];

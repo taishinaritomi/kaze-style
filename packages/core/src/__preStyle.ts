@@ -8,10 +8,10 @@ export const __preStyle = <K extends string>(
   filename: string,
   index: number,
 ): Classes<K> => {
-  const [cssRules, classes, objectClasses] = createStyle(styles);
+  const [cssRules, classes, recordClasses] = createStyle(styles);
   if (forBuild[0] === filename) {
     forBuild[1].push(...cssRules);
-    forBuild[2].push([objectClasses, index]);
+    forBuild[2].push([recordClasses, index]);
   }
 
   return classes;
