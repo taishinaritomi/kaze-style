@@ -6,14 +6,14 @@ import { ClientButton } from '@/components/ClientButton';
 const ServerComponent = () => {
   return (
     <div>
-      <h1 className={style.title.string()}>Server Component</h1>
-      <div className={style.buttonContainer.string()}>
-        <Button className={style.button}>Button</Button>
-        <Button className={mergeStyle(style.button, style.blueButton)}>
+      <h1 className={style.title}>Server Component</h1>
+      <div className={style.buttonContainer}>
+        <Button className={style.$button}>Button</Button>
+        <Button className={mergeStyle(style.$button, style.$blueButton)}>
           Button
         </Button>
-        <Button className={style.button}>Button</Button>
-        <ClientButton className={style.button.static()}>
+        <Button className={style.$button}>Button</Button>
+        <ClientButton className={style.$button.static()}>
           ClientButton
         </ClientButton>
       </div>

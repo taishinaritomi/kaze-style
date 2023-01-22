@@ -12,6 +12,8 @@ type UnionToIntersection<U> = (
   ? I
   : never;
 
+export type StartString<T> = T extends `${infer X}${infer _}` ? X : never;
+
 export type IncludeStr<T extends AndArray<string>> = T extends string
   ? `${string}${T}${string}`
   : UnionToIntersection<`${string}${T[number]}${string}`>;

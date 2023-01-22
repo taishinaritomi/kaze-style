@@ -1,6 +1,6 @@
+import { compileNotAtomicCss } from '../compileNotAtomicCss';
 import { hash } from '../hash';
 import type { KeyframesRules } from '../types/style';
-import { compileObjectCss } from './compileObjectCss';
 
 export const compileKeyFrameCss = (
   keyframeObject: KeyframesRules,
@@ -9,9 +9,9 @@ export const compileKeyFrameCss = (
 
   for (const percentage in keyframeObject) {
     const value = keyframeObject[percentage];
-    percentageRules.push(
-      `${compileObjectCss(value || {}, percentage).join('')}`,
-    );
+    const [_cssRules] = compileNotAtomicCss(value || {}, 'normal', percentage);
+    const percentageRule = _cssRules.map(([cssRule]) => cssRule).join('');
+    percentageRules.push(percentageRule);
   }
   const css = percentageRules.join('');
   const keyframesName = `_${hash(css)}`;

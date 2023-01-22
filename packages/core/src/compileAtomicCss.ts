@@ -12,15 +12,15 @@ import { isObject } from './utils/isObject';
 import { resolveSelectors } from './utils/resolveSelectors';
 import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type ResolvedStyle = [classNameRecord: ClassNameRecord, cssRules: CssRule[]];
+type ResolvedStyle = [cssRules: CssRule[], classNameRecord: ClassNameRecord];
 
-export const resolveStyle = (
+export const compileAtomicCss = (
   style: SupportStyle,
   selectors: Selectors = [[], ''],
-  resolvedStyle: ResolvedStyle = [{}, []],
+  resolvedStyle: ResolvedStyle = [[], {}],
 ): ResolvedStyle => {
-  const classNameRecord = resolvedStyle[0];
-  const cssRules = resolvedStyle[1];
+  const cssRules = resolvedStyle[0];
+  const classNameRecord = resolvedStyle[1];
   for (const _property in style) {
     const property = _property as keyof SupportStyle;
     const styleValue = style[property];
@@ -43,13 +43,13 @@ export const resolveStyle = (
           compileKeyFrameCss(animationNameValue);
         cssRules.push([keyframesRule, 'keyframes']);
         Object.assign(classNameRecord, { [keyframesName]: keyframesName });
-        resolveStyle(
+        compileAtomicCss(
           { animationName: keyframesName },
           selectors,
           resolvedStyle,
         );
       } else {
-        resolveStyle(
+        compileAtomicCss(
           styleValue,
           resolveSelectors(selectors, property),
           resolvedStyle,

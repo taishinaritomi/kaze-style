@@ -2,6 +2,7 @@ import type { Selectors } from './types/common';
 
 export const styleOrder = [
   'global',
+  'notAtomic',
   'normal',
   'link',
   'visited',

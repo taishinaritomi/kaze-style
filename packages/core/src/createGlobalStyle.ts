@@ -1,9 +1,9 @@
+import { compileNotAtomicCss } from './compileNotAtomicCss';
 import type { CssRule } from './styleOrder';
 import type { CssValue } from './types/common';
 import type { KazeGlobalStyle } from './types/globalStyle';
 import type { AndArray, NestObj } from './types/utils';
 import { uniqueCssRules } from './uniqueCssRules';
-import { compileObjectCss } from './utils/compileObjectCss';
 
 type Result = [cssRules: CssRule[]];
 
@@ -14,8 +14,8 @@ export const createGlobalStyle = <T extends string>(
   const styles = _styles as Record<T, NestObj<AndArray<CssValue>>>;
   for (const selector in styles) {
     const style = styles[selector];
-    const rules = compileObjectCss(style, selector);
-    cssRules.push(...rules.map((rule): CssRule => [rule, 'global']));
+    const [_cssRules] = compileNotAtomicCss(style, 'global', selector);
+    cssRules.push(..._cssRules);
   }
   return [uniqueCssRules(cssRules)];
 };

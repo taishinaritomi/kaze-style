@@ -1,5 +1,6 @@
 import type { ClassNameRecord, ClassNameType } from '../ClassName';
 import type { CssRule } from '../styleOrder';
+import type { StartString } from './utils';
 
 export type CssValue = string | number | undefined;
 
@@ -16,8 +17,15 @@ export type NestChar =
   | '.'
   | '#';
 
-export type Classes<K extends string> = Record<K, ClassNameType>;
-export type RecordClasses<K extends string> = Record<K, ClassNameRecord>;
+export type Classes<T extends string> = {
+  [P in T]: StartString<P> extends '$' ? ClassNameType : string;
+};
+
+export type StaticClasses<T extends string> = Record<
+  T,
+  string | ClassNameRecord
+>;
+
 export type StringClasses<K extends string> = Record<K, string>;
 
 export type ClassNameOverride<
@@ -28,8 +36,8 @@ export type ClassNameOverride<
 };
 export type Selectors = [atRules: string[], nest: string];
 
-export type ForBuild = [
+export type ForBuild<T extends string = string> = [
   filename: string,
   cssRules: CssRule[],
-  styles: [classes: RecordClasses<string>, index: number][],
+  styles: [classes: StaticClasses<T>, index: number][],
 ];

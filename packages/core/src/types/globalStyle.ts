@@ -2,7 +2,10 @@ import type { Pseudos, PropertiesFallback, AtRule } from 'csstype';
 import type { CssValue, NestChar } from './common';
 import type { AndArray, IncludeStr } from './utils';
 
-type SupportGlobalRules = PropertiesFallback<AndArray<CssValue>>;
+type SupportGlobalRules = Omit<
+  PropertiesFallback<AndArray<CssValue>>,
+  'animationName'
+>;
 type FontFaceRules = AtRule.FontFaceFallback<CssValue>;
 
 type GlobalPseudosRules = {
@@ -20,9 +23,20 @@ type PredictGlobalSelector =
   | GlobalSelector
   | `${GlobalSelector}${Pseudos}`;
 
+type AnimationNameRules = {
+  animationName?: KeyframesRules | string;
+};
+
+export type KeyframesRules = {
+  [_ in 'from' | 'to']?: SupportGlobalRules;
+} & {
+  [_ in string]?: SupportGlobalRules;
+};
+
 export type SupportGlobalStyle = SupportGlobalRules &
   GlobalPseudosRules &
-  GlobalStringRules;
+  GlobalStringRules &
+  AnimationNameRules;
 
 export type KazeGlobalStyle<T extends string> = {
   '@font-face'?: FontFaceRules;

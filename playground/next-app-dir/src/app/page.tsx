@@ -3,11 +3,11 @@ import Link from 'next/link';
 import { style } from './page.style';
 
 const Home: NextPage = () => (
-  <div className={style.container.string()}>
-    <Link className={style.link.string()} href={'/client'}>
+  <div className={style.container}>
+    <Link className={style.link} href={'/client'}>
       Client Component
     </Link>
-    <Link className={style.link.string()} href={'/server'}>
+    <Link className={style.link} href={'/server'}>
       Server Component
     </Link>
   </div>

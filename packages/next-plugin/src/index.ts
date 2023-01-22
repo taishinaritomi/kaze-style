@@ -67,7 +67,9 @@ const kazeStyleConfig = (
         });
 
         config.plugins?.push(
-          new KazePlugin(Object.assign({ virtualLoader: !appDir }, kazeConfig)),
+          new KazePlugin(
+            Object.assign({ virtualLoader: !appDir, swc: true }, kazeConfig),
+          ),
         );
 
         if (typeof nextConfig.webpack === 'function') {

@@ -8,6 +8,6 @@ export const ClientButton: FC<ClassNameOverride<ComponentProps<'button'>>> = (
   props,
 ) => {
   return (
-    <button {...props} className={mergeStyle(style.button, props.className)} />
+    <button {...props} className={mergeStyle(style.$button, props.className)} />
   );
 };
