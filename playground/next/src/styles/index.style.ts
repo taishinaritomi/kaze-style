@@ -5,10 +5,10 @@ export const style = createStyle({
     display: 'flex',
     gap: '5px',
   },
-  button: {
+  $button: {
     padding: ['10px', '20px'],
   },
-  blueButton: {
+  $blueButton: {
     background: 'blue',
     ':hover': {
       background: 'skyblue',

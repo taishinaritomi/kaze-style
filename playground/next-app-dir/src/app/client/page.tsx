@@ -9,11 +9,11 @@ const Client = () => {
     <div>
       <h1 className={style.title}>Client Component</h1>
       <div className={style.buttonContainer}>
-        <Button className={style.button}>Button</Button>
-        <Button className={mergeStyle(style.button, style.blueButton)}>
+        <Button className={style.$button}>Button</Button>
+        <Button className={mergeStyle(style.$button, style.$blueButton)}>
           Button
         </Button>
-        <Button className={style.button}>Button</Button>
+        <Button className={style.$button}>Button</Button>
       </div>
     </div>
   );

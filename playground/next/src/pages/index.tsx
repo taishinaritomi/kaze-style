@@ -10,11 +10,11 @@ const LazyButton = dynamic(() =>
 const Home: NextPage = () => {
   return (
     <div className={style.container}>
-      <Button className={style.button}>Button</Button>
-      <Button className={mergeStyle(style.button, style.blueButton)}>
+      <Button className={style.$button}>Button</Button>
+      <Button className={mergeStyle(style.$button, style.$blueButton)}>
         Button
       </Button>
-      <LazyButton className={style.button}>Button</LazyButton>
+      <LazyButton className={style.$button}>Button</LazyButton>
     </div>
   );
 };
