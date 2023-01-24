@@ -1,4 +1,4 @@
-import { mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/core';
 import type { NextPage } from 'next';
 import dynamic from 'next/dynamic';
 import { Button } from '@/components/Button';

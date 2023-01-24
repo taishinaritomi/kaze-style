@@ -64,7 +64,7 @@ const compileVanillaSource = async (loader: LoaderContext) => {
         new NodeTargetPlugin(),
         new EnableLibraryPlugin('commonjs2'),
         new LimitChunkCountPlugin({ maxChunks: 1 }),
-        new ExternalsPlugin('commonjs', ['@kaze-style/react']),
+        new ExternalsPlugin('commonjs', ['@kaze-style/core']),
       ],
     );
 

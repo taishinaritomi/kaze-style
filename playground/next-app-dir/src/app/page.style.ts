@@ -1,4 +1,4 @@
-import { createStyle } from '@kaze-style/react';
+import { createStyle } from '@kaze-style/core';
 
 export const style = createStyle({
   container: {

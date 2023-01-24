@@ -1,4 +1,4 @@
-import { createGlobalStyle } from './createGlobalStyle';
+import { resolveGlobalStyle } from './resolveGlobalStyle';
 import type { ForBuild } from './types/common';
 import type { KazeGlobalStyle } from './types/globalStyle';
 
@@ -8,7 +8,7 @@ export const __preGlobalStyle = <T extends string>(
   filename: string,
   _index: number,
 ): void => {
-  const [cssRules] = createGlobalStyle(globalStyles);
+  const [cssRules] = resolveGlobalStyle(globalStyles);
   if (forBuild[0] === filename) {
     forBuild[1].push(...cssRules);
   }

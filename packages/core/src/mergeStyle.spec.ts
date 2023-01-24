@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { ClassName } from './ClassName';
-import { createStyle } from './createStyle';
 import { mergeStyle } from './mergeStyle';
+import { resolveStyle } from './resolveStyle';
 
 describe('mergeStyle', () => {
   it('base', () => {
-    const [, classes] = createStyle({
+    const [, classes] = resolveStyle({
       $base: {
         color: 'red',
         '@media (max-width:1024px)': {

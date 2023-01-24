@@ -6,7 +6,7 @@ Because of various restrictions in `React Server Components`, we need to add som
 
 ```ts
 // ServerComponent.tsx
-import { mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/core';
 import { style } from './ServerComponent.style';
 
 const ServerComponent = () => {
@@ -30,7 +30,7 @@ const ServerComponent2 = (props) => {
 
 ```ts
 // ServerComponent.tsx
-import { mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/core';
 import { style } from './ServerComponent.style';
 
 const ServerComponent = () => {
@@ -45,7 +45,7 @@ const ServerComponent = () => {
 ```ts
 // ClientComponent.tsx
 'use client';
-import { mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/core';
 import { style } from './ClientComponent.style';
 const ClientComponent = (props) => {
   return (

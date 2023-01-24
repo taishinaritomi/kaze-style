@@ -60,7 +60,7 @@ impl TransformVisitor {
       config: config,
       comments: comments,
       index: 0,
-      import_source: "@kaze-style/react".to_string(),
+      import_source: "@kaze-style/core".to_string(),
       transformed_comment: "__kaze-style-pre-transformed".to_string(),
       is_transformed: false,
       transforms: vec![
@@ -191,13 +191,13 @@ test!(
   test,
   // Input codes
   r#"
-  import { createStyle, createGlobalStyle, mergeStyle } from '@kaze-style/react';
+  import { createStyle, createGlobalStyle, mergeStyle } from '@kaze-style/core';
   const c = createStyle({});
   createGlobalStyle({});
   "#,
   // Output codes after
   r#"
-  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/react';
+  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/core';
   const c = __preStyle({}, for_build_name, "filename.ts", 0);
   __preGlobalStyle({}, for_build_name, "filename.ts", 1);
   "#

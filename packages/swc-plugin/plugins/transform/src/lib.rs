@@ -62,7 +62,7 @@ impl TransformVisitor {
   fn new(config: Config) -> Self {
     Self {
       config: config,
-      import_source: "@kaze-style/react".to_string(),
+      import_source: "@kaze-style/core".to_string(),
       class_name: "ClassName".to_string(),
       transforms: vec![
         Transform {
@@ -247,14 +247,14 @@ test!(
   test,
   // Input codes
   r#"
-  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/react';
+  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/core';
   const c = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 0);
   __preGlobalStyle({}, __forBuildByKazeStyle, "filename.ts", 1);
   const c2 = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 2);
   "#,
   // Output codes after
   r#"
-  import { __style, __globalStyle, mergeStyle, ClassName } from '@kaze-style/react';
+  import { __style, __globalStyle, mergeStyle, ClassName } from '@kaze-style/core';
   const c = __style({
     "base": new ClassName({
       "color": "red"

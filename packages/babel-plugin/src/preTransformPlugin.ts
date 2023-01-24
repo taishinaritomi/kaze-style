@@ -16,7 +16,7 @@ type State = {
 };
 
 const options = {
-  importSource: '@kaze-style/react',
+  importSource: '@kaze-style/core',
   transforms: [
     {
       from: 'createStyle',

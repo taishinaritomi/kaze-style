@@ -33,7 +33,7 @@
     "@kaze-style/build": "^0.15.0"
   },
   "peerDependencies": {
-    "@kaze-style/react": "^0.15.0",
+    "@kaze-style/core": "^0.15.0",
     "webpack": "^5"
   }
 }

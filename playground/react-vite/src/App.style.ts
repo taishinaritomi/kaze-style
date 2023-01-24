@@ -1,4 +1,4 @@
-import { createGlobalStyle, createStyle } from '@kaze-style/react';
+import { createGlobalStyle, createStyle } from '@kaze-style/core';
 import { theme } from '@kaze-style/themes';
 
 createGlobalStyle(theme.reset());

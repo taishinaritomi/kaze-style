@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { ClassName } from './ClassName';
-import { createStyle } from './createStyle';
+import { resolveStyle } from './resolveStyle';
 
-describe('createStyle', () => {
+describe('resolveStyle', () => {
   it('base', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         color: 'red',
       },
@@ -15,7 +15,7 @@ describe('createStyle', () => {
   });
 
   it('pseudo', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         ':hover': {
           color: 'red',
@@ -36,7 +36,7 @@ describe('createStyle', () => {
   });
 
   it('nest pseudo', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         ':hover': {
           '::after': {
@@ -57,7 +57,7 @@ describe('createStyle', () => {
   });
 
   it('atRules', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         '@media (max-width: 512px)': {
           color: 'red',
@@ -72,7 +72,7 @@ describe('createStyle', () => {
   });
 
   it('nest atRules', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         '@media (max-width: 512px)': {
           color: 'red',
@@ -96,7 +96,7 @@ describe('createStyle', () => {
   });
 
   it('keyframes', () => {
-    const [cssRules, classes] = createStyle({
+    const [cssRules, classes] = resolveStyle({
       $base: {
         animationName: {
           from: {

@@ -1,6 +1,6 @@
 'use client';
-import type { ClassNameOverride } from '@kaze-style/react';
-import { mergeStyle } from '@kaze-style/react';
+import type { ClassNameOverride } from '@kaze-style/core';
+import { mergeStyle } from '@kaze-style/core';
 import type { ComponentProps, FC } from 'react';
 import { style } from './ClientButton.style';
 

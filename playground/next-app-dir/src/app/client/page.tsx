@@ -1,6 +1,6 @@
 'use client';
 
-import { mergeStyle } from '@kaze-style/react';
+import { mergeStyle } from '@kaze-style/core';
 import { style } from './page.style';
 import { Button } from '@/components/Button';
 
