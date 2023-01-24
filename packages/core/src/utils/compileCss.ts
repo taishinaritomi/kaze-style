@@ -5,7 +5,9 @@ export const compileCss = (
   [atRules, nest]: Selectors,
   declaration: string,
 ): string => {
-  const selector = !nest ? `${_selector}` : `${nest.replace(/&/g, `${_selector}`)}`;
+  const selector = !nest
+    ? `${_selector}`
+    : `${nest.replace(/&/g, `${_selector}`)}`;
 
   let css = `${selector}{${declaration}}`;
 

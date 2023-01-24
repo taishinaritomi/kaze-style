@@ -9,7 +9,11 @@ export const compileKeyFrameCss = (
 
   for (const percentage in keyframeObject) {
     const styleValue = keyframeObject[percentage];
-    const [cssRules] = compileNotAtomicCss(styleValue || {}, 'normal', percentage);
+    const [cssRules] = compileNotAtomicCss(
+      styleValue || {},
+      'normal',
+      percentage,
+    );
     const percentageRule = cssRules.map(([cssRule]) => cssRule).join('');
     percentageRules.push(percentageRule);
   }

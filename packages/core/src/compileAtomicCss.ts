@@ -43,11 +43,7 @@ export const compileAtomicCss = (
           compileKeyFrameCss(animationNameValue);
         cssRules.push([keyframesRule, 'keyframes']);
         Object.assign(classNameRecord, { [keyframesName]: keyframesName });
-        compileAtomicCss(
-          { animationName: keyframesName },
-          selectors,
-          resolved,
-        );
+        compileAtomicCss({ animationName: keyframesName }, selectors, resolved);
       } else {
         compileAtomicCss(
           styleValue,
