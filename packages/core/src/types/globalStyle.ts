@@ -1,6 +1,6 @@
 import type { Pseudos, PropertiesFallback, AtRule } from 'csstype';
 import type { CssValue, NestChar } from './common';
-import type { AndArray, IncludeStr } from './utils';
+import type { AndArray, IncludeString } from './utils';
 
 type SupportGlobalRules = Omit<
   PropertiesFallback<AndArray<CssValue>>,
@@ -13,7 +13,7 @@ type GlobalPseudosRules = {
 };
 
 type GlobalStringRules = {
-  [_ in IncludeStr<NestChar>]?: SupportGlobalStyle;
+  [_ in IncludeString<NestChar>]?: SupportGlobalStyle;
 };
 
 type GlobalSelector = keyof HTMLElementTagNameMap | '*';

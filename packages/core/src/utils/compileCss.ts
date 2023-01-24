@@ -1,24 +1,17 @@
 import type { Selectors } from '../types/common';
 
 export const compileCss = (
-  selector: string,
+  _selector: string,
   [atRules, nest]: Selectors,
   declaration: string,
 ): string => {
-  let resolvedSelector = '';
-  let rule = '';
+  const selector = !nest ? `${_selector}` : `${nest.replace(/&/g, `${_selector}`)}`;
 
-  if (!nest) {
-    resolvedSelector = `${selector}`;
-  } else {
-    resolvedSelector = `${nest.replace(/&/g, `${selector}`)}`;
-  }
-
-  rule = `${resolvedSelector}{${declaration}}`;
+  let css = `${selector}{${declaration}}`;
 
   if (atRules.length !== 0) {
-    atRules.forEach((atRule) => (rule = `${atRule}{${rule}}`));
+    atRules.forEach((atRule) => (css = `${atRule}{${css}}`));
   }
 
-  return rule;
+  return css;
 };

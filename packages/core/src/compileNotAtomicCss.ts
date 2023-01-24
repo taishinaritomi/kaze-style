@@ -9,46 +9,46 @@ import { isObject } from './utils/isObject';
 import { resolveSelectors } from './utils/resolveSelectors';
 import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type ResolvedStyle = [rules: CssRule[]];
+type Resolved = [rules: CssRule[]];
 
 export const compileNotAtomicCss = (
   style: NestObj<AndArray<CssValue>>,
   styleOrder: StyleOrder,
   selector: string,
   selectors: Selectors = [[], ''],
-  resolvedStyle: ResolvedStyle = [[]],
+  resolved: Resolved = [[]],
 ) => {
-  const cssBlock: string[] = [];
+  const cssDeclarations: string[] = [];
   for (const property in style) {
-    const value = style[property];
-    if (isCssValue(value)) {
-      cssBlock.push(styleDeclarationStringify(property, value));
-    } else if (isObject(value)) {
+    const styleValue = style[property];
+    if (isCssValue(styleValue)) {
+      cssDeclarations.push(styleDeclarationStringify(property, styleValue));
+    } else if (isObject(styleValue)) {
       if (property === 'animationName') {
         const animationNameValue = style[property] as KeyframesRules;
         const [keyframesName, keyframesRule] =
           compileKeyFrameCss(animationNameValue);
-        resolvedStyle[0].push([keyframesRule, 'keyframes']);
-        cssBlock.push(
+        resolved[0].push([keyframesRule, 'keyframes']);
+        cssDeclarations.push(
           styleDeclarationStringify('animationName', keyframesName),
         );
       } else {
         compileNotAtomicCss(
-          value,
+          styleValue,
           styleOrder,
           selector,
           resolveSelectors(selectors, property),
-          resolvedStyle,
+          resolved,
         );
       }
     }
   }
 
-  if (cssBlock.length !== 0) {
-    resolvedStyle[0].push([
-      compileCss(selector, selectors, cssBlock.join('')),
+  if (cssDeclarations.length !== 0) {
+    resolved[0].push([
+      compileCss(selector, selectors, cssDeclarations.join('')),
       styleOrder,
     ]);
   }
-  return resolvedStyle;
+  return resolved;
 };

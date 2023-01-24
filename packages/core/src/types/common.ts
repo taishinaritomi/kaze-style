@@ -1,6 +1,6 @@
 import type { ClassNameRecord, ClassNameType } from '../ClassName';
 import type { CssRule } from '../styleOrder';
-import type { StartString } from './utils';
+import type { FirstChar } from './utils';
 
 export type CssValue = string | number | undefined;
 
@@ -18,7 +18,7 @@ export type NestChar =
   | '#';
 
 export type Classes<T extends string> = {
-  [P in T]: StartString<P> extends '$' ? ClassNameType : string;
+  [P in T]: FirstChar<P> extends '$' ? ClassNameType : string;
 };
 
 export type StaticClasses<T extends string> = Record<

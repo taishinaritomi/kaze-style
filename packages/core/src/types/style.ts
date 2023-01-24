@@ -1,6 +1,6 @@
 import type { Pseudos, PropertiesFallback } from 'csstype';
 import type { CssValue, NestChar } from './common';
-import type { IncludeStr } from './utils';
+import type { IncludeString } from './utils';
 
 type SupportRules = Omit<PropertiesFallback<CssValue>, 'animationName'>;
 
@@ -23,7 +23,7 @@ type PseudosRules = {
 };
 
 type StringRules = {
-  [_ in IncludeStr<NestChar>]?: SupportStyle;
+  [_ in IncludeString<NestChar>]?: SupportStyle;
 };
 
 type AnimationNameRules = {
