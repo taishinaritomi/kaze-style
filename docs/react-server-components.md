@@ -12,14 +12,14 @@ import { style } from './ServerComponent.style';
 const ServerComponent = () => {
   return (
     <div className={style.container.string()}>
-      <ServerComponent2 className={style.base}>Server</ServerComponent2>
+      <ServerComponent2 className={style.$base}>Server</ServerComponent2>
     </div>
   );
 };
 
 const ServerComponent2 = (props) => {
   return (
-    <p className={mergeStyle(style.client, props.className).string()}>
+    <p className={mergeStyle(style.$client, props.className).string()}>
       {props.children}
     </p>
   );
@@ -36,7 +36,7 @@ import { style } from './ServerComponent.style';
 const ServerComponent = () => {
   return (
     <div className={style.container.string()}>
-      <ClientComponent className={style.base.static()}>Client</ClientComponent>
+      <ClientComponent className={style.$base.static()}>Client</ClientComponent>
     </div>
   );
 };
@@ -49,7 +49,7 @@ import { mergeStyle } from '@kaze-style/react';
 import { style } from './ClientComponent.style';
 const ClientComponent = (props) => {
   return (
-    <p className={mergeStyle(style.client, props.className)}>
+    <p className={mergeStyle(style.$client, props.className)}>
       {props.children}
     </p>
   );
