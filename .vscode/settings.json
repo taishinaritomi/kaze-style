@@ -9,7 +9,8 @@
     "outfile",
     "picocolors",
     "stylis",
-    "Taishi"
+    "Taishi",
+    "buildtime"
   ],
   "rust-analyzer.linkedProjects": ["./packages/swc-plugin/Cargo.toml"],
   "typescript.tsdk": "node_modules/typescript/lib"

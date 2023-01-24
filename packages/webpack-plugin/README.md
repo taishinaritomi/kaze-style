@@ -32,11 +32,11 @@
 
 # Features
 
-- **Build** - Can choose when to extract css build time & run time (RSC is build time only)
-- **Atomic CSS** - Select atomic css with $
-- **TypeScript** - Type-safe styles via [csstype](https://github.com/frenic/csstype)
-- **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by build time extract
+- **Extract** - Can choose when to extract css is buildtime or runtime(RSC is build only)
+- **Atomic** - Select atomic css with $
 - **Merge** - Style merging ignoring css specificity (atomic css only)
+- **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by buildtime extract
+- **TypeScript** - Type-safe styles via [csstype](https://github.com/frenic/csstype)
 - **Theme** - Consistent styling using "@kaze-style/themes"
 
 # Example
@@ -83,7 +83,7 @@ export const App = ({ action }) => {
 };
 ```
 
-### Setup Next.js（build time extract）
+### Setup Next.js（buildtime extract）
 
 ```ts
 //next.config.mjs
