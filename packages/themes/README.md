@@ -32,10 +32,11 @@
 
 # Features
 
-- **Build** - can choose when to extract css (build time & run time)
+- **Build** - Can choose when to extract css build time & run time (RSC is build time only)
+- **AtomicCSS** -　 Select atomic css with $
 - **TypeScript** - Type-safe styles via [csstype](https://github.com/frenic/csstype)
 - **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by build time extract
-- **Merge** - Style merging ignoring css specificity
+- **Merge** - Style merging ignoring css specificity (atomic css only)
 - **Theme** - Consistent styling using "@kaze-style/themes"
 
 # Example
@@ -51,13 +52,17 @@ createGlobalStyle({
 });
 
 export const style = createStyle({
+  //Not Atomic CSS
   container: {
     margin: '20px',
+    padding: '20px',
   },
+  //Atomic CSS
   $base: {
     color: 'red',
     background: 'black',
   },
+  //Atomic CSS
   $action: {
     color: 'blue',
   },
