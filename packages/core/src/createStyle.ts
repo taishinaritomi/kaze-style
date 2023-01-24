@@ -35,7 +35,7 @@ export const createStyle = <K extends string>(
         `.${selector}`,
       );
       cssRules.push(..._cssRules);
-      //@ts-expect-error type
+      // @ts-expect-error type
       classes[key] = selector;
       staticClasses[key] = selector;
     }
