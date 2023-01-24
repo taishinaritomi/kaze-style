@@ -54,11 +54,11 @@ export const style = createStyle({
   container: {
     margin: '20px',
   },
-  base: {
+  $base: {
     color: 'red',
     background: 'black',
   },
-  action: {
+  $action: {
     color: 'blue',
   },
 });
@@ -72,7 +72,7 @@ import { style } from './App.style';
 export const App = ({ action }) => {
   return (
     <div className={style.container}>
-      <p className={mergeStyle(style.base, action && style.action)}></p>
+      <p className={mergeStyle(style.$base, action && style.$action)}></p>
     </div>
   );
 };
