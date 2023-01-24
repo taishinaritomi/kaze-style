@@ -32,7 +32,7 @@
 
 # Features
 
-- **Extract** - Can choose when to extract css is buildtime or runtime(RSC is build only)
+- **Extract** - Can choose when to extract css is buildtime or runtime(RSC is buildtime only)
 - **Atomic** - Select atomic css with $
 - **Merge** - Style merging ignoring css specificity (atomic css only)
 - **Minimal** - [0.3kb](https://shakerphobia.netlify.app/?imports=ClassName,mergeStyle,__globalStyle,__style&pkg=@kaze-style/react) runtime by buildtime extract
