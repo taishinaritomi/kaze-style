@@ -26,7 +26,7 @@ export const preTransform = async (
     swcrc: false,
     ...swcOptions,
     jsc: {
-      target: "es2022",
+      target: 'es2022',
       ...swcOptions.jsc,
       parser: swcOptions.jsc?.parser ?? {
         syntax: 'typescript',
