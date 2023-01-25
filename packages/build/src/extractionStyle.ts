@@ -1,6 +1,6 @@
 import type { ForBuild } from '@kaze-style/core';
 import evalCode from 'eval';
-import { forBuildName as _forBuildName } from './constants';
+import { FOR_BUILD_NAME } from './constants';
 
 type Options = {
   filename: string;
@@ -9,7 +9,7 @@ type Options = {
 
 export const extractionStyle = (
   code: string,
-  { filename, forBuildName = _forBuildName }: Options,
+  { filename, forBuildName = FOR_BUILD_NAME }: Options,
 ) => {
   const forBuild: ForBuild = [filename, [], []];
   // remove start

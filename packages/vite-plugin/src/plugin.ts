@@ -1,13 +1,18 @@
+import { cssRulesToString } from '@kaze-style/build';
 import type { CssRule } from '@kaze-style/core';
-import { sortCssRules, uniqueCssRules } from '@kaze-style/core';
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';
 
 type KazeConfig = {
   swc?: boolean;
+  cssLayer?: boolean;
 };
 
-export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
+export const plugin = (_kazeConfig: KazeConfig = {}): Plugin => {
+  const kazeConfig = Object.assign(
+    { swc: false, cssLayer: false },
+    _kazeConfig,
+  );
   const cssRules: CssRule[] = [];
   let mode = '';
   return {
@@ -26,8 +31,10 @@ export const plugin = (kazeConfig: KazeConfig = {}): Plugin => {
     load(id: string) {
       const [validId] = id.split('?');
       if (/kaze.css$/.test(validId || '')) {
-        const _cssRules = sortCssRules(uniqueCssRules(cssRules));
-        return _cssRules.map((cssRule) => cssRule[0]).join('');
+        return cssRulesToString(cssRules, {
+          layer: kazeConfig.cssLayer,
+          layerBundle: true,
+        });
       }
       return;
     },

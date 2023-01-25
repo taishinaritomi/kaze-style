@@ -59,7 +59,7 @@ function loader(
             callback(null, sourceCode, inputSourceMap);
             return;
           } else {
-            const cssString = cssRulesToString(cssRules);
+            const cssString = cssRulesToString(cssRules, { layer: true });
             if (options.virtualLoader) {
               const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify(
                 {
