@@ -28,6 +28,7 @@ export const transform = async (
     swcrc: false,
     ...swcOptions,
     jsc: {
+      target: "es2022",
       ...swcOptions.jsc,
       parser: swcOptions.jsc?.parser ?? {
         syntax: 'typescript',
