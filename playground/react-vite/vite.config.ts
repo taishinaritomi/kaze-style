@@ -3,10 +3,7 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react(), kazePlugin()],
+  plugins: [react(), kazePlugin({ cssLayer: true })],
+  // use swc compile
+  // kazePlugin({ swc: true })
 });
-
-// use swc compiler
-// export default defineConfig({
-//   plugins: [react(), kazePlugin({ swc: true })],
-// });
