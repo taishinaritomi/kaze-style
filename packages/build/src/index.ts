@@ -1,4 +1,4 @@
-export * from './sortCss';
+export * from './transformCss';
 export * from './cssRulesToCssString';
 export * from './extractionStyle';
 export * from './preTransform';

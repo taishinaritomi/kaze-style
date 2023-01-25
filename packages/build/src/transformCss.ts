@@ -4,7 +4,7 @@ import type { Element } from 'stylis';
 import { serialize, stringify, compile } from 'stylis';
 import { layerPrefix } from './constants';
 
-export const sortCss = (css: string): string => {
+export const transformCss = (css: string): string => {
   const otherElements: Element[] = [];
   const cssRules: CssRule[] = [];
 

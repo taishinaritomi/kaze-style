@@ -1,5 +1,5 @@
 import path from 'path';
-import { sortCss } from '@kaze-style/build';
+import { transformCss } from '@kaze-style/build';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 
@@ -66,7 +66,7 @@ export class Plugin {
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {
             if (pathname.includes('.css')) {
-              const sortedCss = sortCss(getSource(source));
+              const sortedCss = transformCss(getSource(source));
               compilation.updateAsset(
                 pathname,
                 new compiler.webpack.sources.RawSource(sortedCss),
