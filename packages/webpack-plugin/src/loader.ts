@@ -67,13 +67,13 @@ function loader(
                 },
               )}`;
 
-              const request = `import ${JSON.stringify(
+              const filePrefix = `import ${JSON.stringify(
                 this.utils.contextify(
                   this.context || this.rootContext,
                   `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
                 ),
               )};`;
-              callback(null, `${request}\n\n${transformedCode}`);
+              callback(null, `${filePrefix}\n\n${transformedCode}`);
             } else {
               if (!fs.existsSync(options.preCssOutputPath))
                 fs.mkdirSync(options.preCssOutputPath);
@@ -83,8 +83,8 @@ function loader(
                 `${hash}.css`,
               );
               fs.writeFileSync(cssPath, cssString);
-              const request = `import "${cssPath}";`;
-              callback(null, `${request}\n\n${transformedCode}`);
+              const filePrefix = `import "${cssPath}";`;
+              callback(null, `${filePrefix}\n\n${transformedCode}`);
             }
           }
         });
