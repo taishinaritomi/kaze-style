@@ -1,7 +1,7 @@
 import type { ClassNameOverride } from '@kaze-style/core';
 import { mergeStyle } from '@kaze-style/core';
 import type { ComponentProps, FC } from 'react';
-import { style } from './Button.style';
+import { classes } from './Button.style';
 
 export const Button: FC<ClassNameOverride<ComponentProps<'button'>>> = (
   props,
@@ -9,7 +9,7 @@ export const Button: FC<ClassNameOverride<ComponentProps<'button'>>> = (
   return (
     <button
       {...props}
-      className={mergeStyle(style.$button, props.className).string()}
+      className={mergeStyle(classes.$button, props.className).string()}
     />
   );
 };

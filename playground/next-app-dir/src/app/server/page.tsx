@@ -1,19 +1,19 @@
 import { mergeStyle } from '@kaze-style/core';
-import { style } from './page.style';
+import { classes } from './page.style';
 import { Button } from '@/components/Button';
 import { ClientButton } from '@/components/ClientButton';
 
 const ServerComponent = () => {
   return (
     <div>
-      <h1 className={style.title}>Server Component</h1>
-      <div className={style.buttonContainer}>
-        <Button className={style.$button}>Button</Button>
-        <Button className={mergeStyle(style.$button, style.$blueButton)}>
+      <h1 className={classes.title}>Server Component</h1>
+      <div className={classes.buttonContainer}>
+        <Button className={classes.$button}>Button</Button>
+        <Button className={mergeStyle(classes.$button, classes.$blueButton)}>
           Button
         </Button>
-        <Button className={style.$button}>Button</Button>
-        <ClientButton className={style.$button.static()}>
+        <Button className={classes.$button}>Button</Button>
+        <ClientButton className={classes.$button.static()}>
           ClientButton
         </ClientButton>
       </div>

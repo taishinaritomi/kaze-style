@@ -3,7 +3,7 @@ import { theme } from '@kaze-style/themes';
 
 createGlobalStyle(theme.reset());
 
-export const style = createStyle({
+export const classes = createStyle({
   button: {
     background: 'red',
     borderRadius: '6px',

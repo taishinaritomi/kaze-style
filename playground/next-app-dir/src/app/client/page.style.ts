@@ -1,6 +1,6 @@
 import { createStyle } from '@kaze-style/core';
 
-export const style = createStyle({
+export const classes = createStyle({
   title: {
     fontSize: '2rem',
     color: 'blue',
