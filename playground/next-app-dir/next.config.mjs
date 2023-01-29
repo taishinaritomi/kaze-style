@@ -6,8 +6,8 @@ const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env['ANALYZE'] === 'true',
 });
 
-//use swc compiler
-// const withKazeStyle = createKazeStylePlugin({ swc: true });
+// options
+// const withKazeStyle = createKazeStylePlugin({ swc: true, cssLayer: true });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

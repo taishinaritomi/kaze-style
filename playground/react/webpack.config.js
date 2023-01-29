@@ -42,9 +42,7 @@ module.exports = {
     filename: 'bundle.js',
   },
   plugins: [
-    new KazePlugin(),
-    //use swc compiler
-    // new KazePlugin({ swc: true }),
+    new KazePlugin(/* { swc: true } */),
     new HtmlWebpackPlugin(),
     new MiniCssExtractPlugin(),
   ],
