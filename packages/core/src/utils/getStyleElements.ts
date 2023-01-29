@@ -8,11 +8,11 @@ const styleElements = {} as Record<StyleOrder, StyleElement>;
 export const getStyleElements = () => {
   if (styleElements[styleOrder[0]] === undefined) {
     styleOrder.forEach((order) => {
-      const style = document.createElement('style') as StyleElement;
-      style.r = [];
-      style.id = `kaze-${order}`;
-      document.head.appendChild(style);
-      Object.assign(styleElements, { [order]: style });
+      const styleElement = document.createElement('style') as StyleElement;
+      styleElement.r = [];
+      styleElement.id = `kaze-${order}`;
+      document.head.appendChild(styleElement);
+      Object.assign(styleElements, { [order]: styleElement });
     });
   }
   return styleElements;
