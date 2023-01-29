@@ -36,7 +36,9 @@ import { classes } from './ServerComponent.style';
 const ServerComponent = () => {
   return (
     <div className={classes.container}>
-      <ClientComponent className={classes.$base.static()}>Client</ClientComponent>
+      <ClientComponent className={classes.$base.static()}>
+        Client
+      </ClientComponent>
     </div>
   );
 };
