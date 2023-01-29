@@ -11,7 +11,7 @@
   <br />
   <hr />
   <br />
-  <p align="center">Kaze [風] zero-runtime CSS in JS for React<p>
+  <p align="center">Kaze [風] zero-runtime CSS in JS<p>
   <p align="center"><b>🚧 under development 🚧</b></p>
   <div align="center">
     <a href='https://www.npmjs.com/package/@kaze-style/core'>
@@ -51,7 +51,7 @@ createGlobalStyle({
   },
 });
 
-export const style = createStyle({
+export const classes = createStyle({
   //Not Atomic CSS
   container: {
     margin: '20px',
@@ -72,12 +72,12 @@ export const style = createStyle({
 ```ts
 // App.tsx
 import { mergeStyle } from '@kaze-style/core';
-import { style } from './App.style';
+import { classes } from './App.style';
 
 export const App = ({ action }) => {
   return (
     <div className={style.container}>
-      <p className={mergeStyle(style.$base, action && style.$action)}></p>
+      <p className={mergeStyle(classes.$base, action && classes.$action)}></p>
     </div>
   );
 };
