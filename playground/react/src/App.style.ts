@@ -1,7 +1,7 @@
 import { createStyle, createGlobalStyle } from '@kaze-style/core';
-import { theme } from '@kaze-style/themes';
+import { globalTheme } from '@kaze-style/themes';
 
-createGlobalStyle(theme.reset());
+createGlobalStyle(globalTheme.reset());
 
 export const classes = createStyle({
   button: {
