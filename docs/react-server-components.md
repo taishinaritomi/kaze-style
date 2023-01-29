@@ -11,7 +11,7 @@ import { style } from './ServerComponent.style';
 
 const ServerComponent = () => {
   return (
-    <div className={style.container.string()}>
+    <div className={style.container}>
       <ServerComponent2 className={style.$base}>Server</ServerComponent2>
     </div>
   );
@@ -35,7 +35,7 @@ import { style } from './ServerComponent.style';
 
 const ServerComponent = () => {
   return (
-    <div className={style.container.string()}>
+    <div className={style.container}>
       <ClientComponent className={style.$base.static()}>Client</ClientComponent>
     </div>
   );
