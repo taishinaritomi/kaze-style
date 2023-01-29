@@ -8,13 +8,13 @@ import { uniqueCssRules } from './uniqueCssRules';
 type Result = [cssRules: CssRule[]];
 
 export const resolveGlobalStyle = <T extends string>(
-  _styles: KazeGlobalStyle<T>,
+  _globalStyles: KazeGlobalStyle<T>,
 ): Result => {
   const cssRules: CssRule[] = [];
-  const styles = _styles as Record<T, NestObj<AndArray<CssValue>>>;
-  for (const selector in styles) {
-    const style = styles[selector];
-    const [_cssRules] = compileNotAtomicCss(style, 'global', selector);
+  const globalStyles = _globalStyles as Record<T, NestObj<AndArray<CssValue>>>;
+  for (const selector in globalStyles) {
+    const globalStyle = globalStyles[selector];
+    const [_cssRules] = compileNotAtomicCss(globalStyle, 'global', selector);
     cssRules.push(..._cssRules);
   }
   return [uniqueCssRules(cssRules)];
