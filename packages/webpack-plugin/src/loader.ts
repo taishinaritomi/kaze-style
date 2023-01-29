@@ -73,7 +73,7 @@ function loader(
                   `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
                 ),
               )};`;
-              callback(null, `${filePrefix}\n\n${transformedCode}`);
+              callback(null, `${filePrefix}\n${transformedCode}`);
             } else {
               if (!fs.existsSync(options.preCssOutputPath))
                 fs.mkdirSync(options.preCssOutputPath);
@@ -84,7 +84,7 @@ function loader(
               );
               fs.writeFileSync(cssPath, cssString);
               const filePrefix = `import "${cssPath}";`;
-              callback(null, `${filePrefix}\n\n${transformedCode}`);
+              callback(null, `${filePrefix}\n${transformedCode}`);
             }
           }
         });
