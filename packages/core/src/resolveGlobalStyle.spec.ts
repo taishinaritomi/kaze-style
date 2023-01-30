@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { createGlobalStyle } from './createGlobalStyle';
+import { resolveGlobalStyle } from './resolveGlobalStyle';
 
-describe('createGlobalStyle', () => {
+describe('resolveGlobalStyle', () => {
   it('base', () => {
-    const [cssRules] = createGlobalStyle({
+    const [cssRules] = resolveGlobalStyle({
       html: {
         color: 'red',
         '@media (max-width:1024px)': {
@@ -22,7 +22,7 @@ describe('createGlobalStyle', () => {
   });
 
   it('font-face', () => {
-    const [cssRules] = createGlobalStyle({
+    const [cssRules] = resolveGlobalStyle({
       '@font-face': {
         fontFamily: 'Open Sans',
         src: 'url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2")',
@@ -37,7 +37,7 @@ describe('createGlobalStyle', () => {
   });
 
   it('mix', () => {
-    const [cssRules] = createGlobalStyle({
+    const [cssRules] = resolveGlobalStyle({
       '@font-face': {
         fontFamily: 'Open Sans',
         src: 'url("/fonts/OpenSans-Regular-webfont.woff2") format("woff2")',

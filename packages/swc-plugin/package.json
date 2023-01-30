@@ -24,8 +24,8 @@
     "dist",
     "_transform",
     "_pre-transform",
-    "target/wasm32-wasi/release/kaze_style_swc_plugin_pre_transform.wasm",
-    "target/wasm32-wasi/release/kaze_style_swc_plugin_transform.wasm",
+    "target/wasm32-wasi/release/kaze_style_pre_transform_swc_plugin.wasm",
+    "target/wasm32-wasi/release/kaze_style_transform_swc_plugin.wasm",
     "LICENSE"
   ],
   "scripts": {

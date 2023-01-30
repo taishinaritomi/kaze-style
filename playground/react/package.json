@@ -9,7 +9,7 @@
     "preview": "webpack serve --open"
   },
   "dependencies": {
-    "@kaze-style/react": "*",
+    "@kaze-style/core": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

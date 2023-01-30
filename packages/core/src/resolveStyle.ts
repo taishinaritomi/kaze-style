@@ -1,61 +1,45 @@
-import type { ClassNameRecord } from './ClassName';
+import type { ClassNameType } from './ClassName';
+import { ClassName } from './ClassName';
+import { compileAtomicCss } from './compileAtomicCss';
+import { compileNotAtomicCss } from './compileNotAtomicCss';
 import type { CssRule } from './styleOrder';
-import { getStyleOrder } from './styleOrder';
-import type { Selectors } from './types/common';
-import type { SupportStyle, KeyframesRules } from './types/style';
-import { compileCss } from './utils/compileCss';
-import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
-import { hashClassName } from './utils/hashClassName';
-import { hashSelector } from './utils/hashSelector';
-import { isCssValue } from './utils/isCssValue';
-import { isObject } from './utils/isObject';
-import { resolveSelectors } from './utils/resolveSelectors';
-import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
+import type { Classes, StaticClasses } from './types/common';
+import type { KazeStyle } from './types/style';
+import { uniqueCssRules } from './uniqueCssRules';
+import { hashStyle } from './utils/hashStyle';
 
-type ResolvedStyle = [classNameRecord: ClassNameRecord, cssRules: CssRule[]];
+type Result<K extends string> = [
+  cssRules: CssRule[],
+  classes: Classes<K>,
+  staticClasses: StaticClasses<K>,
+];
 
-export const resolveStyle = (
-  style: SupportStyle,
-  selectors: Selectors = [[], ''],
-  resolvedStyle: ResolvedStyle = [{}, []],
-): ResolvedStyle => {
-  const classNameRecord = resolvedStyle[0];
-  const cssRules = resolvedStyle[1];
-  for (const _property in style) {
-    const property = _property as keyof SupportStyle;
-    const styleValue = style[property];
-    if (isCssValue(styleValue)) {
-      const className = hashClassName(selectors, property, styleValue);
-      const selector = hashSelector(selectors, property);
-      cssRules.push([
-        compileCss(
-          `.${className}`,
-          selectors,
-          styleDeclarationStringify(property, styleValue),
-        ),
-        getStyleOrder(selectors),
-      ]);
-      Object.assign(classNameRecord, { [selector]: className });
-    } else if (isObject(styleValue)) {
-      if (property === 'animationName') {
-        const animationNameValue = styleValue as KeyframesRules;
-        const [keyframesName, keyframesRule] =
-          compileKeyFrameCss(animationNameValue);
-        cssRules.push([keyframesRule, 'keyframes']);
-        Object.assign(classNameRecord, { [keyframesName]: keyframesName });
-        resolveStyle(
-          { animationName: keyframesName },
-          selectors,
-          resolvedStyle,
-        );
-      } else {
-        resolveStyle(
-          styleValue,
-          resolveSelectors(selectors, property),
-          resolvedStyle,
-        );
-      }
+export const resolveStyle = <K extends string>(
+  styles: KazeStyle<K>,
+): Result<K> => {
+  const classes = {} as Classes<K>;
+  const staticClasses = {} as StaticClasses<K>;
+  const cssRules: CssRule[] = [];
+
+  for (const key in styles) {
+    if (key.startsWith('$')) {
+      const [_cssRules, classNameRecord] = compileAtomicCss(styles[key]);
+      cssRules.push(..._cssRules);
+      classes[key] = new ClassName(classNameRecord) as ClassNameType;
+      staticClasses[key] = classNameRecord;
+    } else {
+      const selector = `${hashStyle(styles[key])}`;
+      const [_cssRules] = compileNotAtomicCss(
+        styles[key],
+        'notAtomic',
+        `.${selector}`,
+      );
+      cssRules.push(..._cssRules);
+      // @ts-expect-error type
+      classes[key] = selector;
+      staticClasses[key] = selector;
     }
   }
-  return resolvedStyle;
+
+  return [uniqueCssRules(cssRules), classes, staticClasses];
 };

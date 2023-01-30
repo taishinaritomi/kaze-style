@@ -1,22 +1,22 @@
 import { describe, it, expect } from 'vitest';
 import { ClassName } from './ClassName';
-import { createStyle } from './createStyle';
+import { resolveStyle } from './resolveStyle';
 
-describe('createStyle', () => {
+describe('resolveStyle', () => {
   it('base', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         color: 'red',
       },
     });
 
-    expect(classes).toEqual({ base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
+    expect(classes).toEqual({ $base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
     expect(cssRules).toEqual([['._18ffsfk{color:red;}', 'normal']]);
   });
 
   it('pseudo', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         ':hover': {
           color: 'red',
         },
@@ -27,7 +27,7 @@ describe('createStyle', () => {
     });
 
     expect(classes).toEqual({
-      base: new ClassName({ _1ez8kfk: '_1qka0wa', _as4l2f: '_5p99rv' }),
+      $base: new ClassName({ _1ez8kfk: '_1qka0wa', _as4l2f: '_5p99rv' }),
     });
     expect(cssRules).toEqual([
       ['._1qka0wa:hover{color:red;}', 'hover'],
@@ -36,8 +36,8 @@ describe('createStyle', () => {
   });
 
   it('nest pseudo', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         ':hover': {
           '::after': {
             color: 'green',
@@ -48,7 +48,7 @@ describe('createStyle', () => {
     });
 
     expect(classes).toEqual({
-      base: new ClassName({ _143egyq: '_1em4tpo', _1ez8kfk: '_1qka0wa' }),
+      $base: new ClassName({ _143egyq: '_1em4tpo', _1ez8kfk: '_1qka0wa' }),
     });
     expect(cssRules).toEqual([
       ['._1em4tpo:hover::after{color:green;}', 'hover'],
@@ -57,23 +57,23 @@ describe('createStyle', () => {
   });
 
   it('atRules', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         '@media (max-width: 512px)': {
           color: 'red',
         },
       },
     });
 
-    expect(classes).toEqual({ base: new ClassName({ _8147ym: '_15v7uk7' }) });
+    expect(classes).toEqual({ $base: new ClassName({ _8147ym: '_15v7uk7' }) });
     expect(cssRules).toEqual([
       ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'media'],
     ]);
   });
 
   it('nest atRules', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         '@media (max-width: 512px)': {
           color: 'red',
           '@supports not (display: grid)': {
@@ -91,13 +91,13 @@ describe('createStyle', () => {
       ],
     ]);
     expect(classes).toEqual({
-      base: new ClassName({ _8147ym: '_15v7uk7', _tzry81: '_syblt6' }),
+      $base: new ClassName({ _8147ym: '_15v7uk7', _tzry81: '_syblt6' }),
     });
   });
 
   it('keyframes', () => {
-    const [cssRules, classes] = createStyle({
-      base: {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
         animationName: {
           from: {
             color: 'green',
@@ -110,7 +110,7 @@ describe('createStyle', () => {
     });
 
     expect(classes).toEqual({
-      base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
+      $base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
     });
     expect(cssRules).toEqual([
       ['@keyframes _6qto8h{from{color:green;}to{color:red;}}', 'keyframes'],

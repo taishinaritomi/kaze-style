@@ -5,7 +5,7 @@ import type {
 import { preTransform as babelPreTransform } from '@kaze-style/babel-plugin';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
-import { forBuildName as _forBuildName } from './constants';
+import { FOR_BUILD_NAME } from './constants';
 
 type Options = {
   filename: string;
@@ -22,7 +22,7 @@ export const preTransform = async (
     babelOptions = {},
     swcOptions = {},
     preTransformOptions: {
-      forBuildName = _forBuildName,
+      forBuildName = FOR_BUILD_NAME,
       ...preTransformOptions
     },
   }: Options,

@@ -162,7 +162,7 @@ export const reset = {
     maxWidth: '100%',
     height: 'auto',
   },
-} as const;
+} as const satisfies KazeGlobalStyle<string>;
 /**
  * @deprecated
  * ```
@@ -171,4 +171,3 @@ export const reset = {
  * ```
  */
 export const resetStyle = reset;
-export const __type__: KazeGlobalStyle<string> = reset;

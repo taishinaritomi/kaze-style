@@ -1,5 +1,5 @@
-import { style } from './App.style';
+import { classes } from './App.style';
 
 export const App = () => {
-  return <button className={style.button}>button</button>;
+  return <button className={classes.button}>button</button>;
 };

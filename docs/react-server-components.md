@@ -6,20 +6,20 @@ Because of various restrictions in `React Server Components`, we need to add som
 
 ```ts
 // ServerComponent.tsx
-import { mergeStyle } from '@kaze-style/react';
-import { style } from './ServerComponent.style';
+import { mergeStyle } from '@kaze-style/core';
+import { classes } from './ServerComponent.style';
 
 const ServerComponent = () => {
   return (
-    <div className={style.container.string()}>
-      <ServerComponent2 className={style.base}>Server</ServerComponent2>
+    <div className={classes.container}>
+      <ServerComponent2 className={classes.$base}>Server</ServerComponent2>
     </div>
   );
 };
 
 const ServerComponent2 = (props) => {
   return (
-    <p className={mergeStyle(style.client, props.className).string()}>
+    <p className={mergeStyle(classes.$client, props.className).string()}>
       {props.children}
     </p>
   );
@@ -30,13 +30,15 @@ const ServerComponent2 = (props) => {
 
 ```ts
 // ServerComponent.tsx
-import { mergeStyle } from '@kaze-style/react';
-import { style } from './ServerComponent.style';
+import { mergeStyle } from '@kaze-style/core';
+import { classes } from './ServerComponent.style';
 
 const ServerComponent = () => {
   return (
-    <div className={style.container.string()}>
-      <ClientComponent className={style.base.static()}>Client</ClientComponent>
+    <div className={classes.container}>
+      <ClientComponent className={classes.$base.static()}>
+        Client
+      </ClientComponent>
     </div>
   );
 };
@@ -45,11 +47,11 @@ const ServerComponent = () => {
 ```ts
 // ClientComponent.tsx
 'use client';
-import { mergeStyle } from '@kaze-style/react';
-import { style } from './ClientComponent.style';
+import { mergeStyle } from '@kaze-style/core';
+import { classes } from './ClientComponent.style';
 const ClientComponent = (props) => {
   return (
-    <p className={mergeStyle(style.client, props.className)}>
+    <p className={mergeStyle(classes.$client, props.className)}>
       {props.children}
     </p>
   );

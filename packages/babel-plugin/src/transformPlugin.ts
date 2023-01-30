@@ -17,7 +17,7 @@ type State = {
 };
 
 const options = {
-  importSource: '@kaze-style/react',
+  importSource: '@kaze-style/core',
   transforms: [
     {
       from: '__preStyle',
@@ -69,14 +69,24 @@ export const transformPlugin = declare<
               const objectProperties: t.ObjectProperty[] = [];
               for (const key in classes) {
                 if (classes.hasOwnProperty(key)) {
-                  objectProperties.push(
-                    t.objectProperty(
-                      t.stringLiteral(key),
-                      t.newExpression(t.identifier('ClassName'), [
-                        t.valueToNode(classes[key] || {}),
-                      ]),
-                    ),
-                  );
+                  const className = classes[key];
+                  if (typeof className === 'string') {
+                    objectProperties.push(
+                      t.objectProperty(
+                        t.stringLiteral(key),
+                        t.stringLiteral(className),
+                      ),
+                    );
+                  } else {
+                    objectProperties.push(
+                      t.objectProperty(
+                        t.stringLiteral(key),
+                        t.newExpression(t.identifier('ClassName'), [
+                          t.valueToNode(classes[key] || {}),
+                        ]),
+                      ),
+                    );
+                  }
                 }
               }
               callExpressionPath.node.arguments = [

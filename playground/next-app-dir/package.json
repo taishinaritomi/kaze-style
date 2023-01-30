@@ -10,7 +10,7 @@
     "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
-    "@kaze-style/react": "*",
+    "@kaze-style/core": "*",
     "@kaze-style/themes": "*",
     "next": "13.1.1",
     "react": "18.2.0",

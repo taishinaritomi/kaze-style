@@ -16,7 +16,14 @@ use swc_core::{
 #[derive(serde::Deserialize)]
 pub struct Style {
   index: u8,
-  classes: Option<BTreeMap<String, BTreeMap<String, String>>>,
+  classes: Option<BTreeMap<String, ClassName>>,
+}
+
+#[derive(serde::Deserialize)]
+#[serde(untagged)]
+enum ClassName {
+  Str(String),
+  Obj(BTreeMap<String, String>),
 }
 
 #[derive(serde::Deserialize)]
@@ -55,7 +62,7 @@ impl TransformVisitor {
   fn new(config: Config) -> Self {
     Self {
       config: config,
-      import_source: "@kaze-style/react".to_string(),
+      import_source: "@kaze-style/core".to_string(),
       class_name: "ClassName".to_string(),
       transforms: vec![
         Transform {
@@ -132,36 +139,48 @@ impl TransformVisitor {
                       Some(classes) => {
                         for (classes_key, classes_value) in classes {
                           let classes_key: &str = classes_key;
-                          let classes_arg = classes_value
-                            .iter()
-                            .map(|(style_key, style_value)| {
-                              let style_key: &str = style_key;
-                              let style_value: &str = style_value;
-                              PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
-                                key: PropName::Str(Str::from(style_key)),
-                                value: Box::new(Expr::Lit(Lit::Str(Str::from(style_value)))),
-                              })))
-                            })
-                            .collect();
-                          props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
-                            key: PropName::Str(Str::from(classes_key)),
-                            value: Box::new(Expr::New(NewExpr {
-                              span: DUMMY_SP,
-                              args: Some(vec![ExprOrSpread {
-                                expr: Box::new(Expr::Object(ObjectLit {
-                                  props: classes_arg,
+                          if let ClassName::Str(classes_value) = classes_value {
+                            let classes_value: &str = classes_value;
+                            props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(
+                              KeyValueProp {
+                                key: PropName::Str(Str::from(classes_key)),
+                                value: Box::new(Expr::Lit(Lit::Str(Str::from(classes_value)))),
+                              },
+                            ))));
+                          } else if let ClassName::Obj(classes_value) = classes_value {
+                            let classes_arg = classes_value
+                              .iter()
+                              .map(|(style_key, style_value)| {
+                                let style_key: &str = style_key;
+                                let style_value: &str = style_value;
+                                PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
+                                  key: PropName::Str(Str::from(style_key)),
+                                  value: Box::new(Expr::Lit(Lit::Str(Str::from(style_value)))),
+                                })))
+                              })
+                              .collect();
+                            props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(
+                              KeyValueProp {
+                                key: PropName::Str(Str::from(classes_key)),
+                                value: Box::new(Expr::New(NewExpr {
                                   span: DUMMY_SP,
+                                  args: Some(vec![ExprOrSpread {
+                                    expr: Box::new(Expr::Object(ObjectLit {
+                                      props: classes_arg,
+                                      span: DUMMY_SP,
+                                    })),
+                                    spread: None,
+                                  }]),
+                                  type_args: None,
+                                  callee: Box::new(Expr::Ident(Ident {
+                                    span: DUMMY_SP,
+                                    optional: false,
+                                    sym: class_name.into(),
+                                  })),
                                 })),
-                                spread: None,
-                              }]),
-                              type_args: None,
-                              callee: Box::new(Expr::Ident(Ident {
-                                span: DUMMY_SP,
-                                optional: false,
-                                sym: class_name.into(),
-                              })),
-                            })),
-                          }))));
+                              },
+                            ))));
+                          }
                         }
                       }
                       _ => {}
@@ -213,12 +232,13 @@ test!(
         classes: Some(BTreeMap::from([
           (
             "base".to_string(),
-            BTreeMap::from([("color".to_string(), "red".to_string())]),
+            ClassName::Obj(BTreeMap::from([("color".to_string(), "red".to_string())])),
           ),
           (
             "base1".to_string(),
-            BTreeMap::from([("color".to_string(), "red".to_string())]),
+            ClassName::Obj(BTreeMap::from([("color".to_string(), "red".to_string())])),
           ),
+          ("base2".to_string(), ClassName::Str("red".to_string())),
         ])),
         index: 0,
       }],
@@ -227,21 +247,22 @@ test!(
   test,
   // Input codes
   r#"
-  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/react';
+  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/core';
   const c = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 0);
   __preGlobalStyle({}, __forBuildByKazeStyle, "filename.ts", 1);
   const c2 = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 2);
   "#,
   // Output codes after
   r#"
-  import { __style, __globalStyle, mergeStyle, ClassName } from '@kaze-style/react';
+  import { __style, __globalStyle, mergeStyle, ClassName } from '@kaze-style/core';
   const c = __style({
     "base": new ClassName({
       "color": "red"
     }),
     "base1": new ClassName({
       "color": "red"
-    })
+    }),
+    "base2": "red"
   });
   __globalStyle({});
   const c2 = __style({});

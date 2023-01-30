@@ -1,7 +1,7 @@
-import { createStyle } from '@kaze-style/react';
+import { createStyle } from '@kaze-style/core';
 
-export const style = createStyle({
-  button: {
+export const classes = createStyle({
+  $button: {
     background: 'red',
     borderRadius: '6px',
     ':hover': {

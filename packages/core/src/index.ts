@@ -1,6 +1,8 @@
 export * from './mergeStyle';
 export * from './createStyle';
 export * from './createGlobalStyle';
+export * from './resolveStyle';
+export * from './resolveGlobalStyle';
 export * from './__style';
 export * from './__globalStyle';
 export * from './__preStyle';
@@ -9,7 +11,7 @@ export * from './ClassName';
 export * from './styleOrder';
 export * from './sortCssRules';
 export * from './uniqueCssRules';
-export * from './setCssRuleObjects';
+export * from './setCssRules';
 export type { ClassNameRecord, ClassNameType } from './ClassName';
 export type { Classes, ClassNameOverride, ForBuild } from './types/common';
 export type { KazeStyle, SupportStyle } from './types/style';

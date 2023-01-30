@@ -1,4 +1,4 @@
-import { reset } from './global/reset';
+import { reset } from './globalTheme/reset';
 
 export const globalTheme = {
   reset: () => reset,

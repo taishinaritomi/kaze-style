@@ -1,4 +1,3 @@
-export { resetStyle } from './global/reset';
-export { token } from './token';
-export { tokens } from './tokens';
+export { resetStyle } from './globalTheme/reset';
+export { theme, token, tokens } from './theme';
 export { globalTheme } from './globalTheme';

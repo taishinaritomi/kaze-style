@@ -1,11 +1,12 @@
 import path from 'path';
-import { sortCss } from '@kaze-style/build';
+import { stringToCssRules, cssRulesToString } from '@kaze-style/build';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 
 type PluginOptions = {
   test?: RuleSetRule['test'];
   swc?: boolean;
+  cssLayer?: boolean;
   virtualLoader?: boolean;
   preCssOutputPath?: string;
   exclude?: RuleSetRule['exclude'];
@@ -19,6 +20,7 @@ const preLoader = require.resolve('./preLoader');
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
   swc: boolean;
+  cssLayer: boolean;
   virtualLoader: boolean;
   preCssOutputPath: string;
   exclude: NonNullable<RuleSetRule['exclude']>;
@@ -26,12 +28,14 @@ export class Plugin {
     test = /\.(js|mjs|jsx|ts|tsx)$/,
     // test = /style\.(js|ts)$/,
     swc = false,
+    cssLayer = false,
     virtualLoader = true,
     preCssOutputPath = path.join(__dirname, 'assets'),
     exclude = /node_modules/,
   }: Partial<PluginOptions> = {}) {
     this.test = test;
     this.swc = swc;
+    this.cssLayer = cssLayer;
     this.virtualLoader = virtualLoader;
     this.preCssOutputPath = preCssOutputPath;
     this.exclude = exclude;
@@ -66,10 +70,14 @@ export class Plugin {
         (assets) => {
           Object.entries(assets).forEach(([pathname, source]) => {
             if (pathname.includes('.css')) {
-              const sortedCss = sortCss(getSource(source));
+              const [cssRules, otherCss] = stringToCssRules(getSource(source));
+              const css = `${cssRulesToString(cssRules, {
+                layer: this.cssLayer,
+                layerBundle: true,
+              })}${otherCss}`;
               compilation.updateAsset(
                 pathname,
-                new compiler.webpack.sources.RawSource(sortedCss),
+                new compiler.webpack.sources.RawSource(css),
               );
             }
           });
