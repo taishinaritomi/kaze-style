@@ -1,6 +1,6 @@
 import type { StyleOrder, CssRule } from './styleOrder';
-import type { CssValue, Selectors } from './types/common';
-import type { KeyframesRules } from './types/style';
+import type { Selectors } from './types/common';
+import type { CssValue, KeyframesRules } from './types/style';
 import type { AndArray, NestObj } from './types/utils';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';

@@ -10,8 +10,8 @@ describe('resolveStyle', () => {
       },
     });
 
-    expect(classes).toEqual({ $base: new ClassName({ _1ylxx6h: '_18ffsfk' }) });
-    expect(cssRules).toEqual([['._18ffsfk{color:red;}', 'normal']]);
+    expect(classes).toEqual({ $base: new ClassName({ _1ylxx6h: '_1z0f5pm' }) });
+    expect(cssRules).toEqual([['._1z0f5pm{color:red;}', 'normal']]);
   });
 
   it('pseudo', () => {
@@ -27,11 +27,11 @@ describe('resolveStyle', () => {
     });
 
     expect(classes).toEqual({
-      $base: new ClassName({ _1ez8kfk: '_1qka0wa', _as4l2f: '_5p99rv' }),
+      $base: new ClassName({ _1ez8kfk: '_9vjnpm', _as4l2f: '_4fbj8n' }),
     });
     expect(cssRules).toEqual([
-      ['._1qka0wa:hover{color:red;}', 'hover'],
-      ['._5p99rv::after{color:green;}', 'normal'],
+      ['._9vjnpm:hover{color:red;}', 'hover'],
+      ['._4fbj8n::after{color:green;}', 'normal'],
     ]);
   });
 
@@ -48,11 +48,11 @@ describe('resolveStyle', () => {
     });
 
     expect(classes).toEqual({
-      $base: new ClassName({ _143egyq: '_1em4tpo', _1ez8kfk: '_1qka0wa' }),
+      $base: new ClassName({ _143egyq: '_if3xdm', _1ez8kfk: '_9vjnpm' }),
     });
     expect(cssRules).toEqual([
-      ['._1em4tpo:hover::after{color:green;}', 'hover'],
-      ['._1qka0wa:hover{color:red;}', 'hover'],
+      ['._if3xdm:hover::after{color:green;}', 'hover'],
+      ['._9vjnpm:hover{color:red;}', 'hover'],
     ]);
   });
 
@@ -65,9 +65,9 @@ describe('resolveStyle', () => {
       },
     });
 
-    expect(classes).toEqual({ $base: new ClassName({ _8147ym: '_15v7uk7' }) });
+    expect(classes).toEqual({ $base: new ClassName({ _8147ym: '_1533v1y' }) });
     expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'media'],
+      ['@media (max-width: 512px){._1533v1y{color:red;}}', 'media'],
     ]);
   });
 
@@ -84,14 +84,14 @@ describe('resolveStyle', () => {
     });
 
     expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._15v7uk7{color:red;}}', 'media'],
+      ['@media (max-width: 512px){._1533v1y{color:red;}}', 'media'],
       [
-        '@media (max-width: 512px){@supports not (display: grid){._syblt6{display:flex;}}}',
+        '@media (max-width: 512px){@supports not (display: grid){._1ixciq6{display:flex;}}}',
         'media',
       ],
     ]);
     expect(classes).toEqual({
-      $base: new ClassName({ _8147ym: '_15v7uk7', _tzry81: '_syblt6' }),
+      $base: new ClassName({ _8147ym: '_1533v1y', _tzry81: '_1ixciq6' }),
     });
   });
 
@@ -110,11 +110,11 @@ describe('resolveStyle', () => {
     });
 
     expect(classes).toEqual({
-      $base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_ep4wyi' }),
+      $base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_1nz0ua8' }),
     });
     expect(cssRules).toEqual([
       ['@keyframes _6qto8h{from{color:green;}to{color:red;}}', 'keyframes'],
-      ['._ep4wyi{animation-name:_6qto8h;}', 'normal'],
+      ['._1nz0ua8{animation-name:_6qto8h;}', 'normal'],
     ]);
   });
 });

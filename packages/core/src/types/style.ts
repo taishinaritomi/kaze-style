@@ -1,8 +1,26 @@
-import type { Pseudos, PropertiesFallback } from 'csstype';
-import type { CssValue, NestChar } from './common';
+import type {
+  PropertiesFallback,
+  AtRule,
+  Pseudos,
+  HtmlAttributes,
+  SvgAttributes,
+} from 'csstype';
 import type { IncludeString } from './utils';
 
-type SupportRules = Omit<PropertiesFallback<CssValue>, 'animationName'>;
+export type CssValue = string | number | undefined;
+
+type SelectorChar =
+  | ':'
+  | '&'
+  | ' '
+  | '@'
+  | ','
+  | '>'
+  | '~'
+  | '+'
+  | '['
+  | '.'
+  | '#';
 
 type PredictProperties =
   | '@media (max-width: 0)'
@@ -14,32 +32,36 @@ type PredictProperties =
   | '@supports ()'
   | '@supports not ()';
 
-type PredictRules = {
-  [_ in PredictProperties]?: SupportStyle;
+type SupportProperties = Omit<PropertiesFallback<CssValue>, 'animationName'> & {
+  animationName?: string | string[] | KeyframesRules;
 };
 
-type PseudosRules = {
-  [_ in Pseudos]?: SupportStyle;
-};
-
-type StringRules = {
-  [_ in IncludeString<NestChar>]?: SupportStyle;
-};
-
-type AnimationNameRules = {
-  animationName?: KeyframesRules | string;
-};
+type FontFaceRules = AtRule.FontFaceFallback<CssValue>;
 
 export type KeyframesRules = {
-  [_ in 'from' | 'to']?: SupportRules;
+  [_ in 'from' | 'to']?: SupportProperties;
 } & {
-  [_ in string]?: SupportRules;
+  [_ in string]?: SupportProperties;
 };
 
-export type SupportStyle = SupportRules &
-  PseudosRules &
-  PredictRules &
-  StringRules &
-  AnimationNameRules;
+export type SupportStyle = SupportProperties & {
+  [_ in
+    | PredictProperties
+    | (Pseudos | `&${Pseudos}`)
+    | (HtmlAttributes | SvgAttributes)
+    | `&${HtmlAttributes | SvgAttributes}`]?: SupportStyle;
+} & {
+  [_ in IncludeString<SelectorChar>]?: SupportStyle;
+};
 
 export type KazeStyle<T extends string> = Record<T, SupportStyle>;
+
+export type KazeGlobalStyle<T extends string> = {
+  '@font-face'?: FontFaceRules;
+} & {
+  [K in T]: K extends '@font-face' ? FontFaceRules : SupportStyle;
+} & {
+  [_ in
+    | (keyof HTMLElementTagNameMap | '*')
+    | `${keyof HTMLElementTagNameMap | '*'}${Pseudos}`]?: SupportStyle;
+};

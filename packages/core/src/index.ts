@@ -14,5 +14,4 @@ export * from './uniqueCssRules';
 export * from './setCssRules';
 export type { ClassNameRecord, ClassNameType } from './ClassName';
 export type { Classes, ClassNameOverride, ForBuild } from './types/common';
-export type { KazeStyle, SupportStyle } from './types/style';
-export type { KazeGlobalStyle, SupportGlobalStyle } from './types/globalStyle';
+export type { KazeStyle, KazeGlobalStyle, SupportStyle } from './types/style';
