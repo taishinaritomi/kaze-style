@@ -9,8 +9,6 @@ import type { IncludeString } from './utils';
 
 export type CssValue = string | number | undefined;
 
-type Properties = PropertiesFallback<CssValue>;
-
 type SelectorChar =
   | ':'
   | '&'
@@ -34,22 +32,19 @@ type PredictProperties =
   | '@supports ()'
   | '@supports not ()';
 
-type SupportRules = Omit<Properties, 'animationName'> & {
-  animationName?:
-    | string
-    | KeyframesRules
-    | Exclude<Properties['animationName'], string>;
+type SupportProperties = Omit<PropertiesFallback<CssValue>, 'animationName'> & {
+  animationName?: string | string[] | KeyframesRules;
 };
 
 type FontFaceRules = AtRule.FontFaceFallback<CssValue>;
 
 export type KeyframesRules = {
-  [_ in 'from' | 'to']?: SupportRules;
+  [_ in 'from' | 'to']?: SupportProperties;
 } & {
-  [_ in string]?: SupportRules;
+  [_ in string]?: SupportProperties;
 };
 
-export type SupportStyle = SupportRules & {
+export type SupportStyle = SupportProperties & {
   [_ in
     | PredictProperties
     | (Pseudos | `&${Pseudos}`)
