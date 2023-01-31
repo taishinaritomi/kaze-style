@@ -52,17 +52,17 @@ createGlobalStyle({
 });
 
 export const classes = createStyle({
-  //Not Atomic CSS
+  // not Atomic CSS
   container: {
     margin: '20px',
     padding: '20px',
   },
-  //Atomic CSS
+  // atomic CSS
   $base: {
     color: 'red',
     background: 'black',
   },
-  //Atomic CSS
+  // atomic CSS
   $action: {
     color: 'blue',
   },
