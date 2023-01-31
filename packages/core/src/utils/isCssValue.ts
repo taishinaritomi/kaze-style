@@ -1,4 +1,4 @@
-import type { CssValue } from '../types/common';
+import type { CssValue } from '../types/style';
 import type { AndArray, NestObj } from '../types/utils';
 
 export const isCssValue = (

@@ -20,7 +20,7 @@ describe('mergeStyle', () => {
     });
 
     expect(mergeStyle(classes.$base, classes.$action)).toEqual(
-      new ClassName({ _1ylxx6h: '_18ffsfk', _1l79nxf: '_1rl8wha' }),
+      new ClassName({ _1ylxx6h: '_1z0f5pm', _1l79nxf: '_18qjz5l' }),
     );
   });
 });

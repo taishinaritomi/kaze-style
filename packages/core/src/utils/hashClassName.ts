@@ -1,7 +1,8 @@
 import { hash } from '../hash';
-import type { CssValue, Selectors } from '../types/common';
+import type { Selectors } from '../types/common';
+import type { CssValue } from '../types/style';
 import type { AndArray } from '../types/utils';
-import { styleValueStringify } from './styleValueStringify';
+import { styleDeclarationStringify } from './styleDeclarationStringify';
 
 export const hashClassName = (
   [atRules, nest]: Selectors,
@@ -9,6 +10,9 @@ export const hashClassName = (
   styleValue: AndArray<CssValue>,
 ): string => {
   return `_${hash(
-    `${atRules.join('')}${nest}${property}${styleValueStringify(styleValue)}`,
+    `${atRules.join('')}${nest}${styleDeclarationStringify(
+      property,
+      styleValue,
+    )}`,
   )}`;
 };

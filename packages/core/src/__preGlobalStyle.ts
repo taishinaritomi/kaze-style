@@ -1,6 +1,6 @@
 import { resolveGlobalStyle } from './resolveGlobalStyle';
 import type { ForBuild } from './types/common';
-import type { KazeGlobalStyle } from './types/globalStyle';
+import type { KazeGlobalStyle } from './types/style';
 
 export const __preGlobalStyle = <T extends string>(
   globalStyles: KazeGlobalStyle<T>,

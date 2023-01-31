@@ -2,7 +2,7 @@ import type { ClassNameRecord } from './ClassName';
 import type { CssRule } from './styleOrder';
 import { getStyleOrder } from './styleOrder';
 import type { Selectors } from './types/common';
-import type { SupportStyle, KeyframesRules } from './types/style';
+import type { KeyframesRules, SupportStyle } from './types/style';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
 import { hashClassName } from './utils/hashClassName';

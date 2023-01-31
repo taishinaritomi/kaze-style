@@ -1,7 +1,7 @@
 import { compileNotAtomicCss } from './compileNotAtomicCss';
 import type { CssRule } from './styleOrder';
-import type { CssValue } from './types/common';
-import type { KazeGlobalStyle } from './types/globalStyle';
+import type { CssValue } from './types/style';
+import type { KazeGlobalStyle } from './types/style';
 import type { AndArray, NestObj } from './types/utils';
 import { uniqueCssRules } from './uniqueCssRules';
 
