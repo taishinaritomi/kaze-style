@@ -15,7 +15,7 @@
         "./playground/next*/src/app/**/{page,layout,loading,error,template,head}.tsx",
         "./playground/next*/src/pages/**",
         "./playground/next*/next.config.*",
-        "./playground/react-vite/vite.config.*"
+        "./playground/*/vite.config.*"
       ],
       "rules": {
         "import/no-default-export": "off",
