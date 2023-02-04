@@ -65,12 +65,12 @@ impl TransformVisitor {
       is_transformed: false,
       transforms: vec![
         Transform {
-          from: "createStyle".to_string(),
+          from: "style".to_string(),
           to: "__preStyle".to_string(),
           import_id: None,
         },
         Transform {
-          from: "createGlobalStyle".to_string(),
+          from: "globalStyle".to_string(),
           to: "__preGlobalStyle".to_string(),
           import_id: None,
         },
@@ -191,9 +191,9 @@ test!(
   test,
   // Input codes
   r#"
-  import { createStyle, createGlobalStyle, mergeStyle } from '@kaze-style/core';
-  const c = createStyle({});
-  createGlobalStyle({});
+  import { style, globalStyle, mergeStyle } from '@kaze-style/core';
+  const c = style({});
+  globalStyle({});
   "#,
   // Output codes after
   r#"

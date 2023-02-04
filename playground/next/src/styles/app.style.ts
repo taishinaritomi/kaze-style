@@ -1,4 +1,4 @@
-import { createGlobalStyle } from '@kaze-style/core';
+import { globalStyle } from '@kaze-style/core';
 import { globalTheme } from '@kaze-style/themes';
 
-createGlobalStyle(globalTheme.reset());
+globalStyle(globalTheme.reset());
