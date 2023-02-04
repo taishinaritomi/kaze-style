@@ -3,7 +3,8 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "jsx": "preserve"
   },
   "exclude": ["**/node_modules", "**/dist*", "**/*.*js"]
 }

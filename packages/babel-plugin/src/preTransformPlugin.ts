@@ -19,11 +19,11 @@ const options = {
   importSource: '@kaze-style/core',
   transforms: [
     {
-      from: 'createStyle',
+      from: 'style',
       to: '__preStyle',
     },
     {
-      from: 'createGlobalStyle',
+      from: 'globalStyle',
       to: '__preGlobalStyle',
     },
   ],

@@ -43,15 +43,15 @@
 
 ```ts
 // App.style.ts
-import { createStyle, createGlobalStyle } from '@kaze-style/core';
+import { style, globalStyle } from '@kaze-style/core';
 
-createGlobalStyle({
+globalStyle({
   html: {
     lineHeight: '1.5',
   },
 });
 
-export const classes = createStyle({
+export const classes = style({
   // not Atomic CSS
   container: {
     margin: '20px',
