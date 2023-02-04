@@ -1,0 +1,21 @@
+{
+  "name": "@kaze-style/playground-solid-vite",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "type-check": "tsc --noEmit",
+    "dev": "vite",
+    "build": "rimraf dist && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@kaze-style/core": "*",
+    "solid-js": "^1.6.10"
+  },
+  "devDependencies": {
+    "@kaze-style/vite-plugin": "*",
+    "vite": "^4.0.3",
+    "vite-plugin-solid": "^2.5.0"
+  }
+}
