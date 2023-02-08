@@ -42,5 +42,5 @@ export const getStyleOrder = ([atRules, nest]: Selectors): StyleOrder => {
   }
 };
 
-export type StyleOrder = typeof styleOrder[number];
+export type StyleOrder = (typeof styleOrder)[number];
 export type CssRule = [value: string, order: StyleOrder];
