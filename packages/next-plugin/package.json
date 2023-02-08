@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@kaze-style/webpack-plugin": "^0.17.0",
-    "browserslist": "^4.21.4"
+    "browserslist": "^4.21.5"
   },
   "peerDependencies": {
     "next": ">=12 || >=13",

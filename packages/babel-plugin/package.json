@@ -31,7 +31,7 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@babel/core": "^7.20.7",
+    "@babel/core": "^7.20.12",
     "@babel/plugin-syntax-typescript": "^7.20.0",
     "@babel/helper-plugin-utils": "^7.20.2"
   },
