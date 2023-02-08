@@ -31,14 +31,15 @@
     "build": "tsx ./../../scripts/build.ts"
   },
   "dependencies": {
-    "@kaze-style/build": "^0.16.0",
-    "esbuild": "^0.16.10"
+    "@kaze-style/build": "^0.16.0"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.16.0"
+    "@kaze-style/core": "^0.16.0",
+    "esbuild": "^0.16.14"
   },
   "peerDependencies": {
     "@kaze-style/core": "^0.16.0",
+    "esbuild": "^0.16.14",
     "vite": "^3 || ^4"
   }
 }
