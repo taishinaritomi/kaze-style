@@ -2,7 +2,7 @@ import childProcess from 'child_process';
 import path from 'path';
 import arg from 'arg';
 import type { BuildOptions, Metafile, Plugin, PluginBuild } from 'esbuild';
-import { build } from 'esbuild';
+import esbuild from 'esbuild';
 import fs from 'fs-extra';
 import glob from 'glob';
 import { gzipSize } from 'gzip-size';
@@ -31,7 +31,6 @@ const sizeOutDir = `${outDir}-size`;
 const entryDir = 'src';
 
 const esBuildOptions: BuildOptions = {
-  watch: isWatch,
   entryPoints: glob.sync(`./${entryDir}/**/*.ts`, {
     ignore: ['./**/*.spec.ts'],
   }),
@@ -146,7 +145,7 @@ const bundleSize = async () => {
   sizeEntry.push(`${entryDir}/index.ts`);
   try {
     await fs.remove(sizeOutDir);
-    const { metafile } = await build({
+    const { metafile } = await esbuild.build({
       ...esBuildOptions,
       format: 'esm',
       entryPoints: sizeEntry,
@@ -168,16 +167,30 @@ const esmBuild = async (_packageJson: Record<string, unknown>) => {
   const stop = timer();
   try {
     const packageJson = Object.assign({}, _packageJson, { type: 'module' });
-    await Promise.all([
-      build({
-        ...esBuildOptions,
-        format: 'esm',
-        outdir: esmOutDir,
-        bundle: true,
-        plugins: [addExtensionEsBuildPlugin()],
-      }),
-      fs.outputJson(`${esmOutDir}/package.json`, packageJson),
-    ]);
+    if (isWatch) {
+      const [ctx] = await Promise.all([
+        esbuild.context({
+          ...esBuildOptions,
+          format: 'esm',
+          outdir: esmOutDir,
+          bundle: true,
+          plugins: [addExtensionEsBuildPlugin()],
+        }),
+        fs.outputJson(`${esmOutDir}/package.json`, packageJson),
+      ]);
+      await ctx?.watch();
+    } else {
+      await Promise.all([
+        esbuild.build({
+          ...esBuildOptions,
+          format: 'esm',
+          outdir: esmOutDir,
+          bundle: true,
+          plugins: [addExtensionEsBuildPlugin()],
+        }),
+        fs.outputJson(`${esmOutDir}/package.json`, packageJson),
+      ]);
+    }
     console.log(successLog('ESModule', stop(), esmOutDir));
   } catch (_) {
     console.log(errorLog('ESModule'));
@@ -189,14 +202,26 @@ const cjsBuild = async (_packageJson: Record<string, unknown>) => {
   const stop = timer();
   try {
     const packageJson = Object.assign({}, _packageJson, { type: 'commonjs' });
-    await Promise.all([
-      build({
-        ...esBuildOptions,
-        format: 'cjs',
-        outdir: cjsOutDir,
-      }),
-      fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
-    ]);
+    if (isWatch) {
+      const [ctx] = await Promise.all([
+        esbuild.context({
+          ...esBuildOptions,
+          format: 'cjs',
+          outdir: cjsOutDir,
+        }),
+        fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
+      ]);
+      await ctx?.watch();
+    } else {
+      await Promise.all([
+        esbuild.build({
+          ...esBuildOptions,
+          format: 'cjs',
+          outdir: cjsOutDir,
+        }),
+        fs.outputJson(`${cjsOutDir}/package.json`, packageJson),
+      ]);
+    }
     console.log(successLog('CommonJS', stop(), cjsOutDir));
   } catch (_) {
     console.log(errorLog('CommonJS'));
