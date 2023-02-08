@@ -9,7 +9,7 @@
     "playground/*"
   ],
   "scripts": {
-    "clean": "rimraf **/dist* **/.next **/.turbo **/target **/.swc **/node_modules",
+    "clean": "rimraf ./playground/**/.swc ./playground/**/.next ./{playground,packages}/**/dist*  ./{playground,packages}/**/.turbo ./packages/swc-plugin/target ./node_modules ./{playground,packages}/**/node_modules",
     "build": "turbo run build",
     "build:packages": "turbo run build --filter=./packages/*",
     "dev": "turbo run dev",
