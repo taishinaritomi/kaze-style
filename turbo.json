@@ -8,10 +8,7 @@
     "dev": {
       "cache": false
     },
-    "test": {},
     "type-check": {},
-    "exports-check": {},
-    "code-fix": {},
-    "code-check": {}
+    "exports-check": {}
   }
 }

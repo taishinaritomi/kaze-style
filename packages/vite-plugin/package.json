@@ -35,7 +35,8 @@
   },
   "devDependencies": {
     "@kaze-style/core": "^0.17.0",
-    "esbuild": "^0.16.14"
+    "esbuild": "^0.16.14",
+    "vite": "^4.1.1"
   },
   "peerDependencies": {
     "@kaze-style/core": "^0.17.0",

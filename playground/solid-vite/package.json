@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@kaze-style/core": "*",
+    "@kaze-style/themes": "*",
     "solid-js": "^1.6.10"
   },
   "devDependencies": {
