@@ -36,6 +36,8 @@
     "@babel/helper-plugin-utils": "^7.20.2"
   },
   "devDependencies": {
+    "@types/babel__helper-plugin-utils": "^7.10.0",
+    "@types/babel__core": "^7.20.0",
     "@kaze-style/core": "^0.17.0"
   }
 }

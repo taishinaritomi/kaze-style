@@ -32,6 +32,10 @@
   "dependencies": {
     "@kaze-style/build": "^0.17.0"
   },
+  "devDependencies": {
+    "@kaze-style/core": "^0.17.0",
+    "webpack": "^5.75.0"
+  },
   "peerDependencies": {
     "@kaze-style/core": "^0.17.0",
     "webpack": "^5"

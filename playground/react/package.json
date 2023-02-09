@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@kaze-style/core": "*",
+    "@kaze-style/themes": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -19,6 +20,8 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
     "@kaze-style/webpack-plugin": "*",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
     "babel-loader": "^9.1.2",
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.0",

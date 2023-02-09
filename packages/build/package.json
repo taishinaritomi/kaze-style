@@ -37,7 +37,8 @@
     "stylis": "^4.1.3"
   },
   "devDependencies": {
-    "@kaze-style/core": "^0.17.0"
+    "@kaze-style/core": "^0.17.0",
+    "@types/stylis": "^4.0.2"
   },
   "peerDependencies": {
     "@kaze-style/core": "^0.17.0"
