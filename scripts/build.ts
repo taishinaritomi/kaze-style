@@ -35,7 +35,7 @@ const build = async () => {
   const [report] = await Promise.all([
     isSize && bundleSize(entry),
     !cjsOnly && esmBuild({ packageJson: { sideEffects }, watch }),
-    cjsBuild({ packageJson: { sideEffects } , watch }),
+    cjsBuild({ packageJson: { sideEffects }, watch }),
     tsBuild({ watch }),
     execCommand && execBuild(execCommand),
   ]);

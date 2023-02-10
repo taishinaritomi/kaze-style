@@ -9,7 +9,7 @@ export const logger = {
       pc.bold(pc.gray(version)),
     );
   },
-  success: (operation: string, outDir: string, time: number,) => {
+  success: (operation: string, outDir: string, time: number) => {
     console.log(
       '🟢',
       pc.bold(pc.green(operation)),

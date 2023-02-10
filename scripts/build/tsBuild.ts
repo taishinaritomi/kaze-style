@@ -1,12 +1,12 @@
-import fs from "fs-extra";
-import { TYPES_OUT_DIR } from "./constants";
-import { exec } from "./utils/exec";
-import { logger } from "./utils/logger";
-import { timer } from "./utils/timer";
+import fs from 'fs-extra';
+import { TYPES_OUT_DIR } from './constants';
+import { exec } from './utils/exec';
+import { logger } from './utils/logger';
+import { timer } from './utils/timer';
 
 type Options = {
   watch: boolean;
-}
+};
 
 export const tsBuild = async (options: Options) => {
   const stop = timer();
