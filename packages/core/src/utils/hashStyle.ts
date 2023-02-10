@@ -1,7 +1,6 @@
 import { hash } from '../hash';
-import type { CssValue } from '../types/style';
-import type { NestObj, AndArray } from '../types/utils';
+import type { SupportStyle } from '../types/style';
 
-export const hashStyle = (style: NestObj<AndArray<CssValue>>): string => {
+export const hashStyle = (style: SupportStyle): string => {
   return `_${hash(JSON.stringify(style))}`;
 };

@@ -21,9 +21,8 @@ export const compileAtomicCss = (
 ): Resolved => {
   const cssRules = resolved[0];
   const classNameRecord = resolved[1];
-  for (const _property in style) {
-    const property = _property as keyof SupportStyle;
-    const styleValue = style[property];
+  for (const property in style) {
+    const styleValue = style[property as keyof SupportStyle];
     if (isCssValue(styleValue)) {
       const className = hashClassName(selectors, property, styleValue);
       const selector = hashSelector(selectors, property);

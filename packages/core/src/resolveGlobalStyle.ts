@@ -1,19 +1,16 @@
 import { compileNotAtomicCss } from './compileNotAtomicCss';
 import type { CssRule } from './styleOrder';
-import type { CssValue } from './types/style';
 import type { KazeGlobalStyle } from './types/style';
-import type { AndArray, NestObj } from './types/utils';
 import { uniqueCssRules } from './uniqueCssRules';
 
 type Result = [cssRules: CssRule[]];
 
 export const resolveGlobalStyle = <T extends string>(
-  _globalStyles: KazeGlobalStyle<T>,
+  globalStyles: KazeGlobalStyle<T>,
 ): Result => {
   const cssRules: CssRule[] = [];
-  const globalStyles = _globalStyles as Record<T, NestObj<AndArray<CssValue>>>;
   for (const selector in globalStyles) {
-    const globalStyle = globalStyles[selector];
+    const globalStyle = globalStyles[selector as keyof KazeGlobalStyle<T>];
     const [_cssRules] = compileNotAtomicCss(globalStyle, 'global', selector);
     cssRules.push(..._cssRules);
   }

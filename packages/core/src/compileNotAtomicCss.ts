@@ -1,7 +1,6 @@
 import type { StyleOrder, CssRule } from './styleOrder';
 import type { Selectors } from './types/common';
-import type { CssValue, KeyframesRules } from './types/style';
-import type { AndArray, NestObj } from './types/utils';
+import type { KeyframesRules, SupportStyle } from './types/style';
 import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
 import { isCssValue } from './utils/isCssValue';
@@ -12,7 +11,7 @@ import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 type Resolved = [rules: CssRule[]];
 
 export const compileNotAtomicCss = (
-  style: NestObj<AndArray<CssValue>>,
+  style: SupportStyle,
   styleOrder: StyleOrder,
   selector: string,
   selectors: Selectors = [[], ''],
@@ -20,7 +19,7 @@ export const compileNotAtomicCss = (
 ) => {
   const cssDeclarations: string[] = [];
   for (const property in style) {
-    const styleValue = style[property];
+    const styleValue = style[property as keyof SupportStyle];
     if (isCssValue(styleValue)) {
       cssDeclarations.push(styleDeclarationStringify(property, styleValue));
     } else if (isObject(styleValue)) {
