@@ -7,7 +7,7 @@ import type {
 } from 'csstype';
 import type { IncludeString } from './utils';
 
-export type CssValue = string | number | undefined;
+export type CssValue = string | number;
 
 type SelectorChar =
   | ':'
@@ -22,7 +22,9 @@ type SelectorChar =
   | '.'
   | '#';
 
-type PredictProperties =
+type AndPrefix<T extends string> = T | `&${T}`;
+
+type AutoCompleteSelector =
   | '@media (max-width: 0)'
   | '@media (min-width: 0)'
   | '@media (prefers-color-scheme: dark)'
@@ -30,7 +32,14 @@ type PredictProperties =
   | '@layer utilities'
   | '@layer base'
   | '@supports ()'
-  | '@supports not ()';
+  | '@supports not ()'
+  | AndPrefix<Pseudos | HtmlAttributes | SvgAttributes>;
+
+type PseudosSuffix<T extends string> = T | `${T}${Pseudos}`;
+
+type AutoCompleteGlobalSelector = PseudosSuffix<
+  '*' | keyof HTMLElementTagNameMap
+>;
 
 type SupportProperties = Omit<PropertiesFallback<CssValue>, 'animationName'> & {
   animationName?: string | string[] | KeyframesRules;
@@ -45,11 +54,7 @@ export type KeyframesRules = {
 };
 
 export type SupportStyle = SupportProperties & {
-  [_ in
-    | PredictProperties
-    | (Pseudos | `&${Pseudos}`)
-    | (HtmlAttributes | SvgAttributes)
-    | `&${HtmlAttributes | SvgAttributes}`]?: SupportStyle;
+  [_ in AutoCompleteSelector]?: SupportStyle;
 } & {
   [_ in IncludeString<SelectorChar>]?: SupportStyle;
 };
@@ -61,7 +66,5 @@ export type KazeGlobalStyle<T extends string> = {
 } & {
   [K in T]: K extends '@font-face' ? FontFaceRules : SupportStyle;
 } & {
-  [_ in
-    | (keyof HTMLElementTagNameMap | '*')
-    | `${keyof HTMLElementTagNameMap | '*'}${Pseudos}`]?: SupportStyle;
+  [_ in AutoCompleteGlobalSelector]?: SupportStyle;
 };
