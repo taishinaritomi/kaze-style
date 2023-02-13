@@ -14,7 +14,7 @@ describe('resolveStyle', () => {
     expect(cssRules).toEqual([['._1z0f5pm{color:red;}', 'normal']]);
   });
 
-  it('pseudo', () => {
+  it('selector', () => {
     const [cssRules, classes] = resolveStyle({
       $base: {
         ':hover': {
@@ -35,7 +35,7 @@ describe('resolveStyle', () => {
     ]);
   });
 
-  it('nest pseudo', () => {
+  it('nesting selector', () => {
     const [cssRules, classes] = resolveStyle({
       $base: {
         ':hover': {
@@ -71,7 +71,7 @@ describe('resolveStyle', () => {
     ]);
   });
 
-  it('nest atRules', () => {
+  it('nesting atRules', () => {
     const [cssRules, classes] = resolveStyle({
       $base: {
         '@media (max-width: 512px)': {
@@ -93,6 +93,37 @@ describe('resolveStyle', () => {
     expect(classes).toEqual({
       $base: new ClassName({ _8147ym: '_1533v1y', _tzry81: '_1ixciq6' }),
     });
+  });
+
+  it('selector & atRules', () => {
+    const [cssRules, classes] = resolveStyle({
+      $base: {
+        '@media (prefers-color-scheme: dark)': {
+          ':hover': {
+            color: 'red',
+          },
+        },
+        ':hover': {
+          '@media (prefers-color-scheme: light)': {
+            color: 'green',
+          },
+        },
+      },
+    });
+
+    expect(classes).toEqual({
+      $base: new ClassName({ _ekhpz3: '_16o87cv', _2dy4o3: '_1xhc4k2' }),
+    });
+    expect(cssRules).toEqual([
+      [
+        '@media (prefers-color-scheme: dark){._16o87cv:hover{color:red;}}',
+        'media',
+      ],
+      [
+        '@media (prefers-color-scheme: light){._1xhc4k2:hover{color:green;}}',
+        'media',
+      ],
+    ]);
   });
 
   it('keyframes', () => {

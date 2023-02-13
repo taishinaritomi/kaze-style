@@ -1,20 +1,21 @@
-export class ClassName extends String {
-  // Record
-  private r: Record<string, string>;
-  // Value
-  private v: string;
-  // Other
-  private o: string[];
-  constructor(record: ClassName['r'], other: ClassName['o'] = []) {
-    const string = [...Object.values(record), ...other].join(' ');
-    super(string);
-    this.v = string;
-    this.r = record;
-    this.o = other;
-  }
-  string = () => this.v;
-  static = () => this.r;
-  other = () => this.o;
+export interface ClassName {
+  Type: ClassName & string;
+  String: string;
+  Static: Record<string, string>;
+  Other: string[];
 }
-export type ClassNameType = ClassName & string;
-export type ClassNameRecord = ClassName['r'];
+export class ClassName extends String {
+  private readonly _: [
+    string: ClassName['String'],
+    _static: ClassName['Static'],
+    other: ClassName['Other'],
+  ];
+  constructor(_static: ClassName['Static'], other: ClassName['Other'] = []) {
+    const string = [...Object.values(_static), ...other].join(' ');
+    super(string);
+    this._ = [string, _static, other];
+  }
+  string = (): ClassName['String'] => this._[0];
+  static = (): ClassName['Static'] => this._[1];
+  other = (): ClassName['Other'] => this._[2];
+}

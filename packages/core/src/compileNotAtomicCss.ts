@@ -5,23 +5,23 @@ import { compileCss } from './utils/compileCss';
 import { compileKeyFrameCss } from './utils/compileKeyFrameCss';
 import { isCssValue } from './utils/isCssValue';
 import { isObject } from './utils/isObject';
+import { resolveDeclaration } from './utils/resolveDeclaration';
 import { resolveSelectors } from './utils/resolveSelectors';
-import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type Resolved = [rules: CssRule[]];
+type Resolved = [cssRules: CssRule[]];
 
 export const compileNotAtomicCss = (
   style: SupportStyle,
   styleOrder: StyleOrder,
-  selector: string,
-  selectors: Selectors = [[], ''],
+  baseSelector: string,
+  selectors: Selectors = ['', [], ''],
   resolved: Resolved = [[]],
 ) => {
   const cssDeclarations: string[] = [];
   for (const property in style) {
     const styleValue = style[property as keyof SupportStyle];
     if (isCssValue(styleValue)) {
-      cssDeclarations.push(styleDeclarationStringify(property, styleValue));
+      cssDeclarations.push(resolveDeclaration(property, styleValue));
     } else if (isObject(styleValue)) {
       if (property === 'animationName') {
         const animationNameValue = style[property] as KeyframesRules;
@@ -29,13 +29,13 @@ export const compileNotAtomicCss = (
           compileKeyFrameCss(animationNameValue);
         resolved[0].push([keyframesRule, 'keyframes']);
         cssDeclarations.push(
-          styleDeclarationStringify('animationName', keyframesName),
+          resolveDeclaration('animationName', keyframesName),
         );
       } else {
         compileNotAtomicCss(
           styleValue,
           styleOrder,
-          selector,
+          baseSelector,
           resolveSelectors(selectors, property),
           resolved,
         );
@@ -45,7 +45,7 @@ export const compileNotAtomicCss = (
 
   if (cssDeclarations.length !== 0) {
     resolved[0].push([
-      compileCss(selector, selectors, cssDeclarations.join('')),
+      compileCss(baseSelector, selectors, cssDeclarations.join('')),
       styleOrder,
     ]);
   }

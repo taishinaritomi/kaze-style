@@ -1,11 +1,11 @@
 import type {
-  PropertiesFallback,
+  Properties,
   AtRule,
   Pseudos,
   HtmlAttributes,
   SvgAttributes,
 } from 'csstype';
-import type { IncludeString } from './utils';
+import type { IncludeString, Prettify, ValueAndArray } from './utils';
 
 export type CssValue = string | number;
 
@@ -41,11 +41,13 @@ type AutoCompleteGlobalSelector = PseudosSuffix<
   '*' | keyof HTMLElementTagNameMap
 >;
 
-type SupportProperties = Omit<PropertiesFallback<CssValue>, 'animationName'> & {
-  animationName?: string | string[] | KeyframesRules;
-};
+type SupportProperties = Prettify<
+  Omit<ValueAndArray<Properties<CssValue>>, 'animationName'> & {
+    animationName?: string | string[] | KeyframesRules;
+  }
+>;
 
-type FontFaceRules = AtRule.FontFaceFallback<CssValue>;
+type FontFaceRules = ValueAndArray<AtRule.FontFace<CssValue>>;
 
 export type KeyframesRules = {
   [_ in 'from' | 'to']?: SupportProperties;
@@ -57,6 +59,8 @@ export type SupportStyle = SupportProperties & {
   [_ in AutoCompleteSelector]?: SupportStyle;
 } & {
   [_ in IncludeString<SelectorChar>]?: SupportStyle;
+} & {
+  [_ in `(${string})`]?: SupportStyle;
 };
 
 export type KazeStyle<T extends string> = Record<T, SupportStyle>;

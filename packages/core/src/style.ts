@@ -9,5 +9,6 @@ export const style = <K extends string>(styles: KazeStyle<K>): Classes<K> => {
   if (typeof document !== 'undefined') {
     setCssRules(cssRules);
   }
+
   return classes;
 };
