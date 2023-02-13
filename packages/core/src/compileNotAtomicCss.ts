@@ -18,6 +18,7 @@ export const compileNotAtomicCss = (
   resolved: Resolved = [[]],
 ) => {
   const cssDeclarations: string[] = [];
+  const cssRules = resolved[0];
   for (const property in style) {
     const styleValue = style[property as keyof SupportStyle];
     if (isCssValue(styleValue)) {
@@ -27,24 +28,24 @@ export const compileNotAtomicCss = (
         const animationNameValue = style[property] as KeyframesRules;
         const [keyframesName, keyframesRule] =
           compileKeyFrameCss(animationNameValue);
-        resolved[0].push([keyframesRule, 'keyframes']);
+        cssRules.push([keyframesRule, 'keyframes']);
         cssDeclarations.push(
           resolveDeclaration('animationName', keyframesName),
         );
       } else {
-        compileNotAtomicCss(
+        const [_cssRules] = compileNotAtomicCss(
           styleValue,
           styleOrder,
           baseSelector,
           resolveSelectors(selectors, property),
-          resolved,
         );
+        cssRules.push(..._cssRules);
       }
     }
   }
 
   if (cssDeclarations.length !== 0) {
-    resolved[0].push([
+    cssRules.unshift([
       compileCss(baseSelector, selectors, cssDeclarations.join('')),
       styleOrder,
     ]);
