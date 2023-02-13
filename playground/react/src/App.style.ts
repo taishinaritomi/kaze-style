@@ -7,7 +7,7 @@ export const classes = style({
   button: {
     background: 'red',
     borderRadius: '6px',
-    padding: ['10px', '20px'],
+    padding: '10px 20px',
     ':hover': {
       background: 'orange',
     },

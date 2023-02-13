@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-import { ClassName } from './ClassName';
 import { resolveStyle } from './resolveStyle';
 
 describe('resolveStyle', () => {
@@ -7,97 +6,21 @@ describe('resolveStyle', () => {
     const [cssRules, classes] = resolveStyle({
       $base: {
         color: 'red',
-      },
-    });
-
-    expect(classes).toEqual({ $base: new ClassName({ _1ylxx6h: '_1z0f5pm' }) });
-    expect(cssRules).toEqual([['._1z0f5pm{color:red;}', 'normal']]);
-  });
-
-  it('pseudo', () => {
-    const [cssRules, classes] = resolveStyle({
-      $base: {
         ':hover': {
-          color: 'red',
-        },
-        '::after': {
+          '@media (prefers-color-scheme: light)': {
+            color: 'lightgreen',
+          },
           color: 'green',
-        },
-      },
-    });
-
-    expect(classes).toEqual({
-      $base: new ClassName({ _1ez8kfk: '_9vjnpm', _as4l2f: '_4fbj8n' }),
-    });
-    expect(cssRules).toEqual([
-      ['._9vjnpm:hover{color:red;}', 'hover'],
-      ['._4fbj8n::after{color:green;}', 'normal'],
-    ]);
-  });
-
-  it('nest pseudo', () => {
-    const [cssRules, classes] = resolveStyle({
-      $base: {
-        ':hover': {
-          '::after': {
-            color: 'green',
-          },
-          color: 'red',
-        },
-      },
-    });
-
-    expect(classes).toEqual({
-      $base: new ClassName({ _143egyq: '_if3xdm', _1ez8kfk: '_9vjnpm' }),
-    });
-    expect(cssRules).toEqual([
-      ['._if3xdm:hover::after{color:green;}', 'hover'],
-      ['._9vjnpm:hover{color:red;}', 'hover'],
-    ]);
-  });
-
-  it('atRules', () => {
-    const [cssRules, classes] = resolveStyle({
-      $base: {
-        '@media (max-width: 512px)': {
-          color: 'red',
-        },
-      },
-    });
-
-    expect(classes).toEqual({ $base: new ClassName({ _8147ym: '_1533v1y' }) });
-    expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._1533v1y{color:red;}}', 'media'],
-    ]);
-  });
-
-  it('nest atRules', () => {
-    const [cssRules, classes] = resolveStyle({
-      $base: {
-        '@media (max-width: 512px)': {
-          color: 'red',
-          '@supports not (display: grid)': {
-            display: 'flex',
+          '@media (prefers-color-scheme: dark)': {
+            ':enabled': {
+              color: 'lightblue',
+            },
+            color: 'darkgreen',
+            ':disabled': {
+              color: 'darkblue',
+            },
           },
         },
-      },
-    });
-
-    expect(cssRules).toEqual([
-      ['@media (max-width: 512px){._1533v1y{color:red;}}', 'media'],
-      [
-        '@media (max-width: 512px){@supports not (display: grid){._1ixciq6{display:flex;}}}',
-        'media',
-      ],
-    ]);
-    expect(classes).toEqual({
-      $base: new ClassName({ _8147ym: '_1533v1y', _tzry81: '_1ixciq6' }),
-    });
-  });
-
-  it('keyframes', () => {
-    const [cssRules, classes] = resolveStyle({
-      $base: {
         animationName: {
           from: {
             color: 'green',
@@ -109,10 +32,35 @@ describe('resolveStyle', () => {
       },
     });
 
-    expect(classes).toEqual({
-      $base: new ClassName({ _6qto8h: '_6qto8h', _1mdtyre: '_1nz0ua8' }),
+    expect(classes.$base.static()).toEqual({
+      _1ez8kfk: '_zr2gzt',
+      _1mdtyre: '_1nz0ua8',
+      _1rx8eb2: '_1jw51ya',
+      _1ylxx6h: '_1z0f5pm',
+      _2dy4o3: '_ndfhes',
+      _6qto8h: '_6qto8h',
+      _cppp84: '_i5bypd',
+      _ekhpz3: '_qdpplj',
     });
     expect(cssRules).toEqual([
+      ['._1z0f5pm{color:red;}', 'normal'],
+      [
+        '@media (prefers-color-scheme: light){._ndfhes:hover{color:lightgreen;}}',
+        'media',
+      ],
+      ['._zr2gzt:hover{color:green;}', 'hover'],
+      [
+        '@media (prefers-color-scheme: dark){._1jw51ya:hover:enabled{color:lightblue;}}',
+        'media',
+      ],
+      [
+        '@media (prefers-color-scheme: dark){._qdpplj:hover{color:darkgreen;}}',
+        'media',
+      ],
+      [
+        '@media (prefers-color-scheme: dark){._i5bypd:hover:disabled{color:darkblue;}}',
+        'media',
+      ],
       ['@keyframes _6qto8h{from{color:green;}to{color:red;}}', 'keyframes'],
       ['._1nz0ua8{animation-name:_6qto8h;}', 'normal'],
     ]);

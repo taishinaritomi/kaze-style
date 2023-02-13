@@ -9,9 +9,13 @@ export const resolveGlobalStyle = <T extends string>(
   globalStyles: KazeGlobalStyle<T>,
 ): Result => {
   const cssRules: CssRule[] = [];
-  for (const selector in globalStyles) {
-    const globalStyle = globalStyles[selector as keyof KazeGlobalStyle<T>];
-    const [_cssRules] = compileNotAtomicCss(globalStyle, 'global', selector);
+  for (const baseSelector in globalStyles) {
+    const globalStyle = globalStyles[baseSelector as keyof KazeGlobalStyle<T>];
+    const [_cssRules] = compileNotAtomicCss(
+      globalStyle,
+      'global',
+      baseSelector,
+    );
     cssRules.push(..._cssRules);
   }
   return [uniqueCssRules(cssRules)];

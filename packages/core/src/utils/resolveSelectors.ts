@@ -1,17 +1,33 @@
 import type { Selectors } from '../types/common';
-import { isNestSelector } from './isNestSelector';
-import { normalizeNestSelector } from './normalizeNestSelector';
 
 export const resolveSelectors = (
-  selectors: Selectors,
+  [selector, atRules, groups]: Selectors,
   property: string,
 ): Selectors => {
-  const atRules = [...selectors[0]];
-  let nest = selectors[1];
   if (property.substring(0, 1) === '@') {
-    atRules.unshift(property);
-  } else if (isNestSelector(property)) {
-    nest = normalizeNestSelector(nest, property);
+    return [selector, [property, ...atRules], groups];
+  } else if (isGroups(property)) {
+    return [selector, atRules, groups];
+  } else if (isSelector(property)) {
+    return [normalizeSelector(selector, property), atRules, groups];
   }
-  return [atRules, nest];
+  return [selector, atRules, groups];
+};
+
+const isSelector = (property: string): boolean => {
+  return /(:|&| |,|>|~|\+|\[|\.|#|)/.test(property);
+};
+
+const isGroups = (property: string): boolean => {
+  return property.startsWith('(') && property.endsWith(')');
+};
+
+const normalizeSelector = (current: string, property: string): string => {
+  if (current) {
+    return (
+      current + (property.charAt(0) === '&' ? property.slice(1) : property)
+    );
+  } else {
+    return property.includes('&') ? property : '&' + property;
+  }
 };
