@@ -5,6 +5,6 @@ globalStyle(globalTheme.reset());
 
 export const classes = style({
   $button: {
-    padding: ['10px', '20px'],
+    padding: "10px 20px",
   },
 });
