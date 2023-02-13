@@ -27,8 +27,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "exports-check": "publint",
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts"
+    "dev": "tsx ./../../scripts/build --watch",
+    "build": "tsx ./../../scripts/build"
   },
   "dependencies": {
     "@babel/core": "^7.20.12",
