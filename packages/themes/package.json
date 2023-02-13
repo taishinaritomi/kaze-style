@@ -28,8 +28,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "exports-check": "publint",
-    "dev": "tsx ./../../scripts/build.ts --watch",
-    "build": "tsx ./../../scripts/build.ts --size"
+    "dev": "tsx ./../../scripts/build --watch",
+    "build": "tsx ./../../scripts/build --size"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.17.0"

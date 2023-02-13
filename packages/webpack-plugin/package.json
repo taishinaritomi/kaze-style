@@ -26,8 +26,8 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "exports-check": "publint",
-    "dev": "tsx ./../../scripts/build.ts --watch --cjsOnly",
-    "build": "tsx ./../../scripts/build.ts --cjsOnly"
+    "dev": "tsx ./../../scripts/build --watch --cjsOnly",
+    "build": "tsx ./../../scripts/build --cjsOnly"
   },
   "dependencies": {
     "@kaze-style/build": "^0.17.0"

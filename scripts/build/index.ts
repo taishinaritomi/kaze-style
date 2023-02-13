@@ -1,14 +1,14 @@
 import arg from 'arg';
 import fs from 'fs-extra';
-import { bundleSize } from './build/bundleSize';
-import { cjsBuild } from './build/cjsBuild';
-import { OUT_DIR } from './build/constants';
-import { esmBuild } from './build/esmBuild';
-import { execBuild } from './build/execBuild';
-import { tsBuild } from './build/tsBuild';
-import { getPackageJson } from './build/utils/getPackageJson';
-import { logger } from './build/utils/logger';
-import { timer } from './build/utils/timer';
+import { bundleSize } from './bundleSize';
+import { cjsBuild } from './cjsBuild';
+import { OUT_DIR } from './constants';
+import { esmBuild } from './esmBuild';
+import { execBuild } from './execBuild';
+import { tsBuild } from './tsBuild';
+import { getPackageJson } from './utils/getPackageJson';
+import { logger } from './utils/logger';
+import { timer } from './utils/timer';
 
 const args = arg({
   '--cjsOnly': Boolean,
