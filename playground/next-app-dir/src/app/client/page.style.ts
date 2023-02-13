@@ -11,7 +11,7 @@ export const classes = style({
     gap: '5px',
   },
   $button: {
-    padding: ['10px', '20px'],
+    padding: '10px 20px',
   },
   $blueButton: {
     background: 'blue',

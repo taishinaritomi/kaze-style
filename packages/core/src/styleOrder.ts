@@ -16,26 +16,26 @@ export const styleOrder = [
   'media',
 ] as const;
 
-export const getStyleOrder = ([atRules, nest]: Selectors): StyleOrder => {
+export const getStyleOrder = ([selector, atRules]: Selectors): StyleOrder => {
   if (atRules.length !== 0) {
     if (atRules.some((atRule) => atRule.includes('@media'))) {
       return 'media';
     } else {
       return 'atRules';
     }
-  } else if (nest.includes(':active')) {
+  } else if (selector.includes(':active')) {
     return 'active';
-  } else if (nest.includes(':hover')) {
+  } else if (selector.includes(':hover')) {
     return 'hover';
-  } else if (nest.includes(':focus-visible')) {
+  } else if (selector.includes(':focus-visible')) {
     return 'focusVisible';
-  } else if (nest.includes(':focus')) {
+  } else if (selector.includes(':focus')) {
     return 'focus';
-  } else if (nest.includes(':focus-within')) {
+  } else if (selector.includes(':focus-within')) {
     return 'focusWithin';
-  } else if (nest.includes(':visited')) {
+  } else if (selector.includes(':visited')) {
     return 'visited';
-  } else if (nest.includes(':link')) {
+  } else if (selector.includes(':link')) {
     return 'link';
   } else {
     return 'normal';

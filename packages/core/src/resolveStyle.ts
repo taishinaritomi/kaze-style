@@ -1,4 +1,3 @@
-import type { ClassNameType } from './ClassName';
 import { ClassName } from './ClassName';
 import { compileAtomicCss } from './compileAtomicCss';
 import { compileNotAtomicCss } from './compileNotAtomicCss';
@@ -25,19 +24,19 @@ export const resolveStyle = <K extends string>(
     if (key.startsWith('$')) {
       const [_cssRules, classNameRecord] = compileAtomicCss(styles[key]);
       cssRules.push(..._cssRules);
-      classes[key] = new ClassName(classNameRecord) as ClassNameType;
+      classes[key] = new ClassName(classNameRecord) as ClassName['Type'];
       staticClasses[key] = classNameRecord;
     } else {
-      const selector = `${hashStyle(styles[key])}`;
+      const className = `${hashStyle(styles[key])}`;
       const [_cssRules] = compileNotAtomicCss(
         styles[key],
         'notAtomic',
-        `.${selector}`,
+        `.${className}`,
       );
       cssRules.push(..._cssRules);
       // @ts-expect-error type
-      classes[key] = selector;
-      staticClasses[key] = selector;
+      classes[key] = className;
+      staticClasses[key] = className;
     }
   }
 

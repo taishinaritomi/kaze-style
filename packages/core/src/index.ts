@@ -12,6 +12,10 @@ export * from './styleOrder';
 export * from './sortCssRules';
 export * from './uniqueCssRules';
 export * from './setCssRules';
-export type { ClassNameRecord, ClassNameType } from './ClassName';
-export type { Classes, ClassNameOverride, ForBuild } from './types/common';
+export type {
+  Classes,
+  ClassNameOverride,
+  ClassOverride,
+  ForBuild,
+} from './types/common';
 export type { KazeStyle, KazeGlobalStyle, SupportStyle } from './types/style';

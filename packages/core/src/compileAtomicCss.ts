@@ -1,4 +1,4 @@
-import type { ClassNameRecord } from './ClassName';
+import type { ClassName } from './ClassName';
 import type { CssRule } from './styleOrder';
 import { getStyleOrder } from './styleOrder';
 import type { Selectors } from './types/common';
@@ -9,18 +9,18 @@ import { hashClassName } from './utils/hashClassName';
 import { hashSelector } from './utils/hashSelector';
 import { isCssValue } from './utils/isCssValue';
 import { isObject } from './utils/isObject';
+import { resolveDeclaration } from './utils/resolveDeclaration';
 import { resolveSelectors } from './utils/resolveSelectors';
-import { styleDeclarationStringify } from './utils/styleDeclarationStringify';
 
-type Resolved = [cssRules: CssRule[], classNameRecord: ClassNameRecord];
+type Resolved = [cssRules: CssRule[], classNameStatic: ClassName['Static']];
 
 export const compileAtomicCss = (
   style: SupportStyle,
-  selectors: Selectors = [[], ''],
+  selectors: Selectors = ['', [], ''],
   resolved: Resolved = [[], {}],
 ): Resolved => {
   const cssRules = resolved[0];
-  const classNameRecord = resolved[1];
+  const classNameStatic = resolved[1];
   for (const property in style) {
     const styleValue = style[property as keyof SupportStyle];
     if (isCssValue(styleValue)) {
@@ -30,18 +30,18 @@ export const compileAtomicCss = (
         compileCss(
           `.${className}`,
           selectors,
-          styleDeclarationStringify(property, styleValue),
+          resolveDeclaration(property, styleValue),
         ),
         getStyleOrder(selectors),
       ]);
-      Object.assign(classNameRecord, { [selector]: className });
+      Object.assign(classNameStatic, { [selector]: className });
     } else if (isObject(styleValue)) {
       if (property === 'animationName') {
         const animationNameValue = styleValue as KeyframesRules;
         const [keyframesName, keyframesRule] =
           compileKeyFrameCss(animationNameValue);
         cssRules.push([keyframesRule, 'keyframes']);
-        Object.assign(classNameRecord, { [keyframesName]: keyframesName });
+        Object.assign(classNameStatic, { [keyframesName]: keyframesName });
         compileAtomicCss({ animationName: keyframesName }, selectors, resolved);
       } else {
         compileAtomicCss(

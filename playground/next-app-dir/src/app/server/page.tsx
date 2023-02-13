@@ -8,12 +8,12 @@ const ServerComponent = () => {
     <div>
       <h1 className={classes.title}>Server Component</h1>
       <div className={classes.buttonContainer}>
-        <Button className={classes.$button}>Button</Button>
-        <Button className={mergeStyle(classes.$button, classes.$blueButton)}>
+        <Button $className={classes.$button}>Button</Button>
+        <Button $className={mergeStyle(classes.$button, classes.$blueButton)}>
           Button
         </Button>
-        <Button className={classes.$button}>Button</Button>
-        <ClientButton className={classes.$button.static()}>
+        <Button $className={classes.$button}>Button</Button>
+        <ClientButton $className={classes.$button.static()}>
           ClientButton
         </ClientButton>
       </div>
