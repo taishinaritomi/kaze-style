@@ -5,7 +5,7 @@ import type {
   HtmlAttributes,
   SvgAttributes,
 } from 'csstype';
-import type { IncludeString, Prettify, ValueAndArray } from './utils';
+import type { IncludeString, Prettify, NonNullable } from './utils';
 
 export type CssValue = string | number;
 
@@ -41,13 +41,17 @@ type AutoCompleteGlobalSelector = PseudosSuffix<
   '*' | keyof HTMLElementTagNameMap
 >;
 
+type Fallback<T> = {
+  [P in keyof T]: T[P] | Array<NonNullable<T[P]>>;
+};
+
 type SupportProperties = Prettify<
-  Omit<ValueAndArray<Properties<CssValue>>, 'animationName'> & {
+  Omit<Fallback<Properties<CssValue>>, 'animationName'> & {
     animationName?: string | string[] | KeyframesRules;
   }
 >;
 
-type FontFaceRules = ValueAndArray<AtRule.FontFace<CssValue>>;
+type FontFaceRules = Fallback<AtRule.FontFace<CssValue>>;
 
 export type KeyframesRules = {
   [_ in 'from' | 'to']?: SupportProperties;
