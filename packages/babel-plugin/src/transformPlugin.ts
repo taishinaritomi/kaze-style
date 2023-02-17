@@ -52,6 +52,8 @@ export const transformPlugin = declare<
     visitor: {
       Program: {
         exit(path, state) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
           const _styles = styles.map(([classes, index]) => ({
             classes,
             index,

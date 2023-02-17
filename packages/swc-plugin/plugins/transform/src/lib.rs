@@ -1,220 +1,130 @@
-use std::collections::BTreeMap;
+mod config;
+
 use swc_core::{
   common::DUMMY_SP,
   ecma::{
-    ast::{
-      CallExpr, Callee, Expr, ExprOrSpread, Id, Ident, ImportDecl, ImportNamedSpecifier,
-      ImportSpecifier, KeyValueProp, Lit, NewExpr, ObjectLit, Program, Prop, PropName,
-      PropOrSpread, Str,
-    },
+    ast::{CallExpr, Callee, Expr, Ident, Program},
     transforms::testing::test,
-    visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
+    visit::{as_folder, FoldWith, VisitMut},
   },
   plugin::{plugin_transform, proxies::TransformPluginProgramMetadata},
 };
 
-#[derive(serde::Deserialize)]
-pub struct Style {
-  index: u8,
-  classes: Option<BTreeMap<String, ClassName>>,
-}
-
-#[derive(serde::Deserialize)]
-#[serde(untagged)]
-enum ClassName {
-  Str(String),
-  Obj(BTreeMap<String, String>),
-}
-
-#[derive(serde::Deserialize)]
-pub struct Config {
-  styles: Vec<Style>,
-}
-
-pub fn json_to_config(json: Option<String>) -> Config {
-  let config: Result<Config, serde_json::Error> = if let Some(config) = json {
-    serde_json::from_str(&config)
-  } else {
-    panic!("config parse Error")
-  };
-
-  let config = match config {
-    Ok(config) => config,
-    Err(_) => panic!("config parse Error"),
-  };
-  config
-}
-
-pub struct Transform {
-  from: String,
-  to: String,
-  import_id: Option<Id>,
-}
+use fxhash::FxHashMap;
+use swc_core::ecma::ast::{ExprOrSpread, Id, ImportDecl, ImportNamedSpecifier, ImportSpecifier, Lit, ModuleExportName};
+use crate::config::{Config, json_to_config};
 
 pub struct TransformVisitor {
   config: Config,
-  import_source: String,
-  class_name: String,
-  transforms: Vec<Transform>,
+  calls: FxHashMap<Id, String>,
+  new_calls: FxHashMap<String, String>,
 }
 
 impl TransformVisitor {
   fn new(config: Config) -> Self {
     Self {
-      config: config,
-      import_source: "@kaze-style/core".to_string(),
-      class_name: "ClassName".to_string(),
-      transforms: vec![
-        Transform {
-          from: "__preStyle".to_string(),
-          to: "__style".to_string(),
-          import_id: None,
-        },
-        Transform {
-          from: "__preGlobalStyle".to_string(),
-          to: "__globalStyle".to_string(),
-          import_id: None,
-        },
-      ],
-    }
-  }
-
-  fn transform_target_import(&mut self, import_decl: &mut ImportDecl) {
-    if &*import_decl.src.value == self.import_source {
-      let mut is_target_import = false;
-      for specifier in import_decl.specifiers.iter_mut() {
-        match specifier {
-          ImportSpecifier::Named(named_specifier) => {
-            for transform in self.transforms.iter_mut() {
-              if &transform.from == &*named_specifier.local.sym {
-                let transform_to: &str = &transform.to;
-                if is_target_import == false {
-                  is_target_import = true;
-                }
-                transform.import_id = Some(named_specifier.local.to_id());
-                named_specifier.local.sym = transform_to.into();
-              }
-            }
-          }
-          _ => {}
-        }
-      }
-      if is_target_import {
-        let class_name: &str = &self.class_name;
-        let class_name = Ident {
-          span: DUMMY_SP,
-          optional: false,
-          sym: class_name.into(),
-        };
-        import_decl
-          .specifiers
-          .push(ImportSpecifier::Named(ImportNamedSpecifier {
-            local: class_name,
-            is_type_only: false,
-            imported: None,
-            span: DUMMY_SP,
-          }));
-      }
-    }
-  }
-
-  fn transform_target_call_ident(&mut self, call_expr: &mut CallExpr) {
-    if let Callee::Expr(expr) = &mut call_expr.callee {
-      if let Expr::Ident(ident) = &mut **expr {
-        for transform in self.transforms.iter_mut() {
-          if let Some(imported_id) = &transform.import_id {
-            if &*ident.sym == &transform.from
-              && *imported_id == ident.to_id()
-              && call_expr.args.len() == 4
-            {
-              if let Expr::Lit(Lit::Num(index)) = &mut *call_expr.args[3].expr {
-                let transform_to: &str = &transform.to;
-                let class_name: &str = &self.class_name;
-                let mut props: Vec<PropOrSpread> = vec![];
-
-                for style in self.config.styles.iter() {
-                  let style_index: f64 = style.index.into();
-                  if index.value == style_index {
-                    match &style.classes {
-                      Some(classes) => {
-                        for (classes_key, classes_value) in classes {
-                          let classes_key: &str = classes_key;
-                          if let ClassName::Str(classes_value) = classes_value {
-                            let classes_value: &str = classes_value;
-                            props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(
-                              KeyValueProp {
-                                key: PropName::Str(Str::from(classes_key)),
-                                value: Box::new(Expr::Lit(Lit::Str(Str::from(classes_value)))),
-                              },
-                            ))));
-                          } else if let ClassName::Obj(classes_value) = classes_value {
-                            let classes_arg = classes_value
-                              .iter()
-                              .map(|(style_key, style_value)| {
-                                let style_key: &str = style_key;
-                                let style_value: &str = style_value;
-                                PropOrSpread::Prop(Box::new(Prop::KeyValue(KeyValueProp {
-                                  key: PropName::Str(Str::from(style_key)),
-                                  value: Box::new(Expr::Lit(Lit::Str(Str::from(style_value)))),
-                                })))
-                              })
-                              .collect();
-                            props.push(PropOrSpread::Prop(Box::new(Prop::KeyValue(
-                              KeyValueProp {
-                                key: PropName::Str(Str::from(classes_key)),
-                                value: Box::new(Expr::New(NewExpr {
-                                  span: DUMMY_SP,
-                                  args: Some(vec![ExprOrSpread {
-                                    expr: Box::new(Expr::Object(ObjectLit {
-                                      props: classes_arg,
-                                      span: DUMMY_SP,
-                                    })),
-                                    spread: None,
-                                  }]),
-                                  type_args: None,
-                                  callee: Box::new(Expr::Ident(Ident {
-                                    span: DUMMY_SP,
-                                    optional: false,
-                                    sym: class_name.into(),
-                                  })),
-                                })),
-                              },
-                            ))));
-                          }
-                        }
-                      }
-                      _ => {}
-                    }
-                    break;
-                  }
-                }
-
-                call_expr.args = vec![ExprOrSpread {
-                  expr: Box::new(Expr::Object(ObjectLit {
-                    span: DUMMY_SP,
-                    props: props,
-                  })),
-                  spread: None,
-                }];
-                ident.sym = transform_to.into();
-              }
-            }
-          }
-        }
-      }
+      config,
+      calls: FxHashMap::default(),
+      new_calls: FxHashMap::default(),
     }
   }
 }
 
 impl VisitMut for TransformVisitor {
-  fn visit_mut_import_decl(&mut self, import_decl: &mut ImportDecl) {
-    self.transform_target_import(import_decl);
-    import_decl.visit_mut_children_with(self);
+  fn visit_mut_import_decl(&mut self, decl: &mut ImportDecl) {
+    if decl.type_only {
+      return;
+    }
+
+    for transform in self.config.transforms.iter() {
+      if decl.src.value == transform.from.source {
+        for specifier in decl.specifiers.iter_mut() {
+          match specifier {
+            // import { default as __style } from '@kaze-plugin/core'
+            // import { __style } from '@kaze-plugin/core'
+            ImportSpecifier::Named(named) => {
+              let name = transform.from.specifier.as_ref();
+              let matched = match &named.imported {
+                Some(imported) => match imported {
+                  ModuleExportName::Ident(v) => v.sym.to_string() == name,
+                  ModuleExportName::Str(v) => v.value.to_string() == name,
+                },
+                _ => named.local.as_ref() == name,
+              };
+              if matched {
+                // https://swc.rs/docs/plugin/ecmascript/cheatsheet#generateuididentifier
+                self.calls.insert(named.local.to_id(), transform.to.specifier.clone());
+                named.local.sym = transform.to.specifier.clone().into();
+              }
+            }
+
+            // Todo: handle these?
+            // import something from 'something'
+            ImportSpecifier::Default(_) => {}
+            // import * as namespace from 'something'
+            ImportSpecifier::Namespace(_) => {}
+          }
+        }
+      }
+    }
+
+    for import in self.config.imports.iter() {
+      if decl.src.value == import.source {
+        // Todo: only accept from imports that already exist? - change name from source to target?
+        // Add new import to already existing import specifier
+
+        // Local
+        let local = Ident::new(import.specifier.clone().into(), DUMMY_SP);
+        let local_name = local.to_string();
+        let imported = Ident::new(import.specifier.clone().into(), DUMMY_SP);
+        // todo: make sure to update the name we're interested in
+        let imported_name = imported.to_string();
+        let specifier = ImportSpecifier::Named(ImportNamedSpecifier {
+          span: DUMMY_SP,
+          local,
+          imported: Some(ModuleExportName::Ident(imported)),
+          is_type_only: false,
+        });
+
+        decl.specifiers.push(specifier);
+        self.new_calls.insert(local_name, imported_name);
+      }
+    }
   }
 
-  fn visit_mut_call_expr(&mut self, call_expr: &mut CallExpr) {
-    self.transform_target_call_ident(call_expr);
-    call_expr.visit_mut_children_with(self);
+  fn visit_mut_call_expr(&mut self, expr: &mut CallExpr) {
+    if self.calls.is_empty() {
+      return;
+    }
+
+    if let Callee::Expr(callee) = &expr.callee {
+      if let Expr::Ident(ident) = &**callee {
+        if let Some(to_name) = self.calls.get(&ident.to_id()) {
+          expr.callee = Callee::Expr(Box::new(Expr::Ident(Ident::new(
+            to_name.clone().into(),
+            DUMMY_SP,
+          ))));
+
+          let mut new_args = vec![];
+
+          if expr.args.len() == 4 {
+            if let Expr::Lit(Lit::Num(index)) = &mut *expr.args[3].expr {
+              for style in self.config.styles.iter() {
+                // Todo: is this check really needed? Why are we keeping track of the index?
+                if index.value == style.index {
+                  new_args = style.arguments.iter().map(|v| ExprOrSpread {
+                    spread: None,
+                    expr: Box::new(v.clone()),
+                  }).collect();
+                }
+              }
+            }
+          }
+
+          expr.args = new_args;
+        }
+      }
+    }
   }
 }
 
@@ -224,47 +134,125 @@ pub fn process_transform(program: Program, metadata: TransformPluginProgramMetad
   program.fold_with(&mut as_folder(TransformVisitor::new(config)))
 }
 
+
 test!(
   Default::default(),
   |_| {
-    as_folder(TransformVisitor::new(Config {
-      styles: vec![Style {
-        classes: Some(BTreeMap::from([
-          (
-            "base".to_string(),
-            ClassName::Obj(BTreeMap::from([("color".to_string(), "red".to_string())])),
-          ),
-          (
-            "base1".to_string(),
-            ClassName::Obj(BTreeMap::from([("color".to_string(), "red".to_string())])),
-          ),
-          ("base2".to_string(), ClassName::Str("red".to_string())),
-        ])),
-        index: 0,
+    let config = r#"
+    {
+      "transforms": [{
+        "from": {
+          "specifier": "__preStyle",
+          "source": "@kaze-style/core"
+        },
+        "to": {
+          "specifier": "__style",
+          "source": "@kaze-style/core"
+        }
+      },
+      {
+        "from": {
+          "specifier": "__preGlobalStyle",
+          "source": "@kaze-style/core"
+        },
+        "to": {
+          "specifier": "__globalStyle",
+          "source": "@kaze-style/core"
+        }
       }],
-    }))
+      "imports": [{
+        "specifier": "ClassName",
+        "source": "@kaze-style/core"
+      }],
+      "styles": [{
+        "index": 0,
+        "arguments": [{
+          "kind": 5,
+          "value": [{
+              "kind": 6,
+              "key": "container",
+              "value": {
+                "kind": 0,
+                "value": "_11s457t"
+              }
+            },
+            {
+              "kind": 6,
+              "key": "$button",
+              "value": {
+                "kind": 7,
+                "constructor": "ClassName",
+                "value": {
+                  "kind": 5,
+                  "value": [{
+                    "kind": 6,
+                    "key": "color",
+                    "value": {
+                      "kind": 0,
+                      "value": "red"
+                    }
+                  }]
+                }
+              }
+            },
+            {
+              "kind": 6,
+              "key": "$blueButton",
+              "value": {
+                "kind": 7,
+                "constructor": "ClassName",
+                "value": {
+                  "kind": 5,
+                  "value": [{
+                      "kind": 6,
+                      "key": "color",
+                      "value": {
+                        "kind": 0,
+                        "value": "red"
+                      }
+                    },
+                    {
+                      "kind": 6,
+                      "key": "fontSize",
+                      "value": {
+                        "kind": 0,
+                        "value": "12px"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }]
+      }]
+    }
+  "#;
+
+    as_folder(TransformVisitor::new(json_to_config(Some(config.into()))))
   },
   test,
-  // Input codes
+  // Input
   r#"
-  import { __preStyle, __preGlobalStyle, mergeStyle } from '@kaze-style/core';
-  const c = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 0);
-  __preGlobalStyle({}, __forBuildByKazeStyle, "filename.ts", 1);
-  const c2 = __preStyle({}, __forBuildByKazeStyle, "filename.ts", 2);
+    import { __preStyle, __preGlobalStyle } from "@kaze-style/core";
+    __preGlobalStyle({});
+    __preStyle({}, null, null, 0);
+    notTouched();
   "#,
-  // Output codes after
+  // Output
   r#"
-  import { __style, __globalStyle, mergeStyle, ClassName } from '@kaze-style/core';
-  const c = __style({
-    "base": new ClassName({
-      "color": "red"
-    }),
-    "base1": new ClassName({
-      "color": "red"
-    }),
-    "base2": "red"
-  });
-  __globalStyle({});
-  const c2 = __style({});
+    import { __style, __globalStyle, ClassName as ClassName } from "@kaze-style/core";
+    __globalStyle();
+    __style({
+      container: "_11s457t",
+      $button: new ClassName({
+          color: "red"
+      }),
+      $blueButton: new ClassName({
+          color: "red",
+          fontSize: "12px"
+      })
+    });
+    notTouched();
   "#
 );

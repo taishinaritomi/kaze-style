@@ -25,8 +25,15 @@ export type ClassOverride<T, K extends string = '$class'> = ClassNameOverride<
 
 export type Selectors = [selector: string, atRules: string[], groups: string];
 
+type Temp = {
+  index: number;
+  arguments: any[];
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export type ForBuild<T extends string = string> = [
   filename: string,
   cssRules: CssRule[],
-  styles: [classes: StaticClasses<T>, index: number][],
+  styles: Temp[],
 ];

@@ -34,7 +34,7 @@
     "code-check": "cargo fmt --check",
     "type-check": "tsc --noEmit",
     "exports-check": "publint",
-    "dev": "tsx ./../../scripts/build --watch --exec='cargo watch -x \"build-wasi --release --quiet\"'",
+    "dev": "tsx ./../../scripts/build --watch",
     "build": "tsx ./../../scripts/build --exec='cargo build-wasi --release --quiet'"
   },
   "dependencies": {
