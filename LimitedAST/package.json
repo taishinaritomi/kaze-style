@@ -1,0 +1,9 @@
+{
+  "name": "ast-json",
+  "version": "0.0.0",
+  "author": "Taishi Naritomi",
+  "license": "MIT",
+  "devDependencies": {
+    "tsx": "^3.12.3"
+  }
+}

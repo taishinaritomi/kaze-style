@@ -1,0 +1,16 @@
+{
+  "argumentsList": [
+    {
+      "index": 0,
+      "arguments": [
+        { "type": "String", "value": "base" },
+        {
+          "type": "Object",
+          "properties": [
+            { "key": "", "value": { "type": "String", "value": "" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
