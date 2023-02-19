@@ -7,6 +7,8 @@ export * from './__style';
 export * from './__globalStyle';
 export * from './__preStyle';
 export * from './__preGlobalStyle';
+export * from './__className';
+export * from './__styleCollector';
 export * from './ClassName';
 export * from './styleOrder';
 export * from './sortCssRules';

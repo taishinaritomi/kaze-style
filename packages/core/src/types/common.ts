@@ -1,5 +1,6 @@
 import type { ClassName } from '../ClassName';
 import type { CssRule } from '../styleOrder';
+import type { Node } from './ast';
 import type { FirstChar } from './utils';
 
 export type Classes<T extends string> = {
@@ -30,3 +31,12 @@ export type ForBuild<T extends string = string> = [
   cssRules: CssRule[],
   styles: [classes: StaticClasses<T>, index: number][],
 ];
+
+export type BuildNew = {
+  filename: string;
+  cssRules: CssRule[];
+  injects: Array<{
+    args: Node[];
+    index: number;
+  }>;
+};
