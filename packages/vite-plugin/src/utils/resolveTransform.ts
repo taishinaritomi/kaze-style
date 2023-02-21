@@ -16,9 +16,7 @@ export const resolveTransform = async (
     code,
     {
       filename,
-      preTransformOptions: {
-        filename,
-      },
+      preTransformOptions: {},
     },
     compiler,
   );
@@ -49,7 +47,7 @@ export const resolveTransform = async (
       ],
     });
 
-    const [cssRules, styles] = extractionStyle(
+    const { cssRules, injectArguments } = extractionStyle(
       result.outputFiles[0]?.text || '',
       {
         filename,
@@ -60,7 +58,7 @@ export const resolveTransform = async (
       preTransformedCode,
       {
         filename,
-        transformOptions: { styles },
+        transformOptions: { injectArguments },
       },
       compiler,
     );

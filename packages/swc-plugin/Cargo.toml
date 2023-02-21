@@ -1,6 +1,6 @@
 [workspace]
 members = [
-  "plugins/*",
+  "crates/*",
 ]
 
 [profile.release]

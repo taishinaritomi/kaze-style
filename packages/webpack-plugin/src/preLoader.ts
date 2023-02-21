@@ -16,7 +16,7 @@ function loader(
     {
       filename: this.resourcePath,
       preTransformOptions: {
-        filename: this.resourcePath,
+        // filename: this.resourcePath,
       },
     },
     options.compiler,

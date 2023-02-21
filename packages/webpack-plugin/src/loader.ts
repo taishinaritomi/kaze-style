@@ -44,14 +44,14 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const [cssRules, styles] = extractionStyle(source, {
+        const { cssRules, injectArguments } = extractionStyle(source, {
           filename: this.resourcePath,
         });
         transform(
           sourceCode,
           {
             filename: this.resourcePath,
-            transformOptions: { styles },
+            transformOptions: { injectArguments },
           },
           options.compiler,
         ).then(([transformedCode]) => {

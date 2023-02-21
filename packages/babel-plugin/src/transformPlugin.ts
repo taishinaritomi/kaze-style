@@ -1,7 +1,7 @@
 import { types as t, template } from '@babel/core';
 import type { NodePath, PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { ForBuild } from '@kaze-style/core';
+// import type { ForBuild } from '@kaze-style/core';
 
 type Transform = {
   from: string;
@@ -37,7 +37,7 @@ const buildStyleImport = template(`
 `);
 
 export type TransformOptions = {
-  styles: ForBuild[2];
+  styles: any;
 };
 
 export const transformPlugin = declare<
@@ -52,7 +52,7 @@ export const transformPlugin = declare<
     visitor: {
       Program: {
         exit(path, state) {
-          const _styles = styles.map(([classes, index]) => ({
+          const _styles = styles.map(([classes, index]: any) => ({
             classes,
             index,
           }));
@@ -64,7 +64,7 @@ export const transformPlugin = declare<
               const indexArgPath = callExpressionPath.node
                 .arguments[3] as t.NumericLiteral;
               const classes = _styles.find(
-                (style) => style.index === indexArgPath.value,
+                (style: any) => style.index === indexArgPath.value,
               )?.classes;
               const objectProperties: t.ObjectProperty[] = [];
               for (const key in classes) {

@@ -26,17 +26,16 @@ export type ClassOverride<T, K extends string = '$class'> = ClassNameOverride<
 
 export type Selectors = [selector: string, atRules: string[], groups: string];
 
-export type ForBuild<T extends string = string> = [
-  filename: string,
-  cssRules: CssRule[],
-  styles: [classes: StaticClasses<T>, index: number][],
-];
+export type BuildArgument = {
+  filename: string;
+  injector: Injector;
+};
 
-export type BuildNew = {
+export type Injector = {
   filename: string;
   cssRules: CssRule[];
-  injects: Array<{
-    args: Node[];
-    index: number;
+  injectArguments: Array<{
+    value: Node[];
+    index: number | undefined;
   }>;
 };

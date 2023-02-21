@@ -5,19 +5,14 @@ export * from './resolveStyle';
 export * from './resolveGlobalStyle';
 export * from './__style';
 export * from './__globalStyle';
-export * from './__preStyle';
-export * from './__preGlobalStyle';
 export * from './__className';
-export * from './__styleCollector';
 export * from './ClassName';
 export * from './styleOrder';
 export * from './sortCssRules';
 export * from './uniqueCssRules';
 export * from './setCssRules';
-export type {
-  Classes,
-  ClassNameOverride,
-  ClassOverride,
-  ForBuild,
-} from './types/common';
+export * from './isBuildTime';
+export type { Classes, ClassNameOverride, ClassOverride } from './types/common';
+export type { Injector, BuildArgument } from './types/common';
+export type { Node } from './types/ast';
 export type { KazeStyle, KazeGlobalStyle, SupportStyle } from './types/style';

@@ -1,15 +1,11 @@
-import type { ForBuild } from '@kaze-style/core';
+// import type { TransformOptions } from '@kaze-style/build';
 import { transform as swcTransform } from '@swc/core';
-import type { Options as SwcOptions } from '@swc/core';
-
-type TransformOptions = {
-  styles: ForBuild[2];
-};
+// import type { Options as SwcOptions } from '@swc/core';
 
 type Options = {
   filename: string;
-  transformOptions: TransformOptions;
-  swcOptions?: SwcOptions;
+  transformOptions: any;
+  swcOptions?: any;
 };
 
 type Metadata = undefined;
@@ -19,10 +15,6 @@ export const transform = async (
   code: string,
   { filename, transformOptions, swcOptions = {} }: Options,
 ): Promise<Result> => {
-  const _styles = transformOptions.styles.map(([classes, index]) => ({
-    classes,
-    index,
-  }));
   const result = await swcTransform(code, {
     filename,
     swcrc: false,
@@ -37,14 +29,14 @@ export const transform = async (
       experimental: {
         ...swcOptions.jsc?.experimental,
         plugins: [
-          [
-            '@kaze-style/swc-plugin/_transform',
-            { ...transformOptions, styles: _styles },
-          ],
+          ['@kaze-style/swc-plugin/_transform', { ...transformOptions }],
           ...(swcOptions.jsc?.experimental?.plugins || []),
         ],
       },
     },
   });
+
+  // console.log(result.code);
+
   return [result.code, undefined];
 };

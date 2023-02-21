@@ -386,6 +386,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "helper"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "swc_core",
+]
+
+[[package]]
 name = "hermit-abi"
 version = "0.1.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -470,6 +479,7 @@ checksum = "4217ad341ebadf8d8e724e264f13e593e0648f5b3e94b3896a5df283be015ecc"
 name = "kaze-style-pre-transform-swc-plugin"
 version = "0.1.0"
 dependencies = [
+ "helper",
  "serde",
  "serde_json",
  "swc_core",
@@ -479,6 +489,7 @@ dependencies = [
 name = "kaze-style-transform-swc-plugin"
 version = "0.1.0"
 dependencies = [
+ "helper",
  "serde",
  "serde_json",
  "swc_core",
