@@ -26,50 +26,53 @@ suite(
         // tsx: true,
         experimental: {
           plugins: [
-            ['swc-plugin', {
-              "transforms": [
-                {
-                  "source": "target_source",
-                  "from": "target",
-                  "pre": "__preTarget",
-                  "to": "__target"
-                },
-                {
-                  "source": "target_source",
-                  "from": "gTarget",
-                  "pre": "__preGTarget",
-                  "to": "__gTarget"
-                },
-              ],
-              "buildArg": {
-                "type": "Object",
-                "properties": [
+            [
+              'swc-plugin',
+              {
+                transforms: [
                   {
-                    "key": "filename",
-                    "value": {
-                      "type": "String",
-                      "value": "filename.ts"
-                    },
+                    source: 'target_source',
+                    from: 'target',
+                    pre: '__preTarget',
+                    to: '__target',
                   },
                   {
-                    "key": "build",
-                    "value": {
-                      "type": "Identifier",
-                      "name": "for_build"
-                    },
-                  }
+                    source: 'target_source',
+                    from: 'gTarget',
+                    pre: '__preGTarget',
+                    to: '__gTarget',
+                  },
                 ],
+                buildArg: {
+                  type: 'Object',
+                  properties: [
+                    {
+                      key: 'filename',
+                      value: {
+                        type: 'String',
+                        value: 'filename.ts',
+                      },
+                    },
+                    {
+                      key: 'build',
+                      value: {
+                        type: 'Identifier',
+                        name: 'for_build',
+                      },
+                    },
+                  ],
+                },
+                collector: {
+                  exportName: '__collector',
+                  specifier: 'collector',
+                },
+                imports: [],
               },
-              "collector": {
-                "exportName": "__collector",
-                "specifier": "collector",
-              },
-              "imports": []
-          }],
+            ],
           ],
         },
       },
-    })
+    });
   }),
   cycle(),
   complete(),
@@ -85,49 +88,52 @@ suite(
       // tsx: true,
       experimental: {
         plugins: [
-          ['swc-plugin', {
-            "transforms": [
-              {
-                "source": "target_source",
-                "from": "target",
-                "pre": "__preTarget",
-                "to": "__target"
-              },
-              {
-                "source": "target_source",
-                "from": "gTarget",
-                "pre": "__preGTarget",
-                "to": "__gTarget"
-              },
-            ],
-            "buildArg": {
-              "type": "Object",
-              "properties": [
+          [
+            'swc-plugin',
+            {
+              transforms: [
                 {
-                  "key": "filename",
-                  "value": {
-                    "type": "String",
-                    "value": "filename.ts"
-                  },
+                  source: 'target_source',
+                  from: 'target',
+                  pre: '__preTarget',
+                  to: '__target',
                 },
                 {
-                  "key": "build",
-                  "value": {
-                    "type": "Identifier",
-                    "name": "for_build"
-                  },
-                }
+                  source: 'target_source',
+                  from: 'gTarget',
+                  pre: '__preGTarget',
+                  to: '__gTarget',
+                },
               ],
+              buildArg: {
+                type: 'Object',
+                properties: [
+                  {
+                    key: 'filename',
+                    value: {
+                      type: 'String',
+                      value: 'filename.ts',
+                    },
+                  },
+                  {
+                    key: 'build',
+                    value: {
+                      type: 'Identifier',
+                      name: 'for_build',
+                    },
+                  },
+                ],
+              },
+              collector: {
+                exportName: '__collector',
+                specifier: 'collector',
+              },
+              imports: [],
             },
-            "collector": {
-              "exportName": "__collector",
-              "specifier": "collector",
-            },
-            "imports": []
-        }],
+          ],
         ],
       },
     },
-  })
+  });
   console.log(result.code);
 })();
