@@ -121,8 +121,9 @@ impl TransformVisitor {
           spread: None,
           expr: Box::new(self.inject_argument.clone()),
         });
+        let target_index: f64 = self.target_index.into();
         call_expr.args.push(ExprOrSpread {
-          expr: Box::new(Expr::Lit(Lit::Num(Number::from(self.target_index as f64)))),
+          expr: Box::new(Expr::Lit(Lit::Num(Number::from(target_index)))),
           spread: None,
         });
         self.target_index += 1;

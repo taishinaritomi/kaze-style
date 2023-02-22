@@ -128,7 +128,8 @@ impl TransformVisitor {
               Some(argument_index) => {
                 let mut is_transform = false;
                 for inject_argument in self.inject_arguments.iter() {
-                  if (inject_argument.index as f64) == argument_index {
+                  let inject_argument_index: f64 = inject_argument.index.into();
+                  if inject_argument_index == argument_index {
                     call_expr.args = inject_argument.value.clone();
                     is_transform = true;
                     break;
