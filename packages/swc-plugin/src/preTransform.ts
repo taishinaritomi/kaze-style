@@ -1,11 +1,10 @@
-// import type { PreTransformOptions } from '@kaze-style/build';
 import { transform as swcTransform } from '@swc/core';
-// import type { Options as SwcOptions } from '@swc/core';
+import type { Options as SwcOptions } from '@swc/core';
 
 type Options = {
   filename: string;
-  preTransformOptions: any;
-  swcOptions?: any;
+  preTransformOptions: Record<string, unknown>;
+  swcOptions?: SwcOptions;
 };
 
 type Metadata = { isTransformed: boolean };

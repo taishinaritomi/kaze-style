@@ -1,11 +1,11 @@
 // import type { TransformOptions } from '@kaze-style/build';
 import { transform as swcTransform } from '@swc/core';
-// import type { Options as SwcOptions } from '@swc/core';
+import type { Options as SwcOptions } from '@swc/core';
 
 type Options = {
   filename: string;
-  transformOptions: any;
-  swcOptions?: any;
+  transformOptions: Record<string, unknown>;
+  swcOptions?: SwcOptions;
 };
 
 type Metadata = undefined;
@@ -35,8 +35,5 @@ export const transform = async (
       },
     },
   });
-
-  // console.log(result.code);
-
   return [result.code, undefined];
 };
