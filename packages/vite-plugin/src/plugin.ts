@@ -1,3 +1,4 @@
+import type { TransformOptions } from '@kaze-style/build';
 import { cssRulesToString, stringToCssRules } from '@kaze-style/build';
 import type { CssRule } from '@kaze-style/core';
 import type { Plugin } from 'vite';
@@ -6,11 +7,13 @@ import { resolveTransform } from './utils/resolveTransform';
 type KazeConfig = {
   swc?: boolean;
   cssLayer?: boolean;
+  imports?: TransformOptions['imports'];
+  transforms?: TransformOptions['transforms'];
 };
 
 export const plugin = (_kazeConfig: KazeConfig = {}): Plugin => {
   const kazeConfig = Object.assign(
-    { swc: false, cssLayer: false },
+    { swc: false, cssLayer: false,imports: [],transforms: [] },
     _kazeConfig,
   );
   const cssRulesMap = new Map<string, CssRule[]>();
@@ -60,6 +63,8 @@ export const plugin = (_kazeConfig: KazeConfig = {}): Plugin => {
       const [transformedCode, _cssRules] = await resolveTransform(code, {
         filename: validId || '',
         compiler: kazeConfig.swc ? 'swc' : 'babel',
+        imports: kazeConfig.imports,
+        transforms: kazeConfig.transforms,
       });
       let filePrefix = '';
       if (_cssRules.length !== 0) {

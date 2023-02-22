@@ -1,10 +1,11 @@
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
+import type { TransformOptions } from '@kaze-style/build';
 import {
   cssRulesToString,
   extractionStyle,
-  transform,
+  transform
 } from '@kaze-style/build';
 import type {
   LoaderDefinitionFunction,
@@ -26,6 +27,8 @@ function loader(
     compiler: 'swc' | 'babel';
     virtualLoader: boolean;
     preCssOutputPath: string;
+    imports: TransformOptions['imports'],
+    transforms: TransformOptions['transforms']
   }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
@@ -51,7 +54,11 @@ function loader(
           sourceCode,
           {
             filename: this.resourcePath,
-            transformOptions: { injectArguments },
+            transformOptions: {
+              injectArguments,
+              imports: options.imports,
+              transforms: options.transforms
+            },
           },
           options.compiler,
         ).then(([transformedCode]) => {
