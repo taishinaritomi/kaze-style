@@ -30,8 +30,8 @@ pub struct Transform {
 }
 
 pub struct TransformVisitor {
-  target_index: usize,
-  ident_index: usize,
+  target_index: u8,
+  ident_index: u8,
   is_use_name_space: bool,
   is_transformed: bool,
   transformed_comment: String,

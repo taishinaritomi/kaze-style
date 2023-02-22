@@ -21,7 +21,7 @@ pub struct InputImport {
 #[serde(rename_all = "camelCase")]
 pub struct InputArgument {
   pub value: Vec<Node>,
-  pub index: usize,
+  pub index: u8,
 }
 
 pub fn parse_config(json: &str) -> InputConfig {

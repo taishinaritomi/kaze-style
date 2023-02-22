@@ -32,7 +32,7 @@ pub struct TransformVisitor {
 }
 pub struct ArgumentExpr {
   value: Vec<ExprOrSpread>,
-  index: usize,
+  index: u8,
 }
 
 impl TransformVisitor {
