@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 use helper::ast_node::Node;
-use helper::common_config::{InputImport, InputTransform};
+use helper::common_config::InputTransform;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -9,6 +9,12 @@ pub struct InputConfig {
   pub transforms: Vec<InputTransform>,
   pub inject_arguments: Vec<InputArgument>,
   pub imports: Vec<InputImport>,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct InputImport {
+  pub source: String,
+  pub specifier: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -9,9 +9,8 @@ use swc_core::{
   ecma::{
     ast::{
       ArrayLit, BindingIdent, CallExpr, Callee, Decl, ExportDecl, Expr, ExprOrSpread, Id, Ident,
-      ImportDecl, ImportNamedSpecifier, ImportSpecifier, Lit, MemberExpr, MemberProp, Module,
-      ModuleDecl, ModuleExportName, ModuleItem, Number, Pat, Program, Stmt, Str, VarDecl,
-      VarDeclKind, VarDeclarator,
+      ImportSpecifier, Lit, MemberExpr, MemberProp, Module, ModuleDecl, ModuleExportName,
+      ModuleItem, Number, Pat, Program, Stmt, VarDecl, VarDeclKind, VarDeclarator,
     },
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
   },
@@ -22,7 +21,6 @@ use swc_core::{
 };
 
 use helper::ast_node::node_to_expr;
-use helper::common_config::InputImport;
 
 pub struct Transform {
   from: String,
@@ -39,7 +37,6 @@ pub struct TransformVisitor {
   transformed_comment: String,
   comments: PluginCommentsProxy,
   transforms: Vec<Transform>,
-  input_imports: Vec<InputImport>,
   input_collector_export_name: String,
   collectors: Vec<Expr>,
   inject_argument: Expr,
@@ -65,7 +62,6 @@ impl TransformVisitor {
       is_transformed: false,
       comments: comments,
       transforms: transforms,
-      input_imports: input_config.imports,
       transformed_comment: input_config.transformed_comment,
       input_collector_export_name: input_config.collector_export_name,
       inject_argument: node_to_expr(&input_config.inject_argument),
@@ -147,7 +143,6 @@ impl TransformVisitor {
                 match &mut member_expr.prop {
                   MemberProp::Ident(prop_ident) => {
                     if prop_ident.sym == transform.from {
-                      // prop_ident.sym = (&transform.to as &str).into();
                       transform.ids.push(prop_ident.to_id());
                     }
                   }
@@ -190,11 +185,6 @@ impl TransformVisitor {
                       Some(import_ident) => {
                         if import_ident.sym.to_string() == transform.from {
                           transform.ids.push(import_named.local.to_id());
-                          // import_named.imported = Some(ModuleExportName::Ident(Ident {
-                          //   optional: false,
-                          //   span: DUMMY_SP,
-                          //   sym: (&transform.to as &str).into(),
-                          // }));
                         }
                       }
                       None => {}
@@ -326,34 +316,6 @@ impl TransformVisitor {
     }
   }
 
-  fn add_imports(&mut self, module: &mut Module) {
-    for import in self.input_imports.iter() {
-      module.body.insert(
-        0,
-        ModuleItem::ModuleDecl(ModuleDecl::Import(ImportDecl {
-          span: DUMMY_SP,
-          asserts: None,
-          type_only: false,
-          src: Box::new(Str {
-            span: DUMMY_SP,
-            raw: None,
-            value: import.source.clone().into(),
-          }),
-          specifiers: vec![ImportSpecifier::Named(ImportNamedSpecifier {
-            span: DUMMY_SP,
-            imported: None,
-            is_type_only: false,
-            local: Ident {
-              span: DUMMY_SP,
-              optional: false,
-              sym: import.specifier.clone().into(),
-            },
-          })],
-        })),
-      );
-    }
-  }
-
   fn add_transformed_comment(&mut self, module: &mut Module) {
     if self.is_transformed == true {
       self.comments.add_leading(
@@ -391,7 +353,6 @@ impl VisitMut for TransformVisitor {
 
   fn visit_mut_module(&mut self, module: &mut Module) {
     self.target_imports_extract_id(module);
-    self.add_imports(module);
     module.visit_mut_children_with(self);
     self.add_collections(module);
     self.add_transformed_comment(module);
@@ -446,8 +407,7 @@ mod tests {
           ],
         },
         "collectorExportName": "__collector",
-        "transformedComment": "transformedComment",
-        "imports": []
+        "transformedComment": "transformedComment"
     })
     .to_string();
     parse_config(&config_json)

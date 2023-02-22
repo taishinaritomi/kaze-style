@@ -1,5 +1,5 @@
 mod config;
-use config::{parse_config, InputConfig};
+use config::{parse_config, InputConfig, InputImport};
 
 use swc_core::{
   common::DUMMY_SP,
@@ -15,7 +15,6 @@ use swc_core::{
 };
 
 use helper::ast_node::node_to_expr;
-use helper::common_config::InputImport;
 
 pub struct Transform {
   from: String,
@@ -26,8 +25,6 @@ pub struct Transform {
 }
 
 pub struct TransformVisitor {
-  // target_index: usize,
-  // ident_index: usize,
   is_use_name_space: bool,
   transforms: Vec<Transform>,
   input_imports: Vec<InputImport>,
@@ -67,8 +64,6 @@ impl TransformVisitor {
       })
       .collect::<Vec<ArgumentExpr>>();
     Self {
-      // target_index: 0,
-      // ident_index: 0,
       is_use_name_space: false,
       transforms: transforms,
       input_imports: input_config.imports,
@@ -152,16 +147,6 @@ impl TransformVisitor {
             call_expr.args = vec![];
           }
         }
-        // call_expr.args =
-        // call_expr.args.push(ExprOrSpread {
-        //   spread: None,
-        //   expr: Box::new(self.inject_arguments.clone()),
-        // });
-        // call_expr.args.push(ExprOrSpread {
-        //   expr: Box::new(Expr::Lit(Lit::Num(Number::from(self.target_index as f64)))),
-        //   spread: None,
-        // });
-        // self.target_index += 1;
       }
     }
   }
@@ -256,73 +241,6 @@ impl TransformVisitor {
     }
   }
 
-  // fn var_decl_extract_collector(&mut self, var_decl: &VarDecl) {
-  //   for var_declarator in var_decl.decls.iter() {
-  //     match &var_declarator.init {
-  //       Some(init_expr) => match &**init_expr {
-  //         Expr::Call(call_expr) => {
-  //           for transform in self.transforms.iter() {
-  //             if self.is_target_call_expr(&call_expr, transform) == true {
-  //               match &var_declarator.name {
-  //                 Pat::Ident(ident) => {
-  //                   self.collectors.push(Expr::Ident(ident.id.clone()));
-  //                 }
-  //                 _ => {}
-  //               }
-  //             }
-  //           }
-  //         }
-  //         _ => {}
-  //       },
-  //       None => {}
-  //     }
-  //   }
-  // }
-
-  // fn top_level_call_expr_extract_collector(&mut self, module_item: &mut ModuleItem) {
-  //   match &module_item {
-  //     ModuleItem::Stmt(stmt) => match stmt {
-  //       Stmt::Expr(expr_stmt) => match &*expr_stmt.expr {
-  //         Expr::Call(call_expr) => {
-  //           for transform in self.transforms.iter() {
-  //             if self.is_target_call_expr(call_expr, transform) == true {
-  //               let ident = self.create_unique_ident();
-  //               self.collectors.push(Expr::Ident(ident.clone()));
-  //               self.ident_index += 1;
-  //               *module_item = ModuleItem::Stmt(Stmt::Decl(Decl::Var(Box::new(VarDecl {
-  //                 span: DUMMY_SP,
-  //                 kind: VarDeclKind::Const,
-  //                 declare: false,
-  //                 decls: vec![VarDeclarator {
-  //                   init: Some(Box::new(Expr::Call(call_expr.clone()))),
-  //                   definite: false,
-  //                   span: DUMMY_SP,
-  //                   name: Pat::Ident(BindingIdent {
-  //                     id: ident,
-  //                     type_ann: None,
-  //                   }),
-  //                 }],
-  //               }))));
-  //               break;
-  //             }
-  //           }
-  //         }
-  //         _ => {}
-  //       },
-  //       _ => {}
-  //     },
-  //     ModuleItem::ModuleDecl(_) => {}
-  //   }
-  // }
-
-  // fn create_unique_ident(&mut self) -> Ident {
-  //   Ident {
-  //     optional: false,
-  //     span: DUMMY_SP,
-  //     sym: format!("__{}", self.ident_index).clone().into(),
-  //   }
-  // }
-
   fn add_imports(&mut self, module: &mut Module) {
     for import in self.input_imports.iter() {
       module.body.insert(
@@ -365,12 +283,10 @@ impl VisitMut for TransformVisitor {
 
   fn visit_mut_var_decl(&mut self, var_decl: &mut VarDecl) {
     var_decl.visit_mut_children_with(self);
-    // self.var_decl_extract_collector(var_decl);
   }
 
   fn visit_mut_module_item(&mut self, module_item: &mut ModuleItem) {
     module_item.visit_mut_children_with(self);
-    // self.top_level_call_expr_extract_collector(module_item);
   }
 
   fn visit_mut_module(&mut self, module: &mut Module) {
