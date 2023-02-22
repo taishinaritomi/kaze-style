@@ -20,7 +20,7 @@ export const resolveTransform = async (
     {
       filename,
       preTransformOptions: {
-        transforms: transforms
+        transforms: transforms,
       },
     },
     compiler,

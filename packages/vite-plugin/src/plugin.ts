@@ -13,7 +13,7 @@ type KazeConfig = {
 
 export const plugin = (_kazeConfig: KazeConfig = {}): Plugin => {
   const kazeConfig = Object.assign(
-    { swc: false, cssLayer: false,imports: [],transforms: [] },
+    { swc: false, cssLayer: false, imports: [], transforms: [] },
     _kazeConfig,
   );
   const cssRulesMap = new Map<string, CssRule[]>();

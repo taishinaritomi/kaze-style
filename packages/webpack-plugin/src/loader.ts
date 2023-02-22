@@ -5,7 +5,7 @@ import type { TransformOptions } from '@kaze-style/build';
 import {
   cssRulesToString,
   extractionStyle,
-  transform
+  transform,
 } from '@kaze-style/build';
 import type {
   LoaderDefinitionFunction,
@@ -27,8 +27,8 @@ function loader(
     compiler: 'swc' | 'babel';
     virtualLoader: boolean;
     preCssOutputPath: string;
-    imports: TransformOptions['imports'],
-    transforms: TransformOptions['transforms']
+    imports: TransformOptions['imports'];
+    transforms: TransformOptions['transforms'];
   }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
@@ -57,7 +57,7 @@ function loader(
             transformOptions: {
               injectArguments,
               imports: options.imports,
-              transforms: options.transforms
+              transforms: options.transforms,
             },
           },
           options.compiler,

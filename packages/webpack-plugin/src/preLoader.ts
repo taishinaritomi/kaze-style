@@ -4,7 +4,10 @@ import type { LoaderContext } from 'webpack';
 import type { WebpackLoaderParams } from './loader';
 
 function loader(
-  this: LoaderContext<{ compiler: 'swc' | 'babel', transforms: TransformOptions['transforms'] }>,
+  this: LoaderContext<{
+    compiler: 'swc' | 'babel';
+    transforms: TransformOptions['transforms'];
+  }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
   additionalData: WebpackLoaderParams[2],
@@ -17,7 +20,7 @@ function loader(
     {
       filename: this.resourcePath,
       preTransformOptions: {
-        transforms: options.transforms
+        transforms: options.transforms,
       },
     },
     options.compiler,
