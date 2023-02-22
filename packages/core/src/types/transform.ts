@@ -1,4 +1,4 @@
-import type { Injector } from "./common";
+import type { Injector } from './common';
 
 export type Transforms = Array<{
   source: string;

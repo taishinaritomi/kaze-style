@@ -12,7 +12,12 @@ export { sortCssRules } from './sortCssRules';
 export { uniqueCssRules } from './uniqueCssRules';
 export { setCssRules } from './setCssRules';
 export { isBuildTime } from './isBuildTime';
-export type { Classes, ClassNameOverride, ClassOverride, CssRule } from './types/common';
+export type {
+  Classes,
+  ClassNameOverride,
+  ClassOverride,
+  CssRule,
+} from './types/common';
 export type { Injector, BuildArgument } from './types/common';
 export type {
   Node,
