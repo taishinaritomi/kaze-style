@@ -3,8 +3,8 @@ import type { Injector } from '@kaze-style/core';
 // import { transform as babelTransform } from '@kaze-style/babel-plugin';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { transform as swcTransform } from '@kaze-style/swc-plugin';
-import type { Imports, Transforms } from './constants';
-import { DEFAULT_IMPORTS, DEFAULT_TRANSFORMS } from './constants';
+import { DEFAULT_TRANSFORMS } from './constants';
+import type { Import, Transform } from './types';
 
 type Options = {
   filename: string;
@@ -14,8 +14,8 @@ type Options = {
 };
 
 export type TransformOptions = {
-  transforms: Transforms;
-  imports: Imports;
+  imports: Import[];
+  transforms: Transform[];
   injectArguments: Injector['injectArguments'];
 };
 
@@ -28,7 +28,13 @@ export const transform = async (
   babelOptions;
   const option: TransformOptions = {
     injectArguments: transformOptions.injectArguments || [],
-    imports: [...DEFAULT_IMPORTS, ...(transformOptions.imports || [])],
+    imports: [
+      {
+        source: '@kaze-style/core',
+        specifier: '__className',
+      },
+      ...(transformOptions.imports || []),
+    ],
     transforms: [...DEFAULT_TRANSFORMS, ...(transformOptions.transforms || [])],
   };
   // if (compiler === 'swc') {

@@ -6,14 +6,9 @@ import type {
 import type { Node } from '@kaze-style/core';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
-import type { Imports, Transforms } from './constants';
-import { COLLECTOR_NAME } from './constants';
-import {
-  DEFAULT_IMPORTS,
-  DEFAULT_TRANSFORMS,
-  GET_DEFAULT_INJECT_ARGUMENT,
-} from './constants';
-// import { BUILD_ARGUMENT_NAME } from './constants';
+import { BUILD_ARGUMENT_NAME } from './constants';
+import { COLLECTOR_NAME, DEFAULT_TRANSFORMS } from './constants';
+import type { Transform } from './types';
 
 type Options = {
   filename: string;
@@ -23,9 +18,8 @@ type Options = {
 };
 
 export type PreTransformOptions = {
-  transforms: Transforms;
   injectArgument: Node;
-  imports: Imports;
+  transforms: Transform[];
   collectorExportName: string;
 };
 
@@ -43,8 +37,25 @@ export const preTransform = async (
   babelOptions;
   const option: PreTransformOptions = {
     collectorExportName: COLLECTOR_NAME,
-    injectArgument: GET_DEFAULT_INJECT_ARGUMENT(filename),
-    imports: [...DEFAULT_IMPORTS, ...(preTransformOptions.imports || [])],
+    injectArgument: {
+      type: 'Object',
+      properties: [
+        {
+          key: 'filename',
+          value: {
+            type: 'String',
+            value: filename,
+          },
+        },
+        {
+          key: 'injector',
+          value: {
+            type: 'Identifier',
+            name: BUILD_ARGUMENT_NAME,
+          },
+        },
+      ],
+    },
     transforms: [
       ...DEFAULT_TRANSFORMS,
       ...(preTransformOptions.transforms || []),
