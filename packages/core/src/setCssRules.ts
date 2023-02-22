@@ -1,4 +1,4 @@
-import type { CssRule } from './styleOrder';
+import type { CssRule } from './types/common';
 import { getStyleElements } from './utils/getStyleElements';
 
 export const setCssRules = (cssRules: CssRule[]) => {

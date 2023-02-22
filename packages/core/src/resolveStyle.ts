@@ -1,8 +1,7 @@
 import { ClassName } from './ClassName';
 import { compileAtomicCss } from './compileAtomicCss';
 import { compileNotAtomicCss } from './compileNotAtomicCss';
-import type { CssRule } from './styleOrder';
-import type { Classes, StaticClasses } from './types/common';
+import type { Classes, StaticClasses, CssRule } from './types/common';
 import type { KazeStyle } from './types/style';
 import { uniqueCssRules } from './uniqueCssRules';
 import { hashStyle } from './utils/hashStyle';

@@ -1,5 +1,5 @@
 import { compileNotAtomicCss } from './compileNotAtomicCss';
-import type { CssRule } from './styleOrder';
+import type { CssRule } from './types/common';
 import type { KazeGlobalStyle } from './types/style';
 import { uniqueCssRules } from './uniqueCssRules';
 

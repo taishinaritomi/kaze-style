@@ -1,7 +1,9 @@
 import type { ClassName } from '../ClassName';
-import type { CssRule } from '../styleOrder';
+import type { StyleOrder } from '../styleOrder';
 import type { Node } from './ast';
 import type { FirstChar } from './utils';
+
+export type CssRule = [value: string, order: StyleOrder];
 
 export type Classes<T extends string> = {
   [P in T]: FirstChar<P> extends '$' ? ClassName['Type'] : string;
