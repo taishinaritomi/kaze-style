@@ -39,7 +39,7 @@ pub struct TransformVisitor {
   transforms: Vec<Transform>,
   input_collector_export_name: String,
   collectors: Vec<Expr>,
-  inject_argument: Expr,
+  build_arg: Expr,
 }
 
 impl TransformVisitor {
@@ -64,7 +64,7 @@ impl TransformVisitor {
       transforms: transforms,
       transformed_comment: input_config.transformed_comment,
       input_collector_export_name: input_config.collector_export_name,
-      inject_argument: node_to_expr(&input_config.inject_argument),
+      build_arg: node_to_expr(&input_config.build_arg),
     }
   }
 
@@ -119,7 +119,7 @@ impl TransformVisitor {
       if is_target == true {
         call_expr.args.push(ExprOrSpread {
           spread: None,
-          expr: Box::new(self.inject_argument.clone()),
+          expr: Box::new(self.build_arg.clone()),
         });
         let target_index: f64 = self.target_index.into();
         call_expr.args.push(ExprOrSpread {
@@ -388,7 +388,7 @@ mod tests {
             "to": "__target"
           },
         ],
-        "injectArgument": {
+        "buildArg": {
           "type": "Object",
           "properties": [
             {
@@ -399,10 +399,10 @@ mod tests {
               },
             },
             {
-              "key": "build",
+              "key": "injector",
               "value": {
                 "type": "Identifier",
-                "name": "for_build"
+                "name": "injector"
               },
             }
           ],
@@ -426,8 +426,8 @@ mod tests {
     // Output codes after
     r#"
     import { target } from 'target_source';
-    const x0 = target({}, { "filename": "filename.ts", "build": for_build }, 0);
-    const __0 = target({}, { "filename": "filename.ts", "build": for_build }, 1);
+    const x0 = target({}, { "filename": "filename.ts", "injector": injector }, 0);
+    const __0 = target({}, { "filename": "filename.ts", "injector": injector }, 1);
     export const __collector = [ x0, __0 ];
     "#
   );
@@ -447,8 +447,8 @@ mod tests {
     r#"
     import { target as _target1 } from 'target_source';
     import { target as _target2 } from 'target_source';
-    const x0 = _target1({}, { "filename": "filename.ts", "build": for_build }, 0);
-    const x1 = _target2({}, { "filename": "filename.ts", "build": for_build }, 1);
+    const x0 = _target1({}, { "filename": "filename.ts", "injector": injector }, 0);
+    const x1 = _target2({}, { "filename": "filename.ts", "injector": injector }, 1);
     export const __collector = [ x0, x1 ];
     "#
   );
@@ -468,8 +468,8 @@ mod tests {
     r#"
     import * as namespace0 from 'target_source';
     import * as namespace1 from 'target_source';
-    const x0 = namespace0.target({}, { "filename": "filename.ts", "build": for_build }, 0);
-    const x1 = namespace1.target({}, { "filename": "filename.ts", "build": for_build }, 1);
+    const x0 = namespace0.target({}, { "filename": "filename.ts", "injector": injector }, 0);
+    const x1 = namespace1.target({}, { "filename": "filename.ts", "injector": injector }, 1);
     export const __collector = [ x0, x1 ];
     "#
   );
@@ -494,11 +494,11 @@ mod tests {
     import { target, target as _target } from 'target_source';
     import { target as __target } from 'target_source';
     import * as namespace from 'target_source';
-    const x0 = target({}, { "filename": "filename.ts", "build": for_build }, 0);
-    const x1 = _target({}, { "filename": "filename.ts", "build": for_build }, 1);
-    const x2 = __target({}, { "filename": "filename.ts", "build": for_build }, 2);
-    const x3 = namespace.target({}, { "filename": "filename.ts", "build": for_build }, 3);
-    const __0 = namespace.target({}, { "filename": "filename.ts", "build": for_build }, 4);
+    const x0 = target({}, { "filename": "filename.ts", "injector": injector }, 0);
+    const x1 = _target({}, { "filename": "filename.ts", "injector": injector }, 1);
+    const x2 = __target({}, { "filename": "filename.ts", "injector": injector }, 2);
+    const x3 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 3);
+    const __0 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     const x4 = namespace.dummy({});
     export const __collector = [ x0, x1, x2, x3, __0 ];
     "#
@@ -521,11 +521,11 @@ mod tests {
     "#,
     // Output codes after
     r#"
-    const x0 = target({}, { "filename": "filename.ts", "build": for_build }, 0);
-    const x1 = _target({}, { "filename": "filename.ts", "build": for_build }, 1);
-    const x2 = __target({}, { "filename": "filename.ts", "build": for_build }, 2);
-    const x3 = namespace.target({}, { "filename": "filename.ts", "build": for_build }, 3);
-    const __0 = namespace.target({}, { "filename": "filename.ts", "build": for_build }, 4);
+    const x0 = target({}, { "filename": "filename.ts", "injector": injector }, 0);
+    const x1 = _target({}, { "filename": "filename.ts", "injector": injector }, 1);
+    const x2 = __target({}, { "filename": "filename.ts", "injector": injector }, 2);
+    const x3 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 3);
+    const __0 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     const x4 = namespace.dummy({});
     import { target, target as _target } from 'target_source';
     import { target as __target } from 'target_source';

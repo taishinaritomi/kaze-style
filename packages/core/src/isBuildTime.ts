@@ -1,9 +1,7 @@
-import type { BuildArgument } from './types/common';
+import type { BuildArg } from './types/common';
 
 export const isBuildTime = (
-  buildArgument: BuildArgument | undefined,
-): buildArgument is BuildArgument => {
-  return buildArgument
-    ? buildArgument.filename === buildArgument.injector.filename
-    : false;
+  buildArg: BuildArg | undefined,
+): buildArg is BuildArg => {
+  return buildArg ? buildArg.filename === buildArg.injector.filename : false;
 };

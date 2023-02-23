@@ -7,7 +7,7 @@ use helper::common_config::InputTransform;
 #[serde(rename_all = "camelCase")]
 pub struct InputConfig {
   pub transforms: Vec<InputTransform>,
-  pub inject_arguments: Vec<InputArgument>,
+  pub inject_args: Vec<InputArgument>,
   pub imports: Vec<InputImport>,
 }
 

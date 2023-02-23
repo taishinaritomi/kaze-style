@@ -16,7 +16,7 @@ type Options = {
 export type TransformOptions = {
   imports: Import[];
   transforms: Transform[];
-  injectArguments: Injector['injectArguments'];
+  injectArgs: Injector['args'];
 };
 
 export const transform = async (
@@ -27,7 +27,7 @@ export const transform = async (
   compiler;
   babelOptions;
   const option: TransformOptions = {
-    injectArguments: transformOptions.injectArguments || [],
+    injectArgs: transformOptions.injectArgs || [],
     imports: [
       {
         source: '@kaze-style/core',
@@ -43,6 +43,7 @@ export const transform = async (
     swcOptions,
     transformOptions: option,
   });
+
   return [transformedCode, metadata] as const;
   // } else {
   //   const [transformedCode, metadata] = await babelTransform(code, {

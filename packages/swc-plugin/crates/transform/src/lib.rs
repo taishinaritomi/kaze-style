@@ -28,9 +28,9 @@ pub struct TransformVisitor {
   is_use_name_space: bool,
   transforms: Vec<Transform>,
   input_imports: Vec<InputImport>,
-  inject_arguments: Vec<ArgumentExpr>,
+  inject_args: Vec<ArgExpr>,
 }
-pub struct ArgumentExpr {
+pub struct ArgExpr {
   value: Vec<ExprOrSpread>,
   index: u8,
 }
@@ -48,26 +48,26 @@ impl TransformVisitor {
         name_space_ids: vec![],
       })
       .collect::<Vec<Transform>>();
-    let inject_arguments = input_config
-      .inject_arguments
+    let inject_args = input_config
+      .inject_args
       .iter()
-      .map(|inject_argument| ArgumentExpr {
-        index: inject_argument.index,
-        value: inject_argument
+      .map(|inject_arg| ArgExpr {
+        index: inject_arg.index,
+        value: inject_arg
           .value
           .iter()
-          .map(|argument| ExprOrSpread {
-            expr: Box::new(node_to_expr(argument)),
+          .map(|arg| ExprOrSpread {
+            expr: Box::new(node_to_expr(arg)),
             spread: None,
           })
           .collect::<Vec<ExprOrSpread>>(),
       })
-      .collect::<Vec<ArgumentExpr>>();
+      .collect::<Vec<ArgExpr>>();
     Self {
       is_use_name_space: false,
       transforms: transforms,
       input_imports: input_config.imports,
-      inject_arguments: inject_arguments,
+      inject_args: inject_args,
     }
   }
 
@@ -120,17 +120,17 @@ impl TransformVisitor {
     for transform in self.transforms.iter() {
       let is_target = self.is_target_call_expr(call_expr, transform);
       if is_target == true {
-        let last_argument = call_expr.args.last();
-        match last_argument {
-          Some(last_argument) => {
-            let argument_index = self.get_index_number(&*last_argument.expr);
-            match argument_index {
-              Some(argument_index) => {
+        let last_arg = call_expr.args.last();
+        match last_arg {
+          Some(last_arg) => {
+            let arg_index = self.get_index_number(&*last_arg.expr);
+            match arg_index {
+              Some(arg_index) => {
                 let mut is_transform = false;
-                for inject_argument in self.inject_arguments.iter() {
-                  let inject_argument_index: f64 = inject_argument.index.into();
-                  if inject_argument_index == argument_index {
-                    call_expr.args = inject_argument.value.clone();
+                for inject_arg in self.inject_args.iter() {
+                  let inject_arg_index: f64 = inject_arg.index.into();
+                  if inject_arg_index == arg_index {
+                    call_expr.args = inject_arg.value.clone();
                     is_transform = true;
                     break;
                   }
@@ -319,7 +319,7 @@ mod tests {
             "to": "__target"
           },
         ],
-        "injectArguments": [
+        "injectArgs": [
           {
             "value": [
               {

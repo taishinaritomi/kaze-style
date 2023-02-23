@@ -28,7 +28,7 @@ export type ClassOverride<T, K extends string = '$class'> = ClassNameOverride<
 
 export type Selectors = [selector: string, atRules: string[], groups: string];
 
-export type BuildArgument = {
+export type BuildArg = {
   filename: string;
   injector: Injector;
 };
@@ -36,8 +36,5 @@ export type BuildArgument = {
 export type Injector = {
   filename: string;
   cssRules: CssRule[];
-  injectArguments: Array<{
-    value: Node[];
-    index: number | undefined;
-  }>;
+  args: Array<{ value: Node[]; index: number }>;
 };

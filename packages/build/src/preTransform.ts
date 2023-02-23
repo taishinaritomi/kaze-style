@@ -6,8 +6,8 @@ import type {
 import type { Node } from '@kaze-style/core';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
-import { BUILD_ARGUMENT_NAME } from './constants';
-import { COLLECTOR_NAME, DEFAULT_TRANSFORMS } from './constants';
+import { BUILD_INJECTOR_NAME } from './constants';
+import { COLLECTOR_EXPORT_NAME, DEFAULT_TRANSFORMS } from './constants';
 import type { Transform } from './types';
 
 type Options = {
@@ -18,7 +18,7 @@ type Options = {
 };
 
 export type PreTransformOptions = {
-  injectArgument: Node;
+  buildArg: Node;
   transforms: Transform[];
   collectorExportName: string;
 };
@@ -36,8 +36,8 @@ export const preTransform = async (
   compiler;
   babelOptions;
   const option: PreTransformOptions = {
-    collectorExportName: COLLECTOR_NAME,
-    injectArgument: {
+    collectorExportName: COLLECTOR_EXPORT_NAME,
+    buildArg: {
       type: 'Object',
       properties: [
         {
@@ -51,7 +51,7 @@ export const preTransform = async (
           key: 'injector',
           value: {
             type: 'Identifier',
-            name: BUILD_ARGUMENT_NAME,
+            name: BUILD_INJECTOR_NAME,
           },
         },
       ],

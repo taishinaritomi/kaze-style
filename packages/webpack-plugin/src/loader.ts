@@ -47,7 +47,7 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const { cssRules, injectArguments } = extractionStyle(source, {
+        const { injectArgs, cssRules } = extractionStyle(source, {
           filename: this.resourcePath,
         });
         transform(
@@ -55,7 +55,7 @@ function loader(
           {
             filename: this.resourcePath,
             transformOptions: {
-              injectArguments,
+              injectArgs,
               imports: options.imports,
               transforms: options.transforms,
             },

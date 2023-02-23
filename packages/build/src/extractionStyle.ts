@@ -1,21 +1,17 @@
 import type { Injector } from '@kaze-style/core';
 import evalCode from 'eval';
-import { BUILD_ARGUMENT_NAME } from './constants';
+import { BUILD_INJECTOR_NAME } from './constants';
 
 type Options = {
   filename: string;
-  buildArgumentName?: string;
+  buildInjectorName?: string;
 };
 
 export const extractionStyle = (
   code: string,
-  { filename, buildArgumentName = BUILD_ARGUMENT_NAME }: Options,
+  { filename, buildInjectorName = BUILD_INJECTOR_NAME }: Options,
 ) => {
-  const injector: Injector = {
-    filename,
-    injectArguments: [],
-    cssRules: [],
-  };
+  const injector: Injector = { filename, args: [], cssRules: [] };
   // remove start
   const window = {};
   const cjsGlobal = {};
@@ -32,8 +28,7 @@ export const extractionStyle = (
       code,
       filename,
       {
-        // ["__BUILD_ARGUMENT_NAME"]: injector,
-        [buildArgumentName]: injector,
+        [buildInjectorName]: injector,
         // remove start
         window,
         $RefreshReg$: () => undefined,
@@ -45,5 +40,5 @@ export const extractionStyle = (
   } catch (error) {
     throw error;
   }
-  return injector;
+  return { injectArgs: injector.args, cssRules: injector.cssRules };
 };

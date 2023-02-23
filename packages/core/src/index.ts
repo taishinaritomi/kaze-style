@@ -19,7 +19,7 @@ export type {
   ClassOverride,
   CssRule,
 } from './types/common';
-export type { Injector, BuildArgument } from './types/common';
+export type { Injector, BuildArg } from './types/common';
 export type {
   Node,
   StringLiteral,

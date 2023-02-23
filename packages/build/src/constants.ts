@@ -1,6 +1,6 @@
 export const LAYER_PREFIX = 'kaze-';
-export const BUILD_ARGUMENT_NAME = '__BUILD_ARGUMENT_NAME';
-export const COLLECTOR_NAME = '__COLLECTOR_NAME';
+export const BUILD_INJECTOR_NAME = '__BUILD_INJECTOR_NAME';
+export const COLLECTOR_EXPORT_NAME = '__COLLECTOR_EXPORT_NAME';
 
 export const DEFAULT_TRANSFORMS = [
   {
