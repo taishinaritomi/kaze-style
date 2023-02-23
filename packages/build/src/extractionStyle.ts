@@ -13,15 +13,15 @@ export const extractionStyle = (
 ) => {
   const injector: Injector = { filename, args: [], cssRules: [] };
   // remove start
-  const window = {};
-  const cjsGlobal = {};
+  // const window = {};
+  // const cjsGlobal = {};
 
-  if (typeof __dirname !== 'undefined') {
-    Object.assign(cjsGlobal, { __dirname });
-  }
-  if (typeof __filename !== 'undefined') {
-    Object.assign(cjsGlobal, { __filename });
-  }
+  // if (typeof __dirname !== 'undefined') {
+  //   Object.assign(cjsGlobal, { __dirname });
+  // }
+  // if (typeof __filename !== 'undefined') {
+  //   Object.assign(cjsGlobal, { __filename });
+  // }
   // remove end
   try {
     evalCode(
@@ -30,9 +30,9 @@ export const extractionStyle = (
       {
         [buildInjectorName]: injector,
         // remove start
-        window,
-        $RefreshReg$: () => undefined,
-        ...cjsGlobal,
+        // window,
+        // $RefreshReg$: () => undefined,
+        // ...cjsGlobal,
         // remove end
       },
       true,

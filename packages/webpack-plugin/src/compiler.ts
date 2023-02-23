@@ -1,6 +1,9 @@
+import { COLLECTOR_EXPORT_NAME } from '@kaze-style/build';
 import type { Compilation } from 'webpack';
+import { DUMMY_JS_FILE_PATH } from './constatns';
 import type { LoaderContext } from './loader';
 
+const virtualLoaderPath = require.resolve('./virtualLoader');
 const compilerNamePrefix = 'kaze-style-compiler';
 
 const getRootCompilation = (loader: LoaderContext) => {
@@ -13,8 +16,8 @@ const getRootCompilation = (loader: LoaderContext) => {
   return compilation;
 };
 
-const getCompilerName = (resource: string) => {
-  return `${compilerNamePrefix}:${resource}`;
+const getCompilerName = (filename: string) => {
+  return `${compilerNamePrefix}:${filename}`;
 };
 
 export const isChildCompiler = (name: string | undefined) => {
@@ -43,8 +46,14 @@ const compileVanillaSource = async (loader: LoaderContext) => {
   }>((resolve, reject) => {
     const webpack = loader._compiler.webpack;
 
+    const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify({
+      src: `import { ${COLLECTOR_EXPORT_NAME} } from '${loader.resourcePath}';${COLLECTOR_EXPORT_NAME};`,
+    })}`;
+
+    const entryPath = `${loader.resourcePath}.run.js!=!${virtualResourceLoader}!${DUMMY_JS_FILE_PATH}`;
+
     const outputOptions: Parameters<Compilation['createChildCompiler']>[1] = {
-      filename: loader.resourcePath,
+      filename: entryPath,
     };
 
     const {
@@ -55,7 +64,7 @@ const compileVanillaSource = async (loader: LoaderContext) => {
       library: { EnableLibraryPlugin },
     } = webpack;
 
-    const compilerName = getCompilerName(loader.resourcePath);
+    const compilerName = getCompilerName(entryPath);
     const childCompiler = getRootCompilation(loader).createChildCompiler(
       compilerName,
       outputOptions,
@@ -73,7 +82,7 @@ const compileVanillaSource = async (loader: LoaderContext) => {
         library: {
           type: 'commonjs2',
         },
-        import: [loader.resourcePath],
+        import: [entryPath],
       },
     });
 
@@ -81,12 +90,13 @@ const compileVanillaSource = async (loader: LoaderContext) => {
 
     childCompiler.hooks.thisCompilation.tap(compilerName, (compilation) => {
       compilation.hooks.processAssets.tap(compilerName, () => {
-        source = compilation.assets[loader.resourcePath]?.source() as string;
+        source = compilation.assets[entryPath]?.source() as string;
+        console.log(source);
 
         compilation.chunks.forEach((chunk) => {
-          chunk.files.forEach((file) => {
-            compilation.deleteAsset(file);
-          });
+          // console.log(chunk.files);
+          // console.log(chunk);
+          chunk.files.forEach((file) => compilation.deleteAsset(file));
         });
       });
     });

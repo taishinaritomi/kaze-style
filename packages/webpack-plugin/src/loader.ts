@@ -12,6 +12,7 @@ import type {
   LoaderContext as _LoaderContext,
 } from 'webpack';
 import { getCompiledSource, isChildCompiler } from './compiler';
+import { DUMMY_CSS_FILE_PATH } from './constatns';
 
 export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 export type LoaderContext<T = unknown> = _LoaderContext<T> & {
@@ -20,7 +21,6 @@ export type LoaderContext<T = unknown> = _LoaderContext<T> & {
 };
 
 const virtualLoaderPath = require.resolve('./virtualLoader');
-const cssPath = require.resolve('../../assets/kaze.css');
 
 function loader(
   this: LoaderContext<{
@@ -77,7 +77,7 @@ function loader(
               const filePrefix = `import ${JSON.stringify(
                 this.utils.contextify(
                   this.context || this.rootContext,
-                  `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
+                  `kaze.css!=!${virtualResourceLoader}!${DUMMY_CSS_FILE_PATH}`,
                 ),
               )};`;
               callback(null, `${filePrefix}\n${transformedCode}`);
