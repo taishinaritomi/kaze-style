@@ -1,9 +1,6 @@
-import { COLLECTOR_EXPORT_NAME } from '@kaze-style/build';
 import type { Compilation } from 'webpack';
-import { DUMMY_JS_FILE_PATH } from './constatns';
 import type { LoaderContext } from './loader';
 
-const virtualLoaderPath = require.resolve('./virtualLoader');
 const compilerNamePrefix = 'kaze-style-compiler';
 
 const getRootCompilation = (loader: LoaderContext) => {
@@ -46,11 +43,8 @@ const compileVanillaSource = async (loader: LoaderContext) => {
   }>((resolve, reject) => {
     const webpack = loader._compiler.webpack;
 
-    const virtualResourceLoader = `${virtualLoaderPath}?${JSON.stringify({
-      src: `import { ${COLLECTOR_EXPORT_NAME} } from '${loader.resourcePath}';${COLLECTOR_EXPORT_NAME};`,
-    })}`;
 
-    const entryPath = `${loader.resourcePath}.run.js!=!${virtualResourceLoader}!${DUMMY_JS_FILE_PATH}`;
+    const entryPath = loader.resourcePath;
 
     const outputOptions: Parameters<Compilation['createChildCompiler']>[1] = {
       filename: entryPath,
@@ -91,11 +85,8 @@ const compileVanillaSource = async (loader: LoaderContext) => {
     childCompiler.hooks.thisCompilation.tap(compilerName, (compilation) => {
       compilation.hooks.processAssets.tap(compilerName, () => {
         source = compilation.assets[entryPath]?.source() as string;
-        console.log(source);
 
         compilation.chunks.forEach((chunk) => {
-          // console.log(chunk.files);
-          // console.log(chunk);
           chunk.files.forEach((file) => compilation.deleteAsset(file));
         });
       });
