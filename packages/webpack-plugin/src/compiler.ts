@@ -43,7 +43,6 @@ const compileVanillaSource = async (loader: LoaderContext) => {
   }>((resolve, reject) => {
     const webpack = loader._compiler.webpack;
 
-
     const entryPath = loader.resourcePath;
 
     const outputOptions: Parameters<Compilation['createChildCompiler']>[1] = {
