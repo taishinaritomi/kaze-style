@@ -34,8 +34,8 @@ pub struct Transform {
 }
 
 pub struct TransformVisitor {
-  target_index: u8,
-  // ident_index: u8,
+  target_index: usize,
+  // ident_index: usize,
   is_use_name_space: bool,
   is_transformed: bool,
   transformed_comment: String,
@@ -125,10 +125,8 @@ impl TransformVisitor {
           spread: None,
           expr: Box::new(self.build_arg.clone()),
         });
-        let target_index: f64 = self.target_index.clone().into();
-        // let target_index: f64 = self.target_index as f64;
         call_expr.args.push(ExprOrSpread {
-          expr: Box::new(Expr::Lit(Lit::Num(Number::from(target_index)))),
+          expr: Box::new(Expr::Lit(Lit::Num(Number::from(self.target_index as f64)))),
           spread: None,
         });
         self.target_index += 1;

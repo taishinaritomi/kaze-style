@@ -32,7 +32,7 @@ pub struct TransformVisitor {
 }
 pub struct ArgExpr {
   value: Vec<ExprOrSpread>,
-  index: u8,
+  index: usize,
 }
 
 impl TransformVisitor {
@@ -128,8 +128,7 @@ impl TransformVisitor {
               Some(arg_index) => {
                 let mut is_transform = false;
                 for inject_arg in self.inject_args.iter() {
-                  let inject_arg_index: f64 = inject_arg.index.into();
-                  if inject_arg_index == arg_index {
+                  if (inject_arg.index as f64) == arg_index {
                     call_expr.args = inject_arg.value.clone();
                     is_transform = true;
                     break;

@@ -14,7 +14,7 @@ pub struct StringLiteral {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct NumberLiteral {
-  value: u8,
+  value: usize,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -74,7 +74,7 @@ pub fn node_to_expr(value: &Node) -> Expr {
       raw: None,
     })),
     Node::Number(number) => Expr::Lit(Lit::Num(Number {
-      value: number.value.into(),
+      value: number.value as f64,
       span: DUMMY_SP,
       raw: None,
     })),
