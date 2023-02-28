@@ -1,98 +1,133 @@
-import { types as t, template } from '@babel/core';
-import type { NodePath, PluginObj, PluginPass } from '@babel/core';
+import { types as t } from '@babel/core';
+import type { PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
+import type { Node } from '@kaze-style/core';
+import { nodeToExpr } from './astNode';
+import type { InputTransform } from './commonConfig';
+
+type InputConfig = {
+  transforms: InputTransform[];
+  buildArg: Node;
+  collectorExportName: string;
+};
 
 type Transform = {
   from: string;
-  to: string;
+  importSource: string;
+  identNames: string[];
+  namespaces: string[];
 };
 
 type State = {
-  targetPaths?: Array<{
-    callee: NodePath<t.Identifier>;
-    definition: NodePath<t.Node>;
-    transform: Transform;
-  }>;
-};
-
-const options = {
-  importSource: '@kaze-style/core',
-  transforms: [
-    {
-      from: 'style',
-      to: '__preStyle',
-    },
-    {
-      from: 'globalStyle',
-      to: '__preGlobalStyle',
-    },
-  ],
-};
-
-const buildPreStyleImport = template(`
-  import { ${options.transforms
-    .map((transform) => transform.to)
-    .join(',')} } from '${options.importSource}';
-`);
-
-export type PreTransformOptions = {
-  filename: string;
-  forBuildName: string;
+  isUseNameSpace?: boolean;
+  transforms?: Transform[];
+  buildArg?: t.Expression;
+  callExprs?: t.CallExpression[];
 };
 
 export const preTransformPlugin = declare<
-  PreTransformOptions,
-  PluginObj<State & PluginPass>
->((_, { filename, forBuildName }) => {
+  InputConfig,
+  PluginObj<PluginPass & State>
+>((_, config) => {
   return {
     name: '@kaze-style/babel-plugin-preTransform',
     pre() {
-      this.targetPaths = [];
+      this.transforms = config.transforms.map((transform) => ({
+        from: transform.from,
+        importSource: transform.source,
+        identNames: [],
+        namespaces: [],
+      }));
+      this.isUseNameSpace = false;
+      this.callExprs = [];
+      this.buildArg = nodeToExpr(config.buildArg);
     },
     visitor: {
       Program: {
-        exit(path, state) {
-          if (state.targetPaths && state.targetPaths.length !== 0) {
-            state.targetPaths.forEach(
-              ({ callee, definition, transform }, index) => {
-                const callExpressionPath = definition.findParent((parentPath) =>
-                  parentPath.isCallExpression(),
-                ) as NodePath<t.CallExpression>;
-                if (callExpressionPath.node.arguments[0]) {
-                  callExpressionPath.node.arguments = [
-                    callExpressionPath.node.arguments[0],
-                    t.identifier(forBuildName),
-                    t.stringLiteral(filename),
-                    t.numericLiteral(index),
-                  ];
+        enter(path, state) {
+          path.node.body.forEach((statement) => {
+            if (t.isImportDeclaration(statement)) {
+              state.transforms?.forEach((transform) => {
+                if (transform.importSource === statement.source.value) {
+                  statement.specifiers.forEach((specifier) => {
+                    if (t.isImportSpecifier(specifier)) {
+                      if (t.isIdentifier(specifier.imported)) {
+                        if (transform.from === specifier.imported.name) {
+                          transform.identNames.push(specifier.local.name);
+                        }
+                      }
+                    } else if (t.isImportNamespaceSpecifier(specifier)) {
+                      state.isUseNameSpace = true;
+                      transform.namespaces.push(specifier.local.name);
+                    }
+                  });
                 }
-                callee.replaceWith(t.identifier(transform.to));
-              },
-            );
-            path.unshiftContainer('body', buildPreStyleImport());
-            this.file.metadata = { isTransformed: true };
-          }
+              });
+            }
+          });
+        },
+        exit(_path, state) {
+          let index = 0;
+          state.callExprs?.forEach((callExpr) => {
+            state.transforms?.forEach((transform) => {
+              let isTarget = false;
+              const callee = callExpr.callee;
+              if (t.isIdentifier(callee)) {
+                transform.identNames.forEach((identName) => {
+                  if (identName === callee.name) {
+                    isTarget = true;
+                  }
+                });
+              } else if (t.isMemberExpression(callee)) {
+                const obj = callee.object;
+                if (t.isIdentifier(obj)) {
+                  transform.namespaces.forEach((namespace) => {
+                    if (namespace === obj.name) {
+                      const prop = callee.property;
+                      if (t.isIdentifier(prop)) {
+                        transform.identNames.forEach((identName) => {
+                          if (prop.name === identName) {
+                            isTarget = true;
+                          }
+                        });
+                      }
+                    }
+                  });
+                }
+              }
+              if (isTarget) {
+                if (state.buildArg) {
+                  callExpr.arguments.push(state.buildArg);
+                  callExpr.arguments.push(t.valueToNode(index));
+                  index += 1;
+                  this.file.metadata = { isTransformed: true };
+                }
+              }
+            });
+          });
         },
       },
-      CallExpression(path, state) {
-        const calleePath = path.get('callee');
-        options.transforms.forEach((transform) => {
-          if (
-            calleePath.referencesImport(options.importSource, transform.from)
-          ) {
-            const argumentPaths = path.get('arguments') as NodePath<t.Node>[];
-            if (Array.isArray(argumentPaths)) {
-              const definitionsPath = argumentPaths[0];
-              if (definitionsPath !== undefined) {
-                state.targetPaths?.push({
-                  callee: calleePath as NodePath<t.Identifier>,
-                  definition: definitionsPath,
-                  transform: transform,
-                });
-              }
-            }
+      MemberExpression(path, state) {
+        if (state.isUseNameSpace) {
+          const obj = path.node.object;
+          if (t.isIdentifier(obj)) {
+            state.transforms?.forEach((transform) => {
+              transform.namespaces.forEach((namespace) => {
+                if (namespace === obj.name) {
+                  const prop = path.node.property;
+                  if (t.isIdentifier(prop)) {
+                    if (prop.name === transform.from) {
+                      transform.identNames.push(prop.name);
+                    }
+                  }
+                }
+              });
+            });
           }
-        });
+        }
+      },
+      CallExpression(path, state) {
+        state.callExprs?.push(path.node);
       },
     },
   };

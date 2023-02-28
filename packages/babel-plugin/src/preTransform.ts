@@ -2,12 +2,11 @@ import { transformAsync as babelTransform } from '@babel/core';
 import type { TransformOptions as BabelOptions } from '@babel/core';
 // @ts-expect-error type
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import type { PreTransformOptions } from './preTransformPlugin';
 import { preTransformPlugin } from './preTransformPlugin';
 
 type Options = {
   filename: string;
-  preTransformOptions: PreTransformOptions;
+  preTransformOptions: Record<string, unknown>;
   babelOptions?: BabelOptions;
 };
 
