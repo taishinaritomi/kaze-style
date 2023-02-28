@@ -30,13 +30,13 @@ pub struct Transform {
   from: String,
   import_source: String,
   ids: Vec<Id>,
-  name_space_ids: Vec<Id>,
+  namespace_ids: Vec<Id>,
 }
 
 pub struct TransformVisitor {
   target_index: usize,
   // ident_index: usize,
-  is_use_name_space: bool,
+  is_use_namespace: bool,
   is_transformed: bool,
   transformed_comment: String,
   comments: PluginCommentsProxy,
@@ -55,14 +55,14 @@ impl TransformVisitor {
         from: input_transform.from.to_string(),
         import_source: input_transform.source.to_string(),
         ids: vec![],
-        name_space_ids: vec![],
+        namespace_ids: vec![],
       })
       .collect::<Vec<Transform>>();
     Self {
       target_index: 0,
       // ident_index: 0,
       // collectors: vec![],
-      is_use_name_space: false,
+      is_use_namespace: false,
       is_transformed: false,
       comments: comments,
       transforms: transforms,
@@ -90,11 +90,11 @@ impl TransformVisitor {
               MemberProp::Ident(member_ident) => {
                 let member_ident_is_target =
                   transform
-                    .name_space_ids
+                    .namespace_ids
                     .iter()
-                    .any(|name_space_id| match &*member_expr.obj {
+                    .any(|namespace_id| match &*member_expr.obj {
                       Expr::Ident(member_obj_ident) => transform.ids.iter().any(|transform_id| {
-                        if *name_space_id == member_obj_ident.to_id()
+                        if *namespace_id == member_obj_ident.to_id()
                           && *transform_id == member_ident.to_id()
                         {
                           true
@@ -137,13 +137,13 @@ impl TransformVisitor {
     }
   }
 
-  fn target_name_space_import_extract_id(&mut self, member_expr: &mut MemberExpr) {
-    if self.is_use_name_space == true {
+  fn target_namespace_import_extract_id(&mut self, member_expr: &mut MemberExpr) {
+    if self.is_use_namespace == true {
       for transform in self.transforms.iter_mut() {
-        for name_space_id in transform.name_space_ids.iter() {
+        for namespace_id in transform.namespace_ids.iter() {
           match &*member_expr.obj {
             Expr::Ident(expr_ident) => {
-              if *name_space_id == expr_ident.to_id() {
+              if *namespace_id == expr_ident.to_id() {
                 match &mut member_expr.prop {
                   MemberProp::Ident(prop_ident) => {
                     if prop_ident.sym == transform.from {
@@ -198,9 +198,9 @@ impl TransformVisitor {
                   ImportSpecifier::Default(_) => {}
                   // import * as namespace from ''
                   ImportSpecifier::Namespace(namespace) => {
-                    transform.name_space_ids.push(namespace.local.to_id());
-                    if self.is_use_name_space == false {
-                      self.is_use_name_space = true;
+                    transform.namespace_ids.push(namespace.local.to_id());
+                    if self.is_use_namespace == false {
+                      self.is_use_namespace = true;
                     }
                   }
                 }
@@ -336,7 +336,7 @@ impl TransformVisitor {
 
 impl VisitMut for TransformVisitor {
   fn visit_mut_member_expr(&mut self, member_expr: &mut MemberExpr) {
-    self.target_name_space_import_extract_id(member_expr);
+    self.target_namespace_import_extract_id(member_expr);
     member_expr.visit_mut_children_with(self);
   }
 
