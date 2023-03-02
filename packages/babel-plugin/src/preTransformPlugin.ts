@@ -8,7 +8,6 @@ import type { InputTransform } from './commonConfig';
 type InputConfig = {
   transforms: InputTransform[];
   buildArg: Node;
-  collectorExportName: string;
 };
 
 type Transform = {
