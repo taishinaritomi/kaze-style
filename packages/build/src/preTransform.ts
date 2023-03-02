@@ -1,8 +1,5 @@
-import type {
-  // PreTransformOptions,
-  BabelOptions,
-} from '@kaze-style/babel-plugin';
-// import { preTransform as babelPreTransform } from '@kaze-style/babel-plugin';
+import type { BabelOptions } from '@kaze-style/babel-plugin';
+import { preTransform as babelPreTransform } from '@kaze-style/babel-plugin';
 import type { Node } from '@kaze-style/core';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
@@ -61,19 +58,19 @@ export const preTransform = async (
       ...(preTransformOptions.transforms || []),
     ],
   };
-  // if (compiler === 'swc') {
-  const [transformedCode, metadata] = await swcPreTransform(code, {
-    filename,
-    swcOptions,
-    preTransformOptions: option,
-  });
-  return [transformedCode, metadata] as const;
-  // } else {
-  //   const [transformedCode, metadata] = await babelPreTransform(code, {
-  //     filename,
-  //     babelOptions,
-  //     preTransformOptions: { buildArgumentName, ...preTransformOptions },
-  //   });
-  //   return [transformedCode, metadata] as const;
-  // }
+  if (compiler === 'swc') {
+    const [transformedCode, metadata] = await swcPreTransform(code, {
+      filename,
+      swcOptions,
+      preTransformOptions: option,
+    });
+    return [transformedCode, metadata] as const;
+  } else {
+    const [transformedCode, metadata] = await babelPreTransform(code, {
+      filename,
+      babelOptions,
+      preTransformOptions: option,
+    });
+    return [transformedCode, metadata] as const;
+  }
 };
