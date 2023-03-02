@@ -7,7 +7,7 @@ use swc_core::{
     ast::{
       CallExpr, Callee, Expr, ExprOrSpread, Id, Ident, ImportDecl, ImportNamedSpecifier,
       ImportSpecifier, Lit, MemberExpr, MemberProp, Module, ModuleDecl, ModuleExportName,
-      ModuleItem, Program, Str, VarDecl,
+      ModuleItem, Program, Str,
     },
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
   },
@@ -279,14 +279,6 @@ impl VisitMut for TransformVisitor {
   fn visit_mut_call_expr(&mut self, call_expr: &mut CallExpr) {
     call_expr.visit_mut_children_with(self);
     self.transform_call_expr_args(call_expr);
-  }
-
-  fn visit_mut_var_decl(&mut self, var_decl: &mut VarDecl) {
-    var_decl.visit_mut_children_with(self);
-  }
-
-  fn visit_mut_module_item(&mut self, module_item: &mut ModuleItem) {
-    module_item.visit_mut_children_with(self);
   }
 
   fn visit_mut_module(&mut self, module: &mut Module) {

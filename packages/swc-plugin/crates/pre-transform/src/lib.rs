@@ -11,11 +11,6 @@ use swc_core::{
       CallExpr, Callee, Expr, ExprOrSpread, Id, Ident, ImportSpecifier, Lit, MemberExpr,
       MemberProp, Module, ModuleDecl, ModuleExportName, ModuleItem, Number, Program,
     },
-    // ast::{
-    //   ArrayLit, BindingIdent, CallExpr, Callee, Decl, ExportDecl, Expr, ExprOrSpread, Id, Ident,
-    //   ImportSpecifier, Lit, MemberExpr, MemberProp, Module, ModuleDecl, ModuleExportName,
-    //   ModuleItem, Number, Pat, Program, Stmt, VarDecl, VarDeclKind, VarDeclarator,
-    // },
     visit::{as_folder, FoldWith, VisitMut, VisitMutWith},
   },
   plugin::{
@@ -35,14 +30,11 @@ pub struct Transform {
 
 pub struct TransformVisitor {
   target_index: usize,
-  // ident_index: usize,
   is_use_namespace: bool,
   is_transformed: bool,
   transformed_comment: String,
   comments: PluginCommentsProxy,
   transforms: Vec<Transform>,
-  // input_collector_export_name: String,
-  // collectors: Vec<Expr>,
   build_arg: Expr,
 }
 
@@ -60,14 +52,11 @@ impl TransformVisitor {
       .collect::<Vec<Transform>>();
     Self {
       target_index: 0,
-      // ident_index: 0,
-      // collectors: vec![],
       is_use_namespace: false,
       is_transformed: false,
       comments: comments,
       transforms: transforms,
       transformed_comment: input_config.transformed_comment,
-      // input_collector_export_name: input_config.collector_export_name,
       build_arg: node_to_expr(&input_config.build_arg),
     }
   }
@@ -213,113 +202,6 @@ impl TransformVisitor {
     }
   }
 
-  // fn var_decl_extract_collector(&mut self, var_decl: &VarDecl) {
-  //   for var_declarator in var_decl.decls.iter() {
-  //     match &var_declarator.init {
-  //       Some(init_expr) => match &**init_expr {
-  //         Expr::Call(call_expr) => {
-  //           for transform in self.transforms.iter() {
-  //             if self.is_target_call_expr(&call_expr, transform) == true {
-  //               match &var_declarator.name {
-  //                 Pat::Ident(ident) => {
-  //                   self.collectors.push(Expr::Ident(ident.id.clone()));
-  //                 }
-  //                 _ => {}
-  //               }
-  //             }
-  //           }
-  //         }
-  //         _ => {}
-  //       },
-  //       None => {}
-  //     }
-  //   }
-  // }
-
-  // fn top_level_call_expr_extract_collector(&mut self, module_item: &mut ModuleItem) {
-  //   match &module_item {
-  //     ModuleItem::Stmt(stmt) => match stmt {
-  //       Stmt::Expr(expr_stmt) => match &*expr_stmt.expr {
-  //         Expr::Call(call_expr) => {
-  //           for transform in self.transforms.iter() {
-  //             if self.is_target_call_expr(call_expr, transform) == true {
-  //               let ident = self.create_unique_ident();
-  //               self.collectors.push(Expr::Ident(ident.clone()));
-  //               self.ident_index += 1;
-  //               *module_item = ModuleItem::Stmt(Stmt::Decl(Decl::Var(Box::new(VarDecl {
-  //                 span: DUMMY_SP,
-  //                 kind: VarDeclKind::Const,
-  //                 declare: false,
-  //                 decls: vec![VarDeclarator {
-  //                   init: Some(Box::new(Expr::Call(call_expr.clone()))),
-  //                   definite: false,
-  //                   span: DUMMY_SP,
-  //                   name: Pat::Ident(BindingIdent {
-  //                     id: ident,
-  //                     type_ann: None,
-  //                   }),
-  //                 }],
-  //               }))));
-  //               break;
-  //             }
-  //           }
-  //         }
-  //         _ => {}
-  //       },
-  //       _ => {}
-  //     },
-  //     ModuleItem::ModuleDecl(_) => {}
-  //   }
-  // }
-
-  // fn create_unique_ident(&mut self) -> Ident {
-  //   Ident {
-  //     optional: false,
-  //     span: DUMMY_SP,
-  //     sym: format!("__{}", self.ident_index).clone().into(),
-  //   }
-  // }
-
-  // fn add_collections(&mut self, module: &mut Module) {
-  //   if self.collectors.len() != 0 {
-  //     module
-  //       .body
-  //       .push(ModuleItem::ModuleDecl(ModuleDecl::ExportDecl(ExportDecl {
-  //         span: DUMMY_SP,
-  //         decl: Decl::Var(Box::new(VarDecl {
-  //           span: DUMMY_SP,
-  //           declare: false,
-  //           kind: VarDeclKind::Const,
-  //           decls: vec![VarDeclarator {
-  //             span: DUMMY_SP,
-  //             definite: false,
-  //             init: Some(Box::new(Expr::Array(ArrayLit {
-  //               span: DUMMY_SP,
-  //               elems: self
-  //                 .collectors
-  //                 .iter()
-  //                 .map(|collector| {
-  //                   Some(ExprOrSpread {
-  //                     spread: None,
-  //                     expr: Box::new(collector.clone()),
-  //                   })
-  //                 })
-  //                 .collect::<Vec<Option<ExprOrSpread>>>(),
-  //             }))),
-  //             name: Pat::Ident(BindingIdent {
-  //               id: Ident {
-  //                 optional: false,
-  //                 span: DUMMY_SP,
-  //                 sym: self.input_collector_export_name.clone().into(),
-  //               },
-  //               type_ann: None,
-  //             }),
-  //           }],
-  //         })),
-  //       })));
-  //   }
-  // }
-
   fn add_transformed_comment(&mut self, module: &mut Module) {
     if self.is_transformed == true {
       self.comments.add_leading(
@@ -345,20 +227,9 @@ impl VisitMut for TransformVisitor {
     self.set_call_expr_args(call_expr);
   }
 
-  // fn visit_mut_var_decl(&mut self, var_decl: &mut VarDecl) {
-  //   var_decl.visit_mut_children_with(self);
-  //   self.var_decl_extract_collector(var_decl);
-  // }
-
-  // fn visit_mut_module_item(&mut self, module_item: &mut ModuleItem) {
-  //   module_item.visit_mut_children_with(self);
-  //   self.top_level_call_expr_extract_collector(module_item);
-  // }
-
   fn visit_mut_module(&mut self, module: &mut Module) {
     self.target_imports_extract_id(module);
     module.visit_mut_children_with(self);
-    // self.add_collections(module);
     self.add_transformed_comment(module);
   }
 }
@@ -410,7 +281,6 @@ mod tests {
             }
           ],
         },
-        "collectorExportName": "__collector",
         "transformedComment": "transformedComment"
     })
     .to_string();
@@ -430,9 +300,7 @@ mod tests {
     r#"
     import { target } from 'target_source';
     const x0 = target({}, { "filename": "filename.ts", "injector": injector }, 0);
-    // const __0 = target({}, { "filename": "filename.ts", "injector": injector }, 1);
     target({}, { "filename": "filename.ts", "injector": injector }, 1);
-    // export const __collector = [ x0, __0 ];
     "#
   );
 
@@ -453,7 +321,6 @@ mod tests {
     import { target as _target2 } from 'target_source';
     const x0 = _target1({}, { "filename": "filename.ts", "injector": injector }, 0);
     const x1 = _target2({}, { "filename": "filename.ts", "injector": injector }, 1);
-    // export const __collector = [ x0, x1 ];
     "#
   );
 
@@ -474,7 +341,6 @@ mod tests {
     import * as namespace1 from 'target_source';
     const x0 = namespace0.target({}, { "filename": "filename.ts", "injector": injector }, 0);
     const x1 = namespace1.target({}, { "filename": "filename.ts", "injector": injector }, 1);
-    // export const __collector = [ x0, x1 ];
     "#
   );
   test!(
@@ -502,10 +368,8 @@ mod tests {
     const x1 = _target({}, { "filename": "filename.ts", "injector": injector }, 1);
     const x2 = __target({}, { "filename": "filename.ts", "injector": injector }, 2);
     const x3 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 3);
-    // const __0 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     const x4 = namespace.dummy({});
-    // export const __collector = [ x0, x1, x2, x3, __0 ];
     "#
   );
   test!(
@@ -530,13 +394,11 @@ mod tests {
     const x1 = _target({}, { "filename": "filename.ts", "injector": injector }, 1);
     const x2 = __target({}, { "filename": "filename.ts", "injector": injector }, 2);
     const x3 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 3);
-    // const __0 = namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     namespace.target({}, { "filename": "filename.ts", "injector": injector }, 4);
     const x4 = namespace.dummy({});
     import { target, target as _target } from 'target_source';
     import { target as __target } from 'target_source';
     import * as namespace from 'target_source';
-    // export const __collector = [ x0, x1, x2, x3, __0 ];
     "#
   );
 }

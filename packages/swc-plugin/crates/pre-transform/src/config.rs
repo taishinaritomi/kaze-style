@@ -9,7 +9,6 @@ pub struct InputConfig {
   pub transforms: Vec<InputTransform>,
   pub build_arg: Node,
   pub transformed_comment: String,
-  pub collector_export_name: String,
 }
 
 pub fn parse_config(json: &str) -> InputConfig {
