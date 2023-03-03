@@ -24,24 +24,24 @@ export type Identifier = {
 
 export type ArrayExpression = {
   type: 'Array';
-  value: Node[];
+  elements: AstNode[];
 };
 
 export type ObjectExpression = {
   type: 'Object';
   properties: Array<{
     key: string;
-    value: Node;
+    value: AstNode;
   }>;
 };
 
 export type CallExpression = {
   type: 'Call';
   name: string;
-  arguments: Node[];
+  arguments: AstNode[];
 };
 
-export type Node =
+export type AstNode =
   | StringLiteral
   | NumberLiteral
   | BooleanLiteral

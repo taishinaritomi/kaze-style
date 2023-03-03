@@ -1,13 +1,13 @@
 import { types as t } from '@babel/core';
 import type { PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { Node } from '@kaze-style/core';
+import type { AstNode } from '@kaze-style/core';
 import { nodeToExpr } from './astNode';
 import type { InputTransform } from './commonConfig';
 
 type InputConfig = {
   transforms: InputTransform[];
-  buildArg: Node;
+  buildArg: AstNode;
 };
 
 type Transform = {

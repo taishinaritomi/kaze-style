@@ -1,7 +1,7 @@
 import type { types as t } from '@babel/core';
-import type { Node } from '@kaze-style/core';
+import type { AstNode } from '@kaze-style/core';
 
-export const nodeToExpr = (node: Node): t.Expression => {
+export const nodeToExpr = (node: AstNode): t.Expression => {
   if (node.type === 'String') {
     return { type: 'StringLiteral', value: node.value };
   } else if (node.type === 'Number') {
@@ -27,7 +27,7 @@ export const nodeToExpr = (node: Node): t.Expression => {
   } else if (node.type === 'Array') {
     return {
       type: 'ArrayExpression',
-      elements: node.value.map((value) => nodeToExpr(value)),
+      elements: node.elements.map((value) => nodeToExpr(value)),
     };
   } else {
     return {

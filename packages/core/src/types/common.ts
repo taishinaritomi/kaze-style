@@ -1,6 +1,6 @@
 import type { ClassName } from '../ClassName';
 import type { StyleOrder } from '../styleOrder';
-import type { Node } from './ast';
+import type { AstNode } from './ast';
 import type { FirstChar } from './utils';
 
 export type CssRule = [value: string, order: StyleOrder];
@@ -36,5 +36,5 @@ export type BuildArg = {
 export type Injector = {
   filename: string;
   cssRules: CssRule[];
-  args: Array<{ value: Node[]; index: number }>;
+  args: Array<{ value: AstNode[]; index: number }>;
 };

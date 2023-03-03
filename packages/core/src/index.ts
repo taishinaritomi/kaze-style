@@ -21,7 +21,7 @@ export type {
 } from './types/common';
 export type { Injector, BuildArg } from './types/common';
 export type {
-  Node,
+  AstNode,
   StringLiteral,
   NumberLiteral,
   BooleanLiteral,

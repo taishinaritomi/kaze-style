@@ -1,13 +1,13 @@
 use serde::{Deserialize, Serialize};
 
-use helper::ast_node::Node;
+use helper::ast_node::AstNode;
 use helper::common_config::InputTransform;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct InputConfig {
   pub transforms: Vec<InputTransform>,
-  pub build_arg: Node,
+  pub build_arg: AstNode,
   pub transformed_comment: String,
 }
 

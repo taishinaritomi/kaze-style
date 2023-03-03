@@ -32,13 +32,13 @@ pub struct Identifier {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ArrayExpression {
-  value: Vec<Node>,
+  elements: Vec<AstNode>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ObjectProperty {
   key: String,
-  value: Node,
+  value: AstNode,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -50,12 +50,12 @@ pub struct ObjectExpression {
 pub struct CallExpression {
   name: String,
   import_source: Option<String>,
-  arguments: Vec<Node>,
+  arguments: Vec<AstNode>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "type")]
-pub enum Node {
+pub enum AstNode {
   String(StringLiteral),
   Number(NumberLiteral),
   Boolean(BooleanLiteral),
@@ -66,32 +66,32 @@ pub enum Node {
   Call(CallExpression),
 }
 
-pub fn node_to_expr(value: &Node) -> Expr {
+pub fn node_to_expr(value: &AstNode) -> Expr {
   match value {
-    Node::String(string) => Expr::Lit(Lit::Str(Str {
+    AstNode::String(string) => Expr::Lit(Lit::Str(Str {
       value: string.value.to_string().into(),
       span: DUMMY_SP,
       raw: None,
     })),
-    Node::Number(number) => Expr::Lit(Lit::Num(Number {
+    AstNode::Number(number) => Expr::Lit(Lit::Num(Number {
       value: number.value as f64,
       span: DUMMY_SP,
       raw: None,
     })),
-    Node::Boolean(boolean) => Expr::Lit(Lit::Bool(Bool {
+    AstNode::Boolean(boolean) => Expr::Lit(Lit::Bool(Bool {
       value: boolean.value.into(),
       span: DUMMY_SP,
     })),
-    Node::Null(_null) => Expr::Lit(Lit::Null(Null { span: DUMMY_SP })),
-    Node::Identifier(ident) => Expr::Ident(Ident {
+    AstNode::Null(_null) => Expr::Lit(Lit::Null(Null { span: DUMMY_SP })),
+    AstNode::Identifier(ident) => Expr::Ident(Ident {
       optional: false,
       span: DUMMY_SP,
       sym: ident.name.to_string().into(),
     }),
-    Node::Array(array) => Expr::Array(ArrayLit {
+    AstNode::Array(array) => Expr::Array(ArrayLit {
       span: DUMMY_SP,
       elems: array
-        .value
+        .elements
         .iter()
         .map(|node| {
           Some(ExprOrSpread {
@@ -101,7 +101,7 @@ pub fn node_to_expr(value: &Node) -> Expr {
         })
         .collect::<Vec<Option<ExprOrSpread>>>(),
     }),
-    Node::Object(object) => Expr::Object(ObjectLit {
+    AstNode::Object(object) => Expr::Object(ObjectLit {
       span: DUMMY_SP,
       props: object
         .properties
@@ -118,7 +118,7 @@ pub fn node_to_expr(value: &Node) -> Expr {
         })
         .collect::<Vec<PropOrSpread>>(),
     }),
-    Node::Call(call) => Expr::Call(CallExpr {
+    AstNode::Call(call) => Expr::Call(CallExpr {
       span: DUMMY_SP,
       args: call
         .arguments

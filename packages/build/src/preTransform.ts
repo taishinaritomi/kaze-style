@@ -1,6 +1,6 @@
 import type { BabelOptions } from '@kaze-style/babel-plugin';
 import { preTransform as babelPreTransform } from '@kaze-style/babel-plugin';
-import type { Node } from '@kaze-style/core';
+import type { AstNode } from '@kaze-style/core';
 import type { SwcOptions } from '@kaze-style/swc-plugin';
 import { preTransform as swcPreTransform } from '@kaze-style/swc-plugin';
 import { BUILD_INJECTOR_NAME } from './constants';
@@ -15,7 +15,7 @@ type Options = {
 };
 
 export type PreTransformOptions = {
-  buildArg: Node;
+  buildArg: AstNode;
   transforms: Transform[];
 };
 
