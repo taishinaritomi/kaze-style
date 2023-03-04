@@ -5,7 +5,7 @@ members = [
 
 [profile.release]
 # https://swc.rs/docs/plugin/publishing#adjusting-configuration-for-smaller-binary
-# codegen-units = 1
+codegen-units = 1
 lto = true
-# opt-level = "s"
-# strip = "symbols"
+opt-level = "s"
+strip = "symbols"
