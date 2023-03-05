@@ -29,6 +29,8 @@ jobs:
             ~/.cargo/git/db/
             packages/swc-plugin/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('packages/swc-plugin/Cargo.lock') }}
+      - name: setup rust version
+        run: rustup override set 1.64.0 && rustup component add rustfmt
       - name: install wasm target
         run: rustup target add wasm32-wasi
       - name: install dependencies
