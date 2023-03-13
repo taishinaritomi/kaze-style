@@ -12,4 +12,14 @@ export const DEFAULT_TRANSFORMS = [
     to: '__globalStyle',
     source: '@kaze-style/core',
   },
+  {
+    from: 'createStyle',
+    to: '__style',
+    source: '@kaze-style/core',
+  },
+  {
+    from: 'createGlobalStyle',
+    to: '__globalStyle',
+    source: '@kaze-style/core',
+  },
 ];

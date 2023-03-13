@@ -24,3 +24,5 @@ export function style<K extends string>(
   } else if (typeof document !== 'undefined') setCssRules(cssRules);
   return classes;
 }
+
+export const createStyle = style;

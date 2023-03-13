@@ -22,3 +22,5 @@ export function globalStyle<K extends string>(
     buildArg.injector.cssRules.push(...cssRules);
   } else if (typeof document !== 'undefined') setCssRules(cssRules);
 }
+
+export const createGlobalStyle = globalStyle;

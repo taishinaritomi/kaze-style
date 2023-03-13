@@ -1,6 +1,6 @@
 export { mergeStyle } from './mergeStyle';
-export { style } from './style';
-export { globalStyle } from './globalStyle';
+export { style, createStyle } from './style';
+export { globalStyle, createGlobalStyle } from './globalStyle';
 export { resolveStyle } from './resolveStyle';
 export { resolveGlobalStyle } from './resolveGlobalStyle';
 export { __style } from './__style';
