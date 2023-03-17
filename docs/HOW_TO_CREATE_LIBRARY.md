@@ -19,13 +19,13 @@ globalStyle(globalTheme.reset());
 
 export const classes = style({
   container: {
-    ...theme.animation('spin')
+    ...theme.animation('spin'),
   },
 });
-
 ```
 
 ### how to create
+
 // TODO
 
 ## 2. Function API
@@ -42,8 +42,8 @@ export const vars = cssVar({
   darkColor: 'black',
   lightColor: 'white',
 });
-
 ```
 
 ### how to create
+
 // TODO
