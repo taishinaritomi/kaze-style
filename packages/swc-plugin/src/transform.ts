@@ -22,10 +22,6 @@ export const transform = async (
     jsc: {
       target: 'es2022',
       ...swcOptions.jsc,
-      parser: swcOptions.jsc?.parser ?? {
-        syntax: 'typescript',
-        tsx: true,
-      },
       experimental: {
         ...swcOptions.jsc?.experimental,
         plugins: [
