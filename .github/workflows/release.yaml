@@ -25,8 +25,8 @@ jobs:
         run: rustup override set 1.64.0 && rustup component add rustfmt
       - name: install wasm target
         run: rustup target add wasm32-wasi
-      - name: install
-        run: npm run ci
+      - name: install dependencies
+        run: npm ci
       - name: build packages
         run: npm run build:packages
       - name: code check
