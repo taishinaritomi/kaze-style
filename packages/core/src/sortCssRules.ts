@@ -1,5 +1,5 @@
-import type { CssRule } from './styleOrder';
 import { styleOrder } from './styleOrder';
+import type { CssRule } from './types/common';
 
 export const sortCssRules = (cssRules: CssRule[]) => {
   return cssRules.sort((ruleA, ruleB) => {

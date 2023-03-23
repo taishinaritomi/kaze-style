@@ -1,5 +1,5 @@
-import { withKazeStyle } from '@kaze-style/next-plugin';
-// import { createKazeStylePlugin } from '@kaze-style/next-plugin';
+// import { withKazeStyle } from '@kaze-style/next-plugin';
+import { createKazeStylePlugin } from '@kaze-style/next-plugin';
 import createBundleAnalyzer from '@next/bundle-analyzer';
 
 const withBundleAnalyzer = createBundleAnalyzer({
@@ -7,7 +7,7 @@ const withBundleAnalyzer = createBundleAnalyzer({
 });
 
 // options
-// const withKazeStyle = createKazeStylePlugin({ swc: true, cssLayer: true });
+const withKazeStyle = createKazeStylePlugin({ swc: true, cssLayer: true });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

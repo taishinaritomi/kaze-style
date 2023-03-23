@@ -1,5 +1,6 @@
 import path from 'path';
 import { stringToCssRules, cssRulesToString } from '@kaze-style/build';
+import type { TransformOptions } from '@kaze-style/build';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 
@@ -9,6 +10,8 @@ type PluginOptions = {
   cssLayer?: boolean;
   virtualLoader?: boolean;
   preCssOutputPath?: string;
+  imports: TransformOptions['imports'];
+  transforms: TransformOptions['transforms'];
   exclude?: RuleSetRule['exclude'];
 };
 
@@ -23,10 +26,14 @@ export class Plugin {
   cssLayer: boolean;
   virtualLoader: boolean;
   preCssOutputPath: string;
+  imports: TransformOptions['imports'];
+  transforms: TransformOptions['transforms'];
   exclude: NonNullable<RuleSetRule['exclude']>;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
     // test = /style\.(js|ts)$/,
+    imports = [],
+    transforms = [],
     swc = false,
     cssLayer = false,
     virtualLoader = true,
@@ -37,6 +44,8 @@ export class Plugin {
     this.swc = swc;
     this.cssLayer = cssLayer;
     this.virtualLoader = virtualLoader;
+    this.imports = imports;
+    this.transforms = transforms;
     this.preCssOutputPath = preCssOutputPath;
     this.exclude = exclude;
   }
@@ -52,11 +61,16 @@ export class Plugin {
             compiler: this.swc ? 'swc' : 'babel',
             virtualLoader: this.virtualLoader,
             preCssOutputPath: this.preCssOutputPath,
+            imports: this.imports,
+            transforms: this.transforms,
           },
         },
         {
           loader: preLoader,
-          options: { compiler: this.swc ? 'swc' : 'babel' },
+          options: {
+            compiler: this.swc ? 'swc' : 'babel',
+            transforms: this.transforms,
+          },
         },
       ],
     });

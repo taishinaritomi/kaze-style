@@ -1,0 +1,18 @@
+[package]
+name = "kaze_style_pre_transform_swc_plugin"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+helper = { path = "../helper" }
+serde = "1"
+serde_json = "1.0.89"
+swc_core = { version = "0.59.*", features = [
+  "ecma_plugin_transform",
+  "ecma_visit",
+  "ecma_ast",
+  "common",
+] }

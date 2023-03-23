@@ -1,6 +1,9 @@
 import type { ClassName } from '../ClassName';
-import type { CssRule } from '../styleOrder';
+import type { StyleOrder } from '../styleOrder';
+import type { AstNode } from './ast';
 import type { FirstChar } from './utils';
+
+export type CssRule = [value: string, order: StyleOrder];
 
 export type Classes<T extends string> = {
   [P in T]: FirstChar<P> extends '$' ? ClassName['Type'] : string;
@@ -25,8 +28,13 @@ export type ClassOverride<T, K extends string = '$class'> = ClassNameOverride<
 
 export type Selectors = [selector: string, atRules: string[], groups: string];
 
-export type ForBuild<T extends string = string> = [
-  filename: string,
-  cssRules: CssRule[],
-  styles: [classes: StaticClasses<T>, index: number][],
-];
+export type BuildArg = {
+  filename: string;
+  injector: Injector;
+};
+
+export type Injector = {
+  filename: string;
+  cssRules: CssRule[];
+  args: Array<{ value: AstNode[]; index: number }>;
+};

@@ -1,9 +1,13 @@
+import type { TransformOptions } from '@kaze-style/build';
 import { preTransform } from '@kaze-style/build';
 import type { LoaderContext } from 'webpack';
 import type { WebpackLoaderParams } from './loader';
 
 function loader(
-  this: LoaderContext<{ compiler: 'swc' | 'babel' }>,
+  this: LoaderContext<{
+    compiler: 'swc' | 'babel';
+    transforms: TransformOptions['transforms'];
+  }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
   additionalData: WebpackLoaderParams[2],
@@ -15,8 +19,8 @@ function loader(
     sourceCode,
     {
       filename: this.resourcePath,
-      preTransformOptions: {
-        filename: this.resourcePath,
+      transform: {
+        transforms: options.transforms,
       },
     },
     options.compiler,

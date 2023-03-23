@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
+import type { TransformOptions } from '@kaze-style/build';
 import {
   cssRulesToString,
   extractionStyle,
@@ -11,6 +12,7 @@ import type {
   LoaderContext as _LoaderContext,
 } from 'webpack';
 import { getCompiledSource, isChildCompiler } from './compiler';
+import { DUMMY_CSS_FILE_PATH } from './constatns';
 
 export type WebpackLoaderParams = Parameters<LoaderDefinitionFunction<never>>;
 export type LoaderContext<T = unknown> = _LoaderContext<T> & {
@@ -19,13 +21,14 @@ export type LoaderContext<T = unknown> = _LoaderContext<T> & {
 };
 
 const virtualLoaderPath = require.resolve('./virtualLoader');
-const cssPath = require.resolve('../../assets/kaze.css');
 
 function loader(
   this: LoaderContext<{
     compiler: 'swc' | 'babel';
     virtualLoader: boolean;
     preCssOutputPath: string;
+    imports: TransformOptions['imports'];
+    transforms: TransformOptions['transforms'];
   }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
@@ -44,14 +47,18 @@ function loader(
 
     getCompiledSource(this)
       .then((source) => {
-        const [cssRules, styles] = extractionStyle(source, {
+        const { injectArgs, cssRules } = extractionStyle(source, {
           filename: this.resourcePath,
         });
         transform(
           sourceCode,
           {
             filename: this.resourcePath,
-            transformOptions: { styles },
+            transform: {
+              injectArgs,
+              imports: options.imports,
+              transforms: options.transforms,
+            },
           },
           options.compiler,
         ).then(([transformedCode]) => {
@@ -70,7 +77,7 @@ function loader(
               const filePrefix = `import ${JSON.stringify(
                 this.utils.contextify(
                   this.context || this.rootContext,
-                  `kaze.css!=!${virtualResourceLoader}!${cssPath}`,
+                  `kaze.css!=!${virtualResourceLoader}!${DUMMY_CSS_FILE_PATH}`,
                 ),
               )};`;
               callback(null, `${filePrefix}\n${transformedCode}`);

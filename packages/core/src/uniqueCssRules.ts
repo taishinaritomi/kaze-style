@@ -1,4 +1,4 @@
-import type { CssRule } from './styleOrder';
+import type { CssRule } from './types/common';
 
 export const uniqueCssRules = (cssRules: CssRule[]) => {
   return Array.from(

@@ -1,3 +1,4 @@
+import type { TransformOptions } from '@kaze-style/build';
 import { extractionStyle, preTransform, transform } from '@kaze-style/build';
 import type { CssRule } from '@kaze-style/core';
 import type { Loader } from 'esbuild';
@@ -6,18 +7,20 @@ import { build } from 'esbuild';
 type Options = {
   filename: string;
   compiler: 'swc' | 'babel';
+  imports: TransformOptions['imports'];
+  transforms: TransformOptions['transforms'];
 };
 
 export const resolveTransform = async (
   code: string,
-  { filename, compiler }: Options,
+  { filename, compiler, imports, transforms }: Options,
 ): Promise<[code: string, cssRules: CssRule[]]> => {
   const [preTransformedCode, metadata] = await preTransform(
     code,
     {
       filename,
-      preTransformOptions: {
-        filename,
+      transform: {
+        transforms: transforms,
       },
     },
     compiler,
@@ -49,7 +52,7 @@ export const resolveTransform = async (
       ],
     });
 
-    const [cssRules, styles] = extractionStyle(
+    const { injectArgs, cssRules } = extractionStyle(
       result.outputFiles[0]?.text || '',
       {
         filename,
@@ -60,7 +63,7 @@ export const resolveTransform = async (
       preTransformedCode,
       {
         filename,
-        transformOptions: { styles },
+        transform: { injectArgs, imports, transforms },
       },
       compiler,
     );

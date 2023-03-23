@@ -1,124 +1,168 @@
-import { types as t, template } from '@babel/core';
-import type { NodePath, PluginObj, PluginPass } from '@babel/core';
+import { types as t } from '@babel/core';
+import type { PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { ForBuild } from '@kaze-style/core';
+import type { AstNode } from '@kaze-style/core';
+import { nodeToExpr } from './astNode';
+import type { InputTransform } from './commonConfig';
+
+type InputConfig = {
+  transforms: InputTransform[];
+  injectArgs: InputArgument[];
+  imports: InputImport[];
+};
+
+type InputArgument = {
+  value: AstNode[];
+  index: number;
+};
+
+type InputImport = {
+  source: string;
+  specifier: string;
+};
 
 type Transform = {
-  from: string;
   to: string;
+  from: string;
+  importSource: string;
+  identNames: string[];
+  namespaces: string[];
+};
+
+type ArgumentExpression = {
+  value: t.Expression[];
+  index: number;
 };
 
 type State = {
-  targetPaths?: Array<{
-    callee: NodePath<t.Identifier>;
-    definition: NodePath<t.Node>;
-    transform: Transform;
-  }>;
-};
-
-const options = {
-  importSource: '@kaze-style/core',
-  transforms: [
-    {
-      from: '__preStyle',
-      to: '__style',
-    },
-    {
-      from: '__preGlobalStyle',
-      to: '__globalStyle',
-    },
-  ],
-};
-
-const buildStyleImport = template(`
-  import { ${options.transforms
-    .map((transform) => transform.to)
-    .join(',')} , ClassName } from '${options.importSource}';
-`);
-
-export type TransformOptions = {
-  styles: ForBuild[2];
+  isUseNameSpace?: boolean;
+  transforms?: Transform[];
+  injectArgs?: ArgumentExpression[];
+  callExprs?: t.CallExpression[];
 };
 
 export const transformPlugin = declare<
-  TransformOptions,
-  PluginObj<State & PluginPass>
->((_, { styles }) => {
+  InputConfig,
+  PluginObj<PluginPass & State>
+>((_, config) => {
   return {
     name: '@kaze-style/babel-plugin-transform',
     pre() {
-      this.targetPaths = [];
+      this.transforms = config.transforms.map((transform) => ({
+        to: transform.to,
+        from: transform.from,
+        importSource: transform.source,
+        identNames: [],
+        namespaces: [],
+      }));
+      this.isUseNameSpace = false;
+      this.callExprs = [];
+      this.injectArgs = config.injectArgs.map((injectArg) => ({
+        value: injectArg.value.map((value) => nodeToExpr(value)),
+        index: injectArg.index,
+      }));
     },
     visitor: {
       Program: {
-        exit(path, state) {
-          const _styles = styles.map(([classes, index]) => ({
-            classes,
-            index,
-          }));
-          if (state.targetPaths && state.targetPaths.length !== 0) {
-            state.targetPaths.forEach(({ callee, definition, transform }) => {
-              const callExpressionPath = definition.findParent((parentPath) =>
-                parentPath.isCallExpression(),
-              ) as NodePath<t.CallExpression>;
-              const indexArgPath = callExpressionPath.node
-                .arguments[3] as t.NumericLiteral;
-              const classes = _styles.find(
-                (style) => style.index === indexArgPath.value,
-              )?.classes;
-              const objectProperties: t.ObjectProperty[] = [];
-              for (const key in classes) {
-                if (classes.hasOwnProperty(key)) {
-                  const className = classes[key];
-                  if (typeof className === 'string') {
-                    objectProperties.push(
-                      t.objectProperty(
-                        t.stringLiteral(key),
-                        t.stringLiteral(className),
-                      ),
-                    );
-                  } else {
-                    objectProperties.push(
-                      t.objectProperty(
-                        t.stringLiteral(key),
-                        t.newExpression(t.identifier('ClassName'), [
-                          t.valueToNode(classes[key] || {}),
-                        ]),
-                      ),
-                    );
+        enter(path, state) {
+          path.node.body.forEach((statement) => {
+            if (t.isImportDeclaration(statement)) {
+              state.transforms?.forEach((transform) => {
+                if (transform.importSource === statement.source.value) {
+                  statement.specifiers.forEach((specifier) => {
+                    if (t.isImportSpecifier(specifier)) {
+                      if (t.isIdentifier(specifier.imported)) {
+                        if (transform.from === specifier.imported.name) {
+                          specifier.imported.name = transform.to;
+                          transform.identNames.push(specifier.local.name);
+                        }
+                      }
+                    } else if (t.isImportNamespaceSpecifier(specifier)) {
+                      state.isUseNameSpace = true;
+                      transform.namespaces.push(specifier.local.name);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        },
+        exit(_path, state) {
+          state.callExprs?.forEach((callExpr) => {
+            state.transforms?.forEach((transform) => {
+              let isTarget = false;
+              const callee = callExpr.callee;
+              if (t.isIdentifier(callee)) {
+                transform.identNames.forEach((identName) => {
+                  if (identName === callee.name) {
+                    isTarget = true;
                   }
+                });
+              } else if (t.isMemberExpression(callee)) {
+                const obj = callee.object;
+                if (t.isIdentifier(obj)) {
+                  transform.namespaces.forEach((namespace) => {
+                    if (namespace === obj.name) {
+                      const prop = callee.property;
+                      if (t.isIdentifier(prop)) {
+                        transform.identNames.forEach((identName) => {
+                          if (prop.name === identName) {
+                            isTarget = true;
+                          }
+                        });
+                      }
+                    }
+                  });
                 }
               }
-              callExpressionPath.node.arguments = [
-                t.objectExpression(objectProperties),
-              ];
-              callee.replaceWith(t.identifier(transform.to));
+              if (isTarget) {
+                if (state.injectArgs) {
+                  const lastArg = callExpr.arguments.at(-1);
+                  if (t.isNumericLiteral(lastArg)) {
+                    let is_transform = false;
+                    for (const injectArg of state.injectArgs || []) {
+                      if (lastArg.value === injectArg.index) {
+                        callExpr.arguments = injectArg.value;
+                        is_transform = true;
+                        break;
+                      }
+                    }
+                    if (is_transform === false) {
+                      callExpr.arguments = [];
+                    }
+                  } else {
+                    callExpr.arguments = [];
+                  }
+                } else {
+                  callExpr.arguments = [];
+                }
+              }
             });
-
-            path.unshiftContainer('body', buildStyleImport());
-            this.file.metadata = { transformed: true };
-          }
+          });
         },
       },
-      CallExpression(path, state) {
-        const calleePath = path.get('callee');
-        options.transforms.forEach((transform) => {
-          if (
-            calleePath.referencesImport(options.importSource, transform.from)
-          ) {
-            const argumentPaths = path.get('arguments') as NodePath<t.Node>[];
-            if (Array.isArray(argumentPaths) && argumentPaths.length === 4) {
-              const definitionsPath = argumentPaths[0];
-              if (definitionsPath !== undefined) {
-                state.targetPaths?.push({
-                  callee: calleePath as NodePath<t.Identifier>,
-                  definition: definitionsPath,
-                  transform: transform,
-                });
-              }
-            }
+      MemberExpression(path, state) {
+        if (state.isUseNameSpace) {
+          const obj = path.node.object;
+          if (t.isIdentifier(obj)) {
+            state.transforms?.forEach((transform) => {
+              transform.namespaces.forEach((namespace) => {
+                if (namespace === obj.name) {
+                  const prop = path.node.property;
+                  if (t.isIdentifier(prop)) {
+                    if (prop.name === transform.from) {
+                      prop.name = transform.to;
+                      transform.identNames.push(prop.name);
+                    }
+                  }
+                }
+              });
+            });
           }
-        });
+        }
+      },
+      CallExpression(path, state) {
+        state.callExprs?.push(path.node);
       },
     },
   };

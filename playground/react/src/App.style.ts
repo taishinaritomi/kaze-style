@@ -1,9 +1,11 @@
-import { style, globalStyle } from '@kaze-style/core';
+// import { classes } from './App.style';
+
+import { globalStyle, createStyle } from '@kaze-style/core';
 import { globalTheme } from '@kaze-style/themes';
 
 globalStyle(globalTheme.reset());
 
-export const classes = style({
+export const classes = createStyle({
   button: {
     background: 'red',
     borderRadius: '6px',

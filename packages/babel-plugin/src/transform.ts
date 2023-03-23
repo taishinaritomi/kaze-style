@@ -2,13 +2,12 @@ import { transformAsync as babelTransform } from '@babel/core';
 import type { TransformOptions as BabelOptions } from '@babel/core';
 // @ts-expect-error type
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import type { TransformOptions } from './transformPlugin';
 import { transformPlugin } from './transformPlugin';
 
 type Options = {
   filename: string;
-  transformOptions: TransformOptions;
-  babelOptions?: BabelOptions;
+  transform: Record<string, unknown>;
+  babel?: BabelOptions;
 };
 
 type Metadata = undefined;
@@ -16,10 +15,12 @@ type Result = [string, Metadata];
 
 export const transform = async (
   code: string,
-  { filename, transformOptions, babelOptions = {} }: Options,
+  options: Options,
 ): Promise<Result> => {
+  const babelOptions = options.babel || {};
+  const transformOptions = options.transform || {};
   const result = await babelTransform(code, {
-    filename,
+    filename: options.filename,
     caller: { name: 'kaze' },
     babelrc: false,
     configFile: false,

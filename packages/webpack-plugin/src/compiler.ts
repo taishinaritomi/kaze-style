@@ -13,8 +13,8 @@ const getRootCompilation = (loader: LoaderContext) => {
   return compilation;
 };
 
-const getCompilerName = (resource: string) => {
-  return `${compilerNamePrefix}:${resource}`;
+const getCompilerName = (filename: string) => {
+  return `${compilerNamePrefix}:${filename}`;
 };
 
 export const isChildCompiler = (name: string | undefined) => {
@@ -43,8 +43,10 @@ const compileVanillaSource = async (loader: LoaderContext) => {
   }>((resolve, reject) => {
     const webpack = loader._compiler.webpack;
 
+    const entryPath = loader.resourcePath;
+
     const outputOptions: Parameters<Compilation['createChildCompiler']>[1] = {
-      filename: loader.resourcePath,
+      filename: entryPath,
     };
 
     const {
@@ -55,7 +57,7 @@ const compileVanillaSource = async (loader: LoaderContext) => {
       library: { EnableLibraryPlugin },
     } = webpack;
 
-    const compilerName = getCompilerName(loader.resourcePath);
+    const compilerName = getCompilerName(entryPath);
     const childCompiler = getRootCompilation(loader).createChildCompiler(
       compilerName,
       outputOptions,
@@ -73,7 +75,7 @@ const compileVanillaSource = async (loader: LoaderContext) => {
         library: {
           type: 'commonjs2',
         },
-        import: [loader.resourcePath],
+        import: [entryPath],
       },
     });
 
@@ -81,12 +83,10 @@ const compileVanillaSource = async (loader: LoaderContext) => {
 
     childCompiler.hooks.thisCompilation.tap(compilerName, (compilation) => {
       compilation.hooks.processAssets.tap(compilerName, () => {
-        source = compilation.assets[loader.resourcePath]?.source() as string;
+        source = compilation.assets[entryPath]?.source() as string;
 
         compilation.chunks.forEach((chunk) => {
-          chunk.files.forEach((file) => {
-            compilation.deleteAsset(file);
-          });
+          chunk.files.forEach((file) => compilation.deleteAsset(file));
         });
       });
     });

@@ -30,6 +30,7 @@
   ],
   "scripts": {
     "test": "cargo test",
+    "test:log": "cargo test -- --nocapture",
     "code-fix": "cargo fmt",
     "code-check": "cargo fmt --check",
     "type-check": "tsc --noEmit",
