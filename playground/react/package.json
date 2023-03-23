@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "type-check": "tsc --noEmit",
+    "code:check:type": "tsc --noEmit",
     "dev": "webpack --watch",
     "build": "rimraf dist && webpack",
     "preview": "webpack serve --open"

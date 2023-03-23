@@ -33,8 +33,8 @@
     "test:log": "cargo test -- --nocapture",
     "code-fix": "cargo fmt",
     "code-check": "cargo fmt --check",
-    "type-check": "tsc --noEmit",
-    "exports-check": "publint",
+    "code:check:type": "tsc --noEmit",
+    "code:check:exports": "publint",
     "dev": "tsx ./../../scripts/build --watch --exec='cargo watch -x \"build-wasi --release --quiet\"'",
     "build": "tsx ./../../scripts/build --exec='cargo build-wasi --release --quiet'"
   },

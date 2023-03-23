@@ -10,12 +10,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-      - name: setup Node
+      - name: setup node
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-          cache: 'yarn'
-      - name: setup Rust
+          cache: 'npm'
+      - name: setup rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -34,12 +34,12 @@ jobs:
       - name: install wasm target
         run: rustup target add wasm32-wasi
       - name: install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
       - name: build packages
-        run: yarn build
+        run: npm run build
       - name: code check
-        run: yarn code:check
+        run: npm run code:check
       - name: readme check
-        run: yarn readme:check
+        run: npm run readme:check
       - name: test
-        run: yarn test
+        run: npm run test

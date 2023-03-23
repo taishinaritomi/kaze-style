@@ -24,8 +24,8 @@
     "LICENSE"
   ],
   "scripts": {
-    "type-check": "tsc --noEmit",
-    "exports-check": "publint",
+    "code:check:type": "tsc --noEmit",
+    "code:check:exports": "publint",
     "dev": "tsx ./../../scripts/build --watch --cjsOnly",
     "build": "tsx ./../../scripts/build --cjsOnly"
   },
