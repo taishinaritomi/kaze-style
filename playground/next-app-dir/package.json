@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "type-check": "tsc --noEmit",
+    "code:check:type": "tsc --noEmit",
     "dev": "next dev",
     "build": "rimraf .next && next build",
     "start": "next start",
