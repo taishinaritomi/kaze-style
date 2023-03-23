@@ -19,7 +19,7 @@ export const resolveTransform = async (
     code,
     {
       filename,
-      preTransformOptions: {
+      transform: {
         transforms: transforms,
       },
     },
@@ -63,7 +63,7 @@ export const resolveTransform = async (
       preTransformedCode,
       {
         filename,
-        transformOptions: { injectArgs, imports, transforms },
+        transform: { injectArgs, imports, transforms },
       },
       compiler,
     );

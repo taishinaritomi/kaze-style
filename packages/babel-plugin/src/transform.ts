@@ -6,8 +6,8 @@ import { transformPlugin } from './transformPlugin';
 
 type Options = {
   filename: string;
-  transformOptions: Record<string, unknown>;
-  babelOptions?: BabelOptions;
+  transform: Record<string, unknown>;
+  babel?: BabelOptions;
 };
 
 type Metadata = undefined;
@@ -15,10 +15,12 @@ type Result = [string, Metadata];
 
 export const transform = async (
   code: string,
-  { filename, transformOptions, babelOptions = {} }: Options,
+  options: Options,
 ): Promise<Result> => {
+  const babelOptions = options.babel || {};
+  const transformOptions = options.transform || {};
   const result = await babelTransform(code, {
-    filename,
+    filename: options.filename,
     caller: { name: 'kaze' },
     babelrc: false,
     configFile: false,

@@ -9,9 +9,11 @@ import type { Transform } from './types';
 
 type Options = {
   filename: string;
-  swcOptions?: SwcOptions;
-  babelOptions?: BabelOptions;
-  preTransformOptions: Partial<PreTransformOptions>;
+  swc?: SwcOptions;
+  babel?: BabelOptions;
+  transform: {
+    transforms?: Transform[];
+  };
 };
 
 export type PreTransformOptions = {
@@ -21,17 +23,10 @@ export type PreTransformOptions = {
 
 export const preTransform = async (
   code: string,
-  {
-    filename,
-    babelOptions = {},
-    swcOptions = {},
-    preTransformOptions,
-  }: Options,
+  options: Options,
   compiler: 'swc' | 'babel' = 'babel',
 ) => {
-  compiler;
-  babelOptions;
-  const option: PreTransformOptions = {
+  const transformOption: PreTransformOptions = {
     buildArg: {
       type: 'Object',
       properties: [
@@ -39,7 +34,7 @@ export const preTransform = async (
           key: 'filename',
           value: {
             type: 'String',
-            value: filename,
+            value: options.filename,
           },
         },
         {
@@ -53,21 +48,22 @@ export const preTransform = async (
     },
     transforms: [
       ...DEFAULT_TRANSFORMS,
-      ...(preTransformOptions.transforms || []),
+      ...(options.transform.transforms || []),
     ],
   };
+
   if (compiler === 'swc') {
     const [transformedCode, metadata] = await swcPreTransform(code, {
-      filename,
-      swcOptions,
-      preTransformOptions: option,
+      filename: options.filename,
+      swc: options.swc || {},
+      transform: transformOption,
     });
     return [transformedCode, metadata] as const;
   } else {
     const [transformedCode, metadata] = await babelPreTransform(code, {
-      filename,
-      babelOptions,
-      preTransformOptions: option,
+      filename: options.filename,
+      babel: options.babel || {},
+      transform: transformOption,
     });
     return [transformedCode, metadata] as const;
   }

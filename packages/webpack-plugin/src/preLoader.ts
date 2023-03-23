@@ -19,7 +19,7 @@ function loader(
     sourceCode,
     {
       filename: this.resourcePath,
-      preTransformOptions: {
+      transform: {
         transforms: options.transforms,
       },
     },

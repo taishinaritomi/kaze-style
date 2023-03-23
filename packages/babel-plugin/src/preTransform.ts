@@ -6,8 +6,8 @@ import { preTransformPlugin } from './preTransformPlugin';
 
 type Options = {
   filename: string;
-  preTransformOptions: Record<string, unknown>;
-  babelOptions?: BabelOptions;
+  transform: Record<string, unknown>;
+  babel?: BabelOptions;
 };
 
 type Metadata = { isTransformed: boolean };
@@ -15,17 +15,19 @@ type Result = [string, Metadata];
 
 export const preTransform = async (
   code: string,
-  { filename, preTransformOptions, babelOptions = {} }: Options,
+  options: Options,
 ): Promise<Result> => {
+  const babelOptions = options.babel || {};
+  const transformOptions = options.transform || {};
   const result = await babelTransform(code, {
-    filename,
+    filename: options.filename,
     caller: { name: 'kaze' },
     babelrc: false,
     configFile: false,
     compact: false,
     ...babelOptions,
     plugins: [
-      [preTransformPlugin, preTransformOptions],
+      [preTransformPlugin, transformOptions],
       [typescriptSyntax, { isTSX: true }],
       ...(babelOptions.plugins || []),
     ],

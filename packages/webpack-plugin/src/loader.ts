@@ -54,7 +54,7 @@ function loader(
           sourceCode,
           {
             filename: this.resourcePath,
-            transformOptions: {
+            transform: {
               injectArgs,
               imports: options.imports,
               transforms: options.transforms,

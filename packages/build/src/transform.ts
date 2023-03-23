@@ -8,9 +8,9 @@ import type { Import, Transform } from './types';
 
 type Options = {
   filename: string;
-  swcOptions?: SwcOptions;
-  babelOptions?: BabelOptions;
-  transformOptions: Partial<TransformOptions>;
+  swc?: SwcOptions;
+  babel?: BabelOptions;
+  transform: Partial<TransformOptions>;
 };
 
 export type TransformOptions = {
@@ -21,35 +21,36 @@ export type TransformOptions = {
 
 export const transform = async (
   code: string,
-  { filename, babelOptions = {}, swcOptions = {}, transformOptions }: Options,
+  options: Options,
   compiler: 'swc' | 'babel' = 'babel',
 ) => {
-  compiler;
-  babelOptions;
-  const option: TransformOptions = {
-    injectArgs: transformOptions.injectArgs || [],
+  const transformOption: TransformOptions = {
+    injectArgs: options.transform.injectArgs || [],
     imports: [
       {
         source: '@kaze-style/core',
         specifier: '__className',
       },
-      ...(transformOptions.imports || []),
+      ...(options.transform.imports || []),
     ],
-    transforms: [...DEFAULT_TRANSFORMS, ...(transformOptions.transforms || [])],
+    transforms: [
+      ...DEFAULT_TRANSFORMS,
+      ...(options.transform.transforms || []),
+    ],
   };
   if (compiler === 'swc') {
     const [transformedCode, metadata] = await swcTransform(code, {
-      filename,
-      swcOptions,
-      transformOptions: option,
+      filename: options.filename,
+      swc: options.swc || {},
+      transform: transformOption,
     });
 
     return [transformedCode, metadata] as const;
   } else {
     const [transformedCode, metadata] = await babelTransform(code, {
-      filename,
-      babelOptions,
-      transformOptions: option,
+      filename: options.filename,
+      babel: options.babel || {},
+      transform: transformOption,
     });
     return [transformedCode, metadata] as const;
   }
