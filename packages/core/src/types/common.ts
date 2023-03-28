@@ -18,7 +18,7 @@ export type ClassNameOverride<T, K extends string = 'className'> = Omit<
   T,
   K
 > & {
-  [_ in K]?: ClassName['Type'] | ClassName['Static'];
+  [_ in K]?: ClassName['Type'] | ClassName['Static'] | string;
 };
 
 export type ClassOverride<T, K extends string = 'class'> = ClassNameOverride<
