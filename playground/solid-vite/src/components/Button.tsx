@@ -9,9 +9,7 @@ export const Button: Component<
   return (
     <button
       {...props}
-      class={`${mergeStyle(classes.$button, props.class)} ${
-        props.class || ''
-      }`}
+      class={`${mergeStyle(classes.$button, props.class)} ${props.class || ''}`}
     />
   );
 };
