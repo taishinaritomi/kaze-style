@@ -30,7 +30,7 @@
     "build": "tsx ./../../scripts/build --cjsOnly"
   },
   "dependencies": {
-    "@kaze-style/build": "^0.17.1"
+    "@kaze-style/builder": "^0.17.1"
   },
   "devDependencies": {
     "@kaze-style/core": "^0.17.1",

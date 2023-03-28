@@ -1,6 +1,6 @@
 import path from 'path';
-import { stringToCssRules, cssRulesToString } from '@kaze-style/build';
-import type { TransformOptions } from '@kaze-style/build';
+import { stringToCssRules, cssRulesToString } from '@kaze-style/builder';
+import type { TransformOptions } from '@kaze-style/builder';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 

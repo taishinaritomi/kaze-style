@@ -1,5 +1,5 @@
-import type { TransformOptions } from '@kaze-style/build';
-import { preTransform } from '@kaze-style/build';
+import type { TransformOptions } from '@kaze-style/builder';
+import { preTransform } from '@kaze-style/builder';
 import type { LoaderContext } from 'webpack';
 import type { WebpackLoaderParams } from './loader';
 

@@ -1,12 +1,12 @@
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import type { TransformOptions } from '@kaze-style/build';
+import type { TransformOptions } from '@kaze-style/builder';
 import {
   cssRulesToString,
   extractionStyle,
   transform,
-} from '@kaze-style/build';
+} from '@kaze-style/builder';
 import type {
   LoaderDefinitionFunction,
   LoaderContext as _LoaderContext,

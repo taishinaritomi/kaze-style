@@ -1,5 +1,5 @@
-import type { TransformOptions } from '@kaze-style/build';
-import { extractionStyle, preTransform, transform } from '@kaze-style/build';
+import type { TransformOptions } from '@kaze-style/builder';
+import { extractionStyle, preTransform, transform } from '@kaze-style/builder';
 import type { CssRule } from '@kaze-style/core';
 import type { Loader } from 'esbuild';
 import { build } from 'esbuild';

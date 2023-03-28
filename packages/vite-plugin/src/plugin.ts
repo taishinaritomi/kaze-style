@@ -1,5 +1,5 @@
-import type { TransformOptions } from '@kaze-style/build';
-import { cssRulesToString, stringToCssRules } from '@kaze-style/build';
+import type { TransformOptions } from '@kaze-style/builder';
+import { cssRulesToString, stringToCssRules } from '@kaze-style/builder';
 import type { CssRule } from '@kaze-style/core';
 import type { Plugin } from 'vite';
 import { resolveTransform } from './utils/resolveTransform';

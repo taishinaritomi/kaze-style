@@ -1,4 +1,4 @@
-// import type { TransformOptions } from '@kaze-style/build';
+// import type { TransformOptions } from '@kaze-style/builder';
 import { transform as swcTransform } from '@swc/core';
 import type { Options as SwcOptions } from '@swc/core';
 
