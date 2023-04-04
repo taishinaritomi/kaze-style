@@ -1,0 +1,16 @@
+{
+  "entries": {
+    "index.ts": {
+      "format": "cjs"
+    },
+    "loader.ts": {
+      "format": "cjs"
+    },
+    "preLoader.ts": {
+      "format": "cjs"
+    },
+    "virtualLoader.ts": {
+      "format": "cjs"
+    }
+  }
+}

@@ -29,7 +29,7 @@
     "code:check:type": "tsc --noEmit",
     "code:check:exports": "publint",
     "dev": "tsx ./../../scripts/build --watch",
-    "build": "tsx ./../../scripts/build --size"
+    "build": "tsx ./../../scripts/build"
   },
   "dependencies": {
     "csstype": "^3.1.1"
