@@ -1,5 +1,5 @@
 {
-  "entries": {
+  "files": {
     "index.ts": {
       "format": "cjs"
     },

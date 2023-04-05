@@ -51,11 +51,11 @@ const distPackageJson = {
   sideEffect: packageJson.sideEffects,
 };
 
-const BuildOptionSchema = z
+const EntryOptionSchema = z
   .object({
     dir: z.string(),
     outDir: z.string(),
-    entries: z.record(
+    files: z.record(
       z
         .object({
           format: z.union([
@@ -69,42 +69,42 @@ const BuildOptionSchema = z
   })
   .partial();
 
-const RequiredBuildOptionSchema = BuildOptionSchema.required();
+const RequiredEntryOptionSchema = EntryOptionSchema.required();
 
-type RequiredBuildOption = z.infer<typeof RequiredBuildOptionSchema>;
+type RequiredEntryOption = z.infer<typeof RequiredEntryOptionSchema>;
 
-const DEFAULT_BUILD_OPTION: RequiredBuildOption = {
+const DEFAULT_ENTRY_OPTION: RequiredEntryOption = {
   dir: 'src',
   outDir: 'dist',
-  entries: {
+  files: {
     'index.ts': {},
   },
 };
 
-const getBuildOption = (): RequiredBuildOption => {
+const getEntryOption = (): RequiredEntryOption => {
   try {
-    const buildJsonPath = path.join(process.cwd(), 'build.json');
-    const buildJson = fs.readFileSync(buildJsonPath);
-    const buildOption = BuildOptionSchema.parse(
-      JSON.parse(buildJson.toString()),
+    const entryJsonPath = path.join(process.cwd(), 'entry.json');
+    const entryJson = fs.readFileSync(entryJsonPath);
+    const entryOption = EntryOptionSchema.parse(
+      JSON.parse(entryJson.toString()),
     );
-    return Object.assign(DEFAULT_BUILD_OPTION, buildOption, {
-      entries: Object.assign(
+    return Object.assign(DEFAULT_ENTRY_OPTION, entryOption, {
+      files: Object.assign(
         {},
-        DEFAULT_BUILD_OPTION.entries || {},
-        buildOption.entries || {},
+        DEFAULT_ENTRY_OPTION.files || {},
+        entryOption.files || {},
       ),
     });
   } catch {
-    return DEFAULT_BUILD_OPTION;
+    return DEFAULT_ENTRY_OPTION;
   }
 };
 
-const buildOption = getBuildOption();
+const entryOption = getEntryOption();
 
 const resolveEsbuildOptions = (): EsbuildOptions[] => {
   const options: EsbuildOptions[] = [];
-  Object.entries(buildOption.entries || {}).map(([entryPath, option]) => {
+  Object.entries(entryOption.files || {}).map(([entryPath, option]) => {
     const filename = entryPath.split('.').slice(0, -1).join('.');
     const format = option.format || 'both';
     let formats: ['cjs', 'esm'] | ['cjs'] | ['esm'];
@@ -114,13 +114,13 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
 
     formats.forEach((format) => {
       options.push({
-        entryPoints: [path.join(buildOption.dir, entryPath)],
+        entryPoints: [path.join(entryOption.dir, entryPath)],
         bundle: true,
         minify: true,
         format: format,
         platform: 'node',
         plugins: [nodeExternalsPlugin()],
-        outfile: path.join(buildOption.outDir, format, `${filename}.js`),
+        outfile: path.join(entryOption.outDir, format, `${filename}.js`),
       });
     });
   });
@@ -153,11 +153,11 @@ const js = async () => {
   await Promise.all([
     buildForOptionsList(resolveEsbuildOptions()),
     fs.outputJson(
-      `${buildOption.outDir}/cjs/package.json`,
+      `${entryOption.outDir}/cjs/package.json`,
       Object.assign({}, distPackageJson, { type: 'commonjs' }),
     ),
     fs.outputJson(
-      `${buildOption.outDir}/esm/package.json`,
+      `${entryOption.outDir}/esm/package.json`,
       Object.assign({}, distPackageJson, { type: 'module' }),
     ),
   ]);
@@ -165,7 +165,7 @@ const js = async () => {
 
 const ts = async () => {
   const packageJson = Object.assign({}, distPackageJson, { type: 'commonjs' });
-  const outDir = `${buildOption.outDir}/types`;
+  const outDir = `${entryOption.outDir}/types`;
   await Promise.all([
     exec(`tsc ${watch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`),
     fs.outputJson(`${outDir}/package.json`, packageJson),
@@ -173,7 +173,7 @@ const ts = async () => {
 };
 
 const build = async () => {
-  await fs.remove(buildOption.outDir);
+  await fs.remove(entryOption.outDir);
   await Promise.all([js(), ts(), execCommand && exec(execCommand)]);
 };
 
