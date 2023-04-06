@@ -53,7 +53,6 @@ const distPackageJson = {
 
 const BuildOptionSchema = z
   .object({
-    dir: z.string(),
     outDir: z.string(),
     entries: z.record(
       z
@@ -74,10 +73,9 @@ const RequiredBuildOptionSchema = BuildOptionSchema.required();
 type RequiredBuildOption = z.infer<typeof RequiredBuildOptionSchema>;
 
 const DEFAULT_BUILD_OPTION: RequiredBuildOption = {
-  dir: 'src',
   outDir: 'dist',
   entries: {
-    'index.ts': {},
+    'src/index.ts': {},
   },
 };
 
@@ -105,7 +103,6 @@ const buildOption = getBuildOption();
 const resolveEsbuildOptions = (): EsbuildOptions[] => {
   const options: EsbuildOptions[] = [];
   Object.entries(buildOption.entries || {}).map(([entryPath, option]) => {
-    const filename = entryPath.split('.').slice(0, -1).join('.');
     const format = option.format || 'both';
     let formats: ['cjs', 'esm'] | ['cjs'] | ['esm'];
 
@@ -114,13 +111,14 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
 
     formats.forEach((format) => {
       options.push({
-        entryPoints: [path.join(buildOption.dir, entryPath)],
+        entryPoints: [entryPath],
         bundle: true,
         minify: true,
         format: format,
         platform: 'node',
         plugins: [nodeExternalsPlugin()],
-        outfile: path.join(buildOption.outDir, format, `${filename}.js`),
+        outdir: path.join(buildOption.outDir, format),
+        outbase: 'src',
       });
     });
   });
