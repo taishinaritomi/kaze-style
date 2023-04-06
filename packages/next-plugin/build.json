@@ -1,6 +1,6 @@
 {
   "entries": {
-    "index.ts": {
+    "src/index.ts": {
       "format": "cjs"
     }
   }

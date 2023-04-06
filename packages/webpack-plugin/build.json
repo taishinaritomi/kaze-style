@@ -1,15 +1,15 @@
 {
   "entries": {
-    "index.ts": {
+    "src/index.ts": {
       "format": "cjs"
     },
-    "loader.ts": {
+    "src/loader.ts": {
       "format": "cjs"
     },
-    "preLoader.ts": {
+    "src/preLoader.ts": {
       "format": "cjs"
     },
-    "virtualLoader.ts": {
+    "src/virtualLoader.ts": {
       "format": "cjs"
     }
   }
