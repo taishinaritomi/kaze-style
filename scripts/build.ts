@@ -147,17 +147,37 @@ const buildForOptionsList = async (
   return undefined;
 };
 
+const isEsm = Object.entries(buildOption.entries).some(([_, value]) => {
+  return (
+    value.format === undefined ||
+    value.format === 'esm' ||
+    value.format === 'both'
+  );
+});
+
+const isCjs = Object.entries(buildOption.entries).some(([_, value]) => {
+  return (
+    value.format === undefined ||
+    value.format === 'cjs' ||
+    value.format === 'both'
+  );
+});
+
+console.log({ isEsm, isCjs });
+
 const js = async () => {
   await Promise.all([
     buildForOptionsList(resolveEsbuildOptions()),
-    fs.outputJson(
-      `${buildOption.outDir}/cjs/package.json`,
-      Object.assign({}, distPackageJson, { type: 'commonjs' }),
-    ),
-    fs.outputJson(
-      `${buildOption.outDir}/esm/package.json`,
-      Object.assign({}, distPackageJson, { type: 'module' }),
-    ),
+    isCjs &&
+      fs.outputJson(
+        `${buildOption.outDir}/cjs/package.json`,
+        Object.assign({}, distPackageJson, { type: 'commonjs' }),
+      ),
+    isEsm &&
+      fs.outputJson(
+        `${buildOption.outDir}/esm/package.json`,
+        Object.assign({}, distPackageJson, { type: 'module' }),
+      ),
   ]);
 };
 
