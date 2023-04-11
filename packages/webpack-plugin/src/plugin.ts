@@ -17,8 +17,8 @@ type PluginOptions = {
 
 const pluginName = 'KazePlugin';
 
-const loader = require.resolve('./loader');
-const preLoader = require.resolve('./preLoader');
+const loader = require.resolve('@kaze-style/webpack-plugin/loader');
+const preLoader = require.resolve('@kaze-style/webpack-plugin/preLoader');
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;

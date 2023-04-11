@@ -117,7 +117,10 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
         format: format,
         platform: 'node',
         plugins: [nodeExternalsPlugin()],
-        outdir: path.join(buildOption.outDir, format),
+        outExtension: {
+          '.js': `.${format === 'cjs' ? 'c' : format === 'esm' ? 'm' : ''}js`,
+        },
+        outdir: buildOption.outDir,
         outbase: 'src',
       });
     });
@@ -147,41 +150,7 @@ const buildForOptionsList = async (
   return undefined;
 };
 
-const isEsm = Object.entries(buildOption.entries).some(([_, value]) => {
-  return (
-    value.format === undefined ||
-    value.format === 'esm' ||
-    value.format === 'both'
-  );
-});
-
-const isCjs = Object.entries(buildOption.entries).some(([_, value]) => {
-  return (
-    value.format === undefined ||
-    value.format === 'cjs' ||
-    value.format === 'both'
-  );
-});
-
-console.log({ isEsm, isCjs });
-
-const js = async () => {
-  await Promise.all([
-    buildForOptionsList(resolveEsbuildOptions()),
-    isCjs &&
-      fs.outputJson(
-        `${buildOption.outDir}/cjs/package.json`,
-        Object.assign({}, distPackageJson, { type: 'commonjs' }),
-      ),
-    isEsm &&
-      fs.outputJson(
-        `${buildOption.outDir}/esm/package.json`,
-        Object.assign({}, distPackageJson, { type: 'module' }),
-      ),
-  ]);
-};
-
-const ts = async () => {
+const types = async () => {
   const packageJson = Object.assign({}, distPackageJson, { type: 'commonjs' });
   const outDir = `${buildOption.outDir}/types`;
   await Promise.all([
@@ -192,7 +161,11 @@ const ts = async () => {
 
 const build = async () => {
   await fs.remove(buildOption.outDir);
-  await Promise.all([js(), ts(), execCommand && exec(execCommand)]);
+  await Promise.all([
+    buildForOptionsList(resolveEsbuildOptions()),
+    types(),
+    execCommand && exec(execCommand),
+  ]);
 };
 
 build();

@@ -20,7 +20,9 @@ export type LoaderContext<T = unknown> = _LoaderContext<T> & {
   _compilation: NonNullable<_LoaderContext<T>['_compilation']>;
 };
 
-const virtualLoaderPath = require.resolve('./virtualLoader');
+const virtualLoaderPath = require.resolve(
+  '@kaze-style/webpack-plugin/virtualLoader',
+);
 
 function loader(
   this: LoaderContext<{
