@@ -33,24 +33,6 @@ const exec = async (cmd: string) => {
   });
 };
 
-type PackageJson = {
-  name?: string;
-  version?: string;
-  sideEffects?: boolean;
-};
-
-const getPackageJson = (): PackageJson => {
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
-  const packageJson = fs.readFileSync(packageJsonPath);
-  return JSON.parse(packageJson.toString());
-};
-
-const packageJson = getPackageJson();
-
-const distPackageJson = {
-  sideEffect: packageJson.sideEffects,
-};
-
 const BuildOptionSchema = z
   .object({
     outDir: z.string(),
@@ -118,7 +100,9 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
         platform: 'node',
         plugins: [nodeExternalsPlugin()],
         outExtension: {
-          '.js': `.${format === 'cjs' ? 'c' : format === 'esm' ? 'm' : ''}js`,
+          '.js': `.${
+            format === 'cjs' ? 'cjs' : format === 'esm' ? 'mjs' : 'js'
+          }`,
         },
         outdir: buildOption.outDir,
         outbase: 'src',
@@ -150,20 +134,15 @@ const buildForOptionsList = async (
   return undefined;
 };
 
-const types = async () => {
-  const packageJson = Object.assign({}, distPackageJson, { type: 'commonjs' });
-  const outDir = `${buildOption.outDir}/types`;
-  await Promise.all([
-    exec(`tsc ${watch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`),
-    fs.outputJson(`${outDir}/package.json`, packageJson),
-  ]);
-};
-
 const build = async () => {
   await fs.remove(buildOption.outDir);
+  const typesOutDir = `${buildOption.outDir}/types`;
   await Promise.all([
     buildForOptionsList(resolveEsbuildOptions()),
-    types(),
+    exec(
+      `tsc ${watch ? '-w' : ''} --outDir ${typesOutDir} -p tsconfig.build.json`,
+    ),
+    fs.outputJson(`${typesOutDir}/package.json`, { type: 'commonjs' }),
     execCommand && exec(execCommand),
   ]);
 };
