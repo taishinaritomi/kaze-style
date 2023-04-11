@@ -33,24 +33,6 @@ const exec = async (cmd: string) => {
   });
 };
 
-type PackageJson = {
-  name?: string;
-  version?: string;
-  sideEffects?: boolean;
-};
-
-const getPackageJson = (): PackageJson => {
-  const packageJsonPath = path.join(process.cwd(), 'package.json');
-  const packageJson = fs.readFileSync(packageJsonPath);
-  return JSON.parse(packageJson.toString());
-};
-
-const packageJson = getPackageJson();
-
-const distPackageJson = {
-  sideEffect: packageJson.sideEffects,
-};
-
 const BuildOptionSchema = z
   .object({
     outDir: z.string(),
@@ -117,7 +99,12 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
         format: format,
         platform: 'node',
         plugins: [nodeExternalsPlugin()],
-        outdir: path.join(buildOption.outDir, format),
+        outExtension: {
+          '.js': `.${
+            format === 'cjs' ? 'cjs' : format === 'esm' ? 'mjs' : 'js'
+          }`,
+        },
+        outdir: buildOption.outDir,
         outbase: 'src',
       });
     });
@@ -147,52 +134,17 @@ const buildForOptionsList = async (
   return undefined;
 };
 
-const isEsm = Object.entries(buildOption.entries).some(([_, value]) => {
-  return (
-    value.format === undefined ||
-    value.format === 'esm' ||
-    value.format === 'both'
-  );
-});
-
-const isCjs = Object.entries(buildOption.entries).some(([_, value]) => {
-  return (
-    value.format === undefined ||
-    value.format === 'cjs' ||
-    value.format === 'both'
-  );
-});
-
-console.log({ isEsm, isCjs });
-
-const js = async () => {
-  await Promise.all([
-    buildForOptionsList(resolveEsbuildOptions()),
-    isCjs &&
-      fs.outputJson(
-        `${buildOption.outDir}/cjs/package.json`,
-        Object.assign({}, distPackageJson, { type: 'commonjs' }),
-      ),
-    isEsm &&
-      fs.outputJson(
-        `${buildOption.outDir}/esm/package.json`,
-        Object.assign({}, distPackageJson, { type: 'module' }),
-      ),
-  ]);
-};
-
-const ts = async () => {
-  const packageJson = Object.assign({}, distPackageJson, { type: 'commonjs' });
-  const outDir = `${buildOption.outDir}/types`;
-  await Promise.all([
-    exec(`tsc ${watch ? '-w' : ''} --outDir ${outDir} -p tsconfig.build.json`),
-    fs.outputJson(`${outDir}/package.json`, packageJson),
-  ]);
-};
-
 const build = async () => {
   await fs.remove(buildOption.outDir);
-  await Promise.all([js(), ts(), execCommand && exec(execCommand)]);
+  const typesOutDir = `${buildOption.outDir}/types`;
+  await Promise.all([
+    buildForOptionsList(resolveEsbuildOptions()),
+    exec(
+      `tsc ${watch ? '-w' : ''} --outDir ${typesOutDir} -p tsconfig.build.json`,
+    ),
+    fs.outputJson(`${typesOutDir}/package.json`, { type: 'commonjs' }),
+    execCommand && exec(execCommand),
+  ]);
 };
 
 build();
