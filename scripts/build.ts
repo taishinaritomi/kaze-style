@@ -5,7 +5,6 @@ import type { BuildOptions as EsbuildOptions } from 'esbuild';
 import esbuild from 'esbuild';
 import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import fs from 'fs-extra';
-import { z } from 'zod';
 
 const args = arg({
   '--watch': Boolean,
@@ -14,6 +13,9 @@ const args = arg({
 
 const watch = args['--watch'] ?? false;
 const execCommand = args['--exec'];
+
+const ENTRY_DIR = 'src';
+const OUT_DIR = 'dist';
 
 const exec = async (cmd: string) => {
   const spawnStream = childProcess.spawn(cmd, { shell: true });
@@ -33,50 +35,33 @@ const exec = async (cmd: string) => {
   });
 };
 
-const BuildOptionSchema = z
-  .object({
-    outDir: z.string(),
-    entries: z.record(
-      z
-        .object({
-          format: z.union([
-            z.literal('both'),
-            z.literal('cjs'),
-            z.literal('esm'),
-          ]),
-        })
-        .partial(),
-    ),
-  })
-  .partial();
-
-const RequiredBuildOptionSchema = BuildOptionSchema.required();
-
-type RequiredBuildOption = z.infer<typeof RequiredBuildOptionSchema>;
-
-const DEFAULT_BUILD_OPTION: RequiredBuildOption = {
-  outDir: 'dist',
-  entries: {
-    'src/index.ts': {},
-  },
+type BuildOption = {
+  entries: Record<
+    string,
+    {
+      formats?: ('cjs' | 'esm')[];
+    }
+  >;
 };
 
-const getBuildOption = (): RequiredBuildOption => {
+const getBuildOption = (): BuildOption => {
   try {
     const buildJsonPath = path.join(process.cwd(), 'build.json');
     const buildJson = fs.readFileSync(buildJsonPath);
-    const buildOption = BuildOptionSchema.parse(
-      JSON.parse(buildJson.toString()),
-    );
-    return Object.assign(DEFAULT_BUILD_OPTION, buildOption, {
-      entries: Object.assign(
-        {},
-        DEFAULT_BUILD_OPTION.entries || {},
-        buildOption.entries || {},
-      ),
-    });
+    const buildOption = JSON.parse(buildJson.toString());
+    return {
+      ...buildOption,
+      entries: {
+        'src/index.ts': {},
+        ...buildOption.entries,
+      },
+    };
   } catch {
-    return DEFAULT_BUILD_OPTION;
+    return {
+      entries: {
+        'src/index.ts': {},
+      },
+    };
   }
 };
 
@@ -85,11 +70,7 @@ const buildOption = getBuildOption();
 const resolveEsbuildOptions = (): EsbuildOptions[] => {
   const options: EsbuildOptions[] = [];
   Object.entries(buildOption.entries || {}).map(([entryPath, option]) => {
-    const format = option.format || 'both';
-    let formats: ['cjs', 'esm'] | ['cjs'] | ['esm'];
-
-    if (format === 'both') formats = ['cjs', 'esm'];
-    else formats = [format];
+    const formats = option.formats || ['cjs', 'esm'];
 
     formats.forEach((format) => {
       options.push({
@@ -104,8 +85,8 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
             format === 'cjs' ? 'cjs' : format === 'esm' ? 'mjs' : 'js'
           }`,
         },
-        outdir: buildOption.outDir,
-        outbase: 'src',
+        outdir: OUT_DIR,
+        outbase: ENTRY_DIR,
       });
     });
   });
@@ -135,8 +116,8 @@ const buildForOptionsList = async (
 };
 
 const build = async () => {
-  await fs.remove(buildOption.outDir);
-  const typesOutDir = `${buildOption.outDir}/types`;
+  await fs.remove(OUT_DIR);
+  const typesOutDir = `${OUT_DIR}/types`;
   await Promise.all([
     buildForOptionsList(resolveEsbuildOptions()),
     exec(
