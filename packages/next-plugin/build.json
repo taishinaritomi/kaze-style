@@ -1,7 +1,7 @@
 {
   "entries": {
     "src/index.ts": {
-      "format": "cjs"
+      "formats": ["cjs"]
     }
   }
 }
