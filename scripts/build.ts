@@ -3,7 +3,6 @@ import path from 'path';
 import arg from 'arg';
 import type { BuildOptions as EsbuildOptions } from 'esbuild';
 import esbuild from 'esbuild';
-import { nodeExternalsPlugin } from 'esbuild-node-externals';
 import fs from 'fs-extra';
 
 const args = arg({
@@ -79,7 +78,7 @@ const resolveEsbuildOptions = (): EsbuildOptions[] => {
         minify: true,
         format: format,
         platform: 'node',
-        plugins: [nodeExternalsPlugin()],
+        packages: 'external',
         outExtension: {
           '.js': `.${
             format === 'cjs' ? 'cjs' : format === 'esm' ? 'mjs' : 'js'
