@@ -1,6 +1,6 @@
 import path from 'path';
 import { stringToCssRules, cssRulesToString } from '@kaze-style/builder';
-import type { TransformOptions } from '@kaze-style/builder';
+import type { TransformStyleOptions } from '@kaze-style/builder';
 import type { Compiler, RuleSetRule } from 'webpack';
 import { getSource } from './utils/getSource';
 
@@ -10,15 +10,17 @@ type PluginOptions = {
   cssLayer?: boolean;
   virtualLoader?: boolean;
   preCssOutputPath?: string;
-  imports: TransformOptions['imports'];
-  transforms: TransformOptions['transforms'];
+  imports: TransformStyleOptions['imports'];
+  transforms: TransformStyleOptions['transforms'];
   exclude?: RuleSetRule['exclude'];
 };
 
 const pluginName = 'KazePlugin';
 
-const loader = require.resolve('@kaze-style/webpack-plugin/loader');
-const preLoader = require.resolve('@kaze-style/webpack-plugin/preLoader');
+const transformLoader = require.resolve(
+  '@kaze-style/webpack-plugin/transformLoader',
+);
+const setupLoader = require.resolve('@kaze-style/webpack-plugin/setupLoader');
 
 export class Plugin {
   test: NonNullable<RuleSetRule['test']>;
@@ -26,8 +28,8 @@ export class Plugin {
   cssLayer: boolean;
   virtualLoader: boolean;
   preCssOutputPath: string;
-  imports: TransformOptions['imports'];
-  transforms: TransformOptions['transforms'];
+  imports: TransformStyleOptions['imports'];
+  transforms: TransformStyleOptions['transforms'];
   exclude: NonNullable<RuleSetRule['exclude']>;
   constructor({
     test = /\.(js|mjs|jsx|ts|tsx)$/,
@@ -56,7 +58,7 @@ export class Plugin {
       exclude: this.exclude,
       use: [
         {
-          loader,
+          loader: transformLoader,
           options: {
             compiler: this.swc ? 'swc' : 'babel',
             virtualLoader: this.virtualLoader,
@@ -66,7 +68,7 @@ export class Plugin {
           },
         },
         {
-          loader: preLoader,
+          loader: setupLoader,
           options: {
             compiler: this.swc ? 'swc' : 'babel',
             transforms: this.transforms,

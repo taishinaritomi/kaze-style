@@ -4,12 +4,12 @@ import { BUILD_INJECTOR_NAME } from './constants';
 
 type Options = {
   filename: string;
-  buildInjectorName?: string;
+  buildInjectName?: string;
 };
 
 export const extractionStyle = (
   code: string,
-  { filename, buildInjectorName = BUILD_INJECTOR_NAME }: Options,
+  { filename, buildInjectName = BUILD_INJECTOR_NAME }: Options,
 ) => {
   const injector: Injector = { filename, args: [], cssRules: [] };
   // remove start
@@ -28,7 +28,7 @@ export const extractionStyle = (
       code,
       filename,
       {
-        [buildInjectorName]: injector,
+        [buildInjectName]: injector,
         // remove start
         // window,
         // $RefreshReg$: () => undefined,

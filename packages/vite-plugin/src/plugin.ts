@@ -1,4 +1,4 @@
-import type { TransformOptions } from '@kaze-style/builder';
+import type { TransformStyleOptions } from '@kaze-style/builder';
 import { cssRulesToString, stringToCssRules } from '@kaze-style/builder';
 import type { CssRule } from '@kaze-style/core';
 import type { Plugin } from 'vite';
@@ -7,8 +7,8 @@ import { resolveTransform } from './utils/resolveTransform';
 type KazeConfig = {
   swc?: boolean;
   cssLayer?: boolean;
-  imports?: TransformOptions['imports'];
-  transforms?: TransformOptions['transforms'];
+  imports?: TransformStyleOptions['imports'];
+  transforms?: TransformStyleOptions['transforms'];
 };
 
 export const plugin = (_kazeConfig: KazeConfig = {}): Plugin => {

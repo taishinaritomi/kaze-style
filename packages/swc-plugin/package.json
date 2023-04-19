@@ -22,10 +22,10 @@
   },
   "files": [
     "dist",
-    "_transform",
-    "_pre-transform",
-    "target/wasm32-wasi/release/kaze_style_pre_transform_swc_plugin.wasm",
-    "target/wasm32-wasi/release/kaze_style_transform_swc_plugin.wasm",
+    "_transform_style",
+    "_setup_style",
+    "target/wasm32-wasi/release/kaze_style_setup_style_swc_plugin.wasm",
+    "target/wasm32-wasi/release/kaze_style_transform_style_swc_plugin.wasm",
     "LICENSE"
   ],
   "scripts": {

@@ -12,23 +12,12 @@ export type { StyleOrder } from './styleOrder';
 export { sortCssRules } from './sortCssRules';
 export { uniqueCssRules } from './uniqueCssRules';
 export { setCssRules } from './setCssRules';
-export { isBuildTime } from './isBuildTime';
 export type {
   Classes,
   ClassNameOverride,
   ClassOverride,
   CssRule,
 } from './types/common';
-export type { Injector, BuildArg } from './types/common';
-export type {
-  AstNode,
-  StringLiteral,
-  NumberLiteral,
-  BooleanLiteral,
-  NullLiteral,
-  Identifier,
-  ArrayExpression,
-  CallExpression,
-  ObjectExpression,
-} from './types/ast';
+export type { Injector, BuildInfo } from './types/common';
+export type { Ast } from './types/ast';
 export type { KazeStyle, KazeGlobalStyle, SupportStyle } from './types/style';

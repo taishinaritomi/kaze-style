@@ -1,12 +1,12 @@
-import type { TransformOptions } from '@kaze-style/builder';
-import { preTransform } from '@kaze-style/builder';
+import type { TransformStyleOptions } from '@kaze-style/builder';
+import { setupStyle } from '@kaze-style/builder';
 import type { LoaderContext } from 'webpack';
-import type { WebpackLoaderParams } from './loader';
+import type { WebpackLoaderParams } from './transformLoader';
 
-function loader(
+function setupLoader(
   this: LoaderContext<{
     compiler: 'swc' | 'babel';
-    transforms: TransformOptions['transforms'];
+    transforms: TransformStyleOptions['transforms'];
   }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
@@ -15,7 +15,7 @@ function loader(
   this.cacheable(true);
   const options = this.getOptions();
   const callback = this.async();
-  preTransform(
+  setupStyle(
     sourceCode,
     {
       filename: this.resourcePath,
@@ -39,4 +39,4 @@ function loader(
   });
 }
 
-export default loader;
+export default setupLoader;

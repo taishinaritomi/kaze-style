@@ -1,4 +1,4 @@
-import type { AstNode } from '../types/ast';
+import type { Ast } from '../types/ast';
 
 export type Value =
   | string
@@ -8,7 +8,7 @@ export type Value =
   | Array<Value>
   | { [_ in keyof unknown]: Value };
 
-export const valueToNode = (value: Value): AstNode => {
+export const valueToNode = (value: Value): Ast.Node => {
   if (typeof value === 'string') return { type: 'String', value: value };
   else if (typeof value === 'number') return { type: 'Number', value: value };
   else if (typeof value === 'boolean') return { type: 'Boolean', value: value };

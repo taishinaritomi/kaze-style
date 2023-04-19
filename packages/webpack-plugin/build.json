@@ -3,10 +3,10 @@
     "src/index.ts": {
       "formats": ["cjs"]
     },
-    "src/loader.ts": {
+    "src/transformLoader.ts": {
       "formats": ["cjs"]
     },
-    "src/preLoader.ts": {
+    "src/setupLoader.ts": {
       "formats": ["cjs"]
     },
     "src/virtualLoader.ts": {

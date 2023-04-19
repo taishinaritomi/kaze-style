@@ -1,11 +1,11 @@
-import type { ObjectExpression } from '../types/ast';
+import type { Ast } from '../types/ast';
 import type { StaticClasses } from '../types/common';
 import { valueToNode } from './valueToNode';
 
 export const classesSerialize = (
   staticClasses: StaticClasses<string>,
-): ObjectExpression => {
-  const objectExpression: ObjectExpression = {
+): Ast.ObjectExpression => {
+  const objectExpression: Ast.ObjectExpression = {
     type: 'Object',
     properties: [],
   };

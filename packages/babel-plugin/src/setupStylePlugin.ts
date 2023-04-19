@@ -1,13 +1,13 @@
 import { types as t } from '@babel/core';
 import type { PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { AstNode } from '@kaze-style/core';
+import type { Ast } from '@kaze-style/core';
 import { nodeToExpr } from './astNode';
 import type { InputTransform } from './commonConfig';
 
 type InputConfig = {
   transforms: InputTransform[];
-  buildArg: AstNode;
+  buildInfo: Ast.Node;
 };
 
 type Transform = {
@@ -20,16 +20,16 @@ type Transform = {
 type State = {
   isUseNameSpace?: boolean;
   transforms?: Transform[];
-  buildArg?: t.Expression;
+  buildInfo?: t.Expression;
   callExprs?: t.CallExpression[];
 };
 
-export const preTransformPlugin = declare<
+export const setupStylePlugin = declare<
   InputConfig,
   PluginObj<PluginPass & State>
 >((_, config) => {
   return {
-    name: '@kaze-style/babel-plugin-preTransform',
+    name: '@kaze-style/babel-plugin-setupStyle',
     pre() {
       this.transforms = config.transforms.map((transform) => ({
         from: transform.from,
@@ -39,7 +39,7 @@ export const preTransformPlugin = declare<
       }));
       this.isUseNameSpace = false;
       this.callExprs = [];
-      this.buildArg = nodeToExpr(config.buildArg);
+      this.buildInfo = nodeToExpr(config.buildInfo);
     },
     visitor: {
       Program: {
@@ -95,8 +95,8 @@ export const preTransformPlugin = declare<
                 }
               }
               if (isTarget) {
-                if (state.buildArg) {
-                  callExpr.arguments.push(state.buildArg);
+                if (state.buildInfo) {
+                  callExpr.arguments.push(state.buildInfo);
                   callExpr.arguments.push(t.valueToNode(index));
                   index += 1;
                   this.file.metadata = { isTransformed: true };

@@ -485,7 +485,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fad582f4b9e86b6caa621cabeb0963332d92eea04729ab12892c2533951e6440"
 
 [[package]]
-name = "kaze_style_pre_transform_swc_plugin"
+name = "kaze_style_setup_style_swc_plugin"
 version = "0.1.0"
 dependencies = [
  "helper",
@@ -495,7 +495,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "kaze_style_transform_swc_plugin"
+name = "kaze_style_transform_style_swc_plugin"
 version = "0.1.0"
 dependencies = [
  "helper",

@@ -1,7 +1,7 @@
 import type { types as t } from '@babel/core';
-import type { AstNode } from '@kaze-style/core';
+import type { Ast } from '@kaze-style/core';
 
-export const nodeToExpr = (node: AstNode): t.Expression => {
+export const nodeToExpr = (node: Ast.Node): t.Expression => {
   if (node.type === 'String') {
     return { type: 'StringLiteral', value: node.value };
   } else if (node.type === 'Number') {

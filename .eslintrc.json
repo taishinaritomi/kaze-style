@@ -11,7 +11,7 @@
   "overrides": [
     {
       "files": [
-        "./packages/webpack-plugin/src/{preLoader,loader,virtualLoader}.ts",
+        "./packages/webpack-plugin/src/{setupLoader,transformLoader,virtualLoader}.ts",
         "./playground/next*/src/app/**/{page,layout,loading,error,template,head}.tsx",
         "./playground/next*/src/pages/**",
         "./playground/next*/next.config.*",
