@@ -1,5 +1,5 @@
 [package]
-name = "kaze_style_transform_swc_plugin"
+name = "kaze_style_transform_style_swc_plugin"
 version = "0.1.0"
 edition = "2021"
 

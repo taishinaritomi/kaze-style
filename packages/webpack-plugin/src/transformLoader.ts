@@ -1,11 +1,11 @@
 import { createHash } from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import type { TransformOptions } from '@kaze-style/builder';
+import type { TransformStyleOptions } from '@kaze-style/builder';
 import {
   cssRulesToString,
   extractionStyle,
-  transform,
+  transformStyle,
 } from '@kaze-style/builder';
 import type {
   LoaderDefinitionFunction,
@@ -24,13 +24,13 @@ const virtualLoaderPath = require.resolve(
   '@kaze-style/webpack-plugin/virtualLoader',
 );
 
-function loader(
+function transformLoader(
   this: LoaderContext<{
     compiler: 'swc' | 'babel';
     virtualLoader: boolean;
     preCssOutputPath: string;
-    imports: TransformOptions['imports'];
-    transforms: TransformOptions['transforms'];
+    imports: TransformStyleOptions['imports'];
+    transforms: TransformStyleOptions['transforms'];
   }>,
   sourceCode: WebpackLoaderParams[0],
   inputSourceMap: WebpackLoaderParams[1],
@@ -52,7 +52,7 @@ function loader(
         const { injectArgs, cssRules } = extractionStyle(source, {
           filename: this.resourcePath,
         });
-        transform(
+        transformStyle(
           sourceCode,
           {
             filename: this.resourcePath,
@@ -106,4 +106,4 @@ function loader(
   this.callback(null, sourceCode, inputSourceMap);
 }
 
-export default loader;
+export default transformLoader;

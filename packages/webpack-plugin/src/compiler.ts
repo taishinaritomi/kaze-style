@@ -1,5 +1,5 @@
 import type { Compilation } from 'webpack';
-import type { LoaderContext } from './loader';
+import type { LoaderContext } from './transformLoader';
 
 const compilerNamePrefix = 'kaze-style-compiler';
 

@@ -14,8 +14,8 @@
   "exports": {
     ".": "./dist/index.cjs",
     "./virtualLoader": "./dist/virtualLoader.cjs",
-    "./preLoader": "./dist/preLoader.cjs",
-    "./loader": "./dist/loader.cjs",
+    "./setupLoader": "./dist/setupLoader.cjs",
+    "./transformLoader": "./dist/transformLoader.cjs",
     "./assets/*": "./assets/*"
   },
   "files": [

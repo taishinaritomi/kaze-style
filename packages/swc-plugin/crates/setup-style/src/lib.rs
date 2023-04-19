@@ -35,7 +35,7 @@ pub struct TransformVisitor {
   transformed_comment: String,
   comments: PluginCommentsProxy,
   transforms: Vec<Transform>,
-  build_arg: Expr,
+  build_info: Expr,
 }
 
 impl TransformVisitor {
@@ -57,7 +57,7 @@ impl TransformVisitor {
       comments: comments,
       transforms: transforms,
       transformed_comment: input_config.transformed_comment,
-      build_arg: node_to_expr(&input_config.build_arg),
+      build_info: node_to_expr(&input_config.build_info),
     }
   }
 
@@ -112,7 +112,7 @@ impl TransformVisitor {
       if is_target == true {
         call_expr.args.push(ExprOrSpread {
           spread: None,
-          expr: Box::new(self.build_arg.clone()),
+          expr: Box::new(self.build_info.clone()),
         });
         call_expr.args.push(ExprOrSpread {
           expr: Box::new(Expr::Lit(Lit::Num(Number::from(self.target_index as f64)))),
@@ -262,7 +262,7 @@ mod tests {
             "to": "__target"
           },
         ],
-        "buildArg": {
+        "buildInfo": {
           "type": "Object",
           "properties": [
             {

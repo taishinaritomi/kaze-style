@@ -1,7 +1,7 @@
 import { types as t } from '@babel/core';
 import type { PluginObj, PluginPass } from '@babel/core';
 import { declare } from '@babel/helper-plugin-utils';
-import type { AstNode } from '@kaze-style/core';
+import type { Ast } from '@kaze-style/core';
 import { nodeToExpr } from './astNode';
 import type { InputTransform } from './commonConfig';
 
@@ -12,7 +12,7 @@ type InputConfig = {
 };
 
 type InputArgument = {
-  value: AstNode[];
+  value: Ast.Node[];
   index: number;
 };
 
@@ -41,7 +41,7 @@ type State = {
   callExprs?: t.CallExpression[];
 };
 
-export const transformPlugin = declare<
+export const transformStylePlugin = declare<
   InputConfig,
   PluginObj<PluginPass & State>
 >((_, config) => {

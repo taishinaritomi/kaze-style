@@ -1,3 +1,0 @@
-{
-  "main": "../target/wasm32-wasi/release/kaze_style_transform_swc_plugin.wasm"
-}

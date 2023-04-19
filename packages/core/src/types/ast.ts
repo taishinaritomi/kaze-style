@@ -1,52 +1,54 @@
-export type StringLiteral = {
-  type: 'String';
-  value: string;
-};
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export namespace Ast {
+  export type Node =
+    | StringLiteral
+    | NumberLiteral
+    | BooleanLiteral
+    | NullLiteral
+    | Identifier
+    | ArrayExpression
+    | ObjectExpression
+    | CallExpression;
 
-export type NumberLiteral = {
-  type: 'Number';
-  value: number;
-};
+  export type StringLiteral = {
+    type: 'String';
+    value: string;
+  };
+  export type NumberLiteral = {
+    type: 'Number';
+    value: number;
+  };
 
-export type BooleanLiteral = {
-  type: 'Boolean';
-  value: boolean;
-};
+  export type BooleanLiteral = {
+    type: 'Boolean';
+    value: boolean;
+  };
 
-export type NullLiteral = {
-  type: 'Null';
-};
+  export type NullLiteral = {
+    type: 'Null';
+  };
 
-export type Identifier = {
-  type: 'Identifier';
-  name: string;
-};
+  export type Identifier = {
+    type: 'Identifier';
+    name: string;
+  };
 
-export type ArrayExpression = {
-  type: 'Array';
-  elements: AstNode[];
-};
+  export type ArrayExpression = {
+    type: 'Array';
+    elements: Node[];
+  };
 
-export type ObjectExpression = {
-  type: 'Object';
-  properties: Array<{
-    key: string;
-    value: AstNode;
-  }>;
-};
+  export type ObjectExpression = {
+    type: 'Object';
+    properties: Array<{
+      key: string;
+      value: Node;
+    }>;
+  };
 
-export type CallExpression = {
-  type: 'Call';
-  name: string;
-  arguments: AstNode[];
-};
-
-export type AstNode =
-  | StringLiteral
-  | NumberLiteral
-  | BooleanLiteral
-  | NullLiteral
-  | Identifier
-  | CallExpression
-  | ArrayExpression
-  | ObjectExpression;
+  export type CallExpression = {
+    type: 'Call';
+    name: string;
+    arguments: Node[];
+  };
+}

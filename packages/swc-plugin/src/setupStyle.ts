@@ -12,7 +12,7 @@ type Result = [string, Metadata];
 
 const TRANSFORMED_COMMENT = '__KAZE_STYLE_TRANSFORMED_COMMENT';
 
-export const preTransform = async (
+export const setupStyle = async (
   code: string,
   options: Options,
 ): Promise<Result> => {
@@ -29,7 +29,7 @@ export const preTransform = async (
         ...swcOptions.jsc?.experimental,
         plugins: [
           [
-            '@kaze-style/swc-plugin/_pre-transform',
+            '@kaze-style/swc-plugin/_setup_style',
             { ...transformOptions, transformedComment: TRANSFORMED_COMMENT },
           ],
           ...(swcOptions.jsc?.experimental?.plugins || []),

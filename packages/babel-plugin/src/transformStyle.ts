@@ -2,7 +2,7 @@ import { transformAsync as babelTransform } from '@babel/core';
 import type { TransformOptions as BabelOptions } from '@babel/core';
 // @ts-expect-error type
 import typescriptSyntax from '@babel/plugin-syntax-typescript';
-import { preTransformPlugin } from './preTransformPlugin';
+import { transformStylePlugin } from './transformStylePlugin';
 
 type Options = {
   filename: string;
@@ -10,10 +10,10 @@ type Options = {
   babel?: BabelOptions;
 };
 
-type Metadata = { isTransformed: boolean };
+type Metadata = undefined;
 type Result = [string, Metadata];
 
-export const preTransform = async (
+export const transformStyle = async (
   code: string,
   options: Options,
 ): Promise<Result> => {
@@ -27,17 +27,11 @@ export const preTransform = async (
     compact: false,
     ...babelOptions,
     plugins: [
-      [preTransformPlugin, transformOptions],
+      [transformStylePlugin, transformOptions],
       [typescriptSyntax, { isTSX: true }],
       ...(babelOptions.plugins || []),
     ],
   });
 
-  return [
-    result?.code ?? '',
-    {
-      isTransformed:
-        (result?.metadata as unknown as Metadata).isTransformed || false,
-    },
-  ];
+  return [result?.code ?? '', undefined];
 };

@@ -1,4 +1,3 @@
-// import type { TransformOptions } from '@kaze-style/builder';
 import { transform as swcTransform } from '@swc/core';
 import type { Options as SwcOptions } from '@swc/core';
 
@@ -11,7 +10,7 @@ type Options = {
 type Metadata = undefined;
 type Result = [string, Metadata];
 
-export const transform = async (
+export const transformStyle = async (
   code: string,
   options: Options,
 ): Promise<Result> => {
@@ -27,7 +26,7 @@ export const transform = async (
       experimental: {
         ...swcOptions.jsc?.experimental,
         plugins: [
-          ['@kaze-style/swc-plugin/_transform', { ...transformOptions }],
+          ['@kaze-style/swc-plugin/_transform_style', { ...transformOptions }],
           ...(swcOptions.jsc?.experimental?.plugins || []),
         ],
       },
