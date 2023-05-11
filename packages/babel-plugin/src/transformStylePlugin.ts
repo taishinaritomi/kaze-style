@@ -72,7 +72,12 @@ export const transformStylePlugin = declare<
             path.unshiftContainer(
               'body',
               t.importDeclaration(
-                [t.importSpecifier(t.identifier(specifier), t.identifier(specifier))],
+                [
+                  t.importSpecifier(
+                    t.identifier(specifier),
+                    t.identifier(specifier),
+                  ),
+                ],
                 t.stringLiteral(source),
               ),
             );
