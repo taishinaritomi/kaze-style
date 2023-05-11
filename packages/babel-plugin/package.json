@@ -31,9 +31,9 @@
     "build": "tsx ./../../scripts/build"
   },
   "dependencies": {
-    "@babel/core": "^7.20.12",
-    "@babel/plugin-syntax-typescript": "^7.20.0",
-    "@babel/helper-plugin-utils": "^7.20.2"
+    "@babel/core": "^7.21.8",
+    "@babel/plugin-syntax-typescript": "^7.21.4",
+    "@babel/helper-plugin-utils": "^7.21.5"
   },
   "devDependencies": {
     "@types/babel__helper-plugin-utils": "^7.10.0",

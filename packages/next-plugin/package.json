@@ -26,10 +26,10 @@
     "browserslist": "^4.21.5"
   },
   "devDependencies": {
-    "next": "^13.1.6",
+    "next": "^13.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "webpack": "^5.75.0"
+    "webpack": "^5.82.1"
   },
   "peerDependencies": {
     "next": ">=12 || >=13",
