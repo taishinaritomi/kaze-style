@@ -36,6 +36,7 @@ type ArgumentExpression = {
 
 type State = {
   isUseNameSpace?: boolean;
+  imports?: InputImport[];
   transforms?: Transform[];
   injectArgs?: ArgumentExpression[];
   callExprs?: t.CallExpression[];
@@ -55,6 +56,8 @@ export const transformStylePlugin = declare<
         identNames: [],
         namespaces: [],
       }));
+
+      this.imports = config.imports;
       this.isUseNameSpace = false;
       this.callExprs = [];
       this.injectArgs = config.injectArgs.map((injectArg) => ({
@@ -65,6 +68,15 @@ export const transformStylePlugin = declare<
     visitor: {
       Program: {
         enter(path, state) {
+          this.imports?.forEach(({ source, specifier }) => {
+            path.unshiftContainer(
+              'body',
+              t.importDeclaration(
+                [t.importSpecifier(t.identifier(specifier), t.identifier(specifier))],
+                t.stringLiteral(source),
+              ),
+            );
+          });
           path.node.body.forEach((statement) => {
             if (t.isImportDeclaration(statement)) {
               state.transforms?.forEach((transform) => {

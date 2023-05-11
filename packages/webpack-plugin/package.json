@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@kaze-style/core": "^0.17.1",
-    "webpack": "^5.75.0"
+    "webpack": "^5.82.1"
   },
   "peerDependencies": {
     "@kaze-style/core": "^0.17.1",

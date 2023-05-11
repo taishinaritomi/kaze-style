@@ -12,14 +12,14 @@
   "dependencies": {
     "@kaze-style/core": "*",
     "@kaze-style/themes": "*",
-    "next": "^13.1.6",
+    "next": "^13.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@kaze-style/next-plugin": "*",
-    "@types/react": "^18.0.27",
-    "@types/react-dom": "^18.0.10",
-    "@next/bundle-analyzer": "^13.1.6"
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@next/bundle-analyzer": "^13.4.1"
   }
 }
